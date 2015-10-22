@@ -1,0 +1,24 @@
+{
+  "name": "gym.app",
+  "version": "0.0.1",
+  "authors": [
+    "Cesar Valdez <cesark_19@hotmail.com>"
+  ],
+  "description": "Aplicación web para llevar el control de los pagos y horarios de un gimnasio",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.6",
+    "jquery": "~2.1.4",
+    "angular-ui-router": "~0.2.15"
+  }
+}

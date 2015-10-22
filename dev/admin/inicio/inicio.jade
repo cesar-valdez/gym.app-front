@@ -1,0 +1,37 @@
+body.Principal
+	div.Contenedor
+		header.Header
+			figure.Header-logo
+			nav.Header-nav
+				ul 
+					a(ui-sref="inicioAdmin")
+						li 
+							span Inicio
+					a(ui-sref="clasesAdmin")
+						li
+							span Clases
+					a(ui-sref="retosAdmin")
+						li
+							span Retos
+					a(ui-sref="pagosAdmin")
+						li
+							span Pagos
+					a(ui-sref="instructoresAdmin")
+						li 
+							span Instructores
+					a(ui-sref="perfilAdmin")
+						li 
+							span Perfiles
+					a(href="#")
+						li 
+							span Salir
+		label.Nombre ¡Bienvenido!
+		div.AreaSlider
+			div(style="background-image: url('./img/banner1.jpg')").Banner
+				div.Botones
+					div: i.icomoon.pencil
+					div: i.icomoon.plus
+					div: i.icomoon.bin
+				p.Banner-texto 
+				//figure.Imgagen
+				//p.Texto

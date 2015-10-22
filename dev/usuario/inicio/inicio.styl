@@ -1,0 +1,77 @@
+
+//------------------fondo Login--------------------------
+body.Principal
+	background: linear-gradient(
+      rgba(black, 0.60), 
+      rgba(black, 0.60)),
+    url(../img/fondo.jpg);
+	background-size: cover;
+	background-position:top center;
+//--------------------globales-------------------------	
+	
+.Contenedor 
+	width:80%;
+	max-width:80em;
+	margin: 0 auto;
+	overflow: hidden;
+	.Header
+		width:100%;
+		border-bottom: 3px solid rgb(232,167,47);
+		overflow: hidden
+		&-logo
+			width:20em;
+			height:5em;
+			margin:0;
+			display: inline-block;
+			background-image: url(../img/logo.png);
+			background-size: 100% 100%;
+			background-repeat: no-repeat;
+			position:relative;
+			float:left;
+		&-nav
+			ul
+				float:right;
+				margin:0;
+				padding:0;
+				a
+					li
+						list-style: none;
+						text-align:center;
+						display: inline-block;
+						margin: 2.2em .7em 1em 0em;
+						padding: .5em .8em 0em 0em;
+						border-right: 1px solid gray;
+						span 
+							color:white;
+						&:first-child
+							text-decoration: underline;	
+							color:white;	
+					&:last-child
+						li
+							border:0;
+	.Nombre
+		color:white;
+		font-size:23px;
+		margin:1.4em 0em 0em 4em;
+		display:inline-block;
+	.AreaSlider
+		width:56em;
+		height:25em;
+		margin:2em 6em 0em;
+		position:relative;
+		.Banner
+			width:100%;
+			height:100%;
+			background-size:100% 100%;//cover
+			//background-position:center;
+			background-repeat:no-repeat;
+			display:inline-block;
+			&-texto
+				width:40em;
+				max-width:45em;
+				height:8em;
+				margin:12em 0em 0em;
+				display:inline-block;
+				background-color:rgba(black, 0.60);
+				color:white;
+				padding:1em 1em 1em .9em;

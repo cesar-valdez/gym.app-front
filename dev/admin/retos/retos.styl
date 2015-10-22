@@ -1,0 +1,99 @@
+
+//------------------fondo Login--------------------------
+body.Principal
+	background: linear-gradient(
+      rgba(black, 0.60), 
+      rgba(black, 0.60)),
+    url(../img/fondo.jpg);
+	background-size: cover;
+	background-position:top center;
+//--------------------globales-------------------------	
+.ContenedorRetoAdmin
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	padding: 2em 3em 0em 3em;
+.Contenedor 
+	width:80%;
+	max-width:80em;
+	margin: 0 auto;
+	overflow: hidden;
+	.Header
+		width:100%;
+		border-bottom: 3px solid rgb(232,167,47);
+		overflow: hidden
+		&-logo
+			width:20em;
+			height:5em;
+			margin:0;
+			display: inline-block;
+			background-image: url(../img/logo.png);
+			background-size: 100% 100%;
+			background-repeat: no-repeat;
+			position:relative;
+			float:left;
+		&-nav
+			ul
+				float:right;
+				margin:0;
+				padding:0;
+				a
+					li
+						list-style: none;
+						text-align:center;
+						display: inline-block;
+						margin: 2.2em .7em 1em 0em;
+						padding: .5em .8em 0em 0em;
+						border-right: 1px solid gray;
+						span 
+							color:white;
+						&:first-child
+							text-decoration: underline;
+							color:white;
+					&:last-child
+						li
+							border:0;
+	.AgregarReto
+		color:white;
+		font-size:15px;
+		padding:.3em 1em;
+		margin:2em 0em 0em 65em;
+		border: 0;
+		border-radius:7px;
+		background: rgb(53,131,44);
+	.RetoAdmin
+		width:17em;
+		background:white;
+		border-radius:15px;
+		padding:.7em .7em .7em .7em;
+		margin: 0em 2em 3em 0em;
+		&-imagenReto
+			width:15.5em;
+			height:7.5em;
+			background-repeat:no-repeat;
+			background-size:cover;
+			background-position:center center;
+		&-reto
+			font-size:21px;
+			text-align:center;
+			margin-top:.3em;
+		&-fecha
+			font-size:13px;
+			text-align:center;
+			margin-top:.2em;
+		&-ver
+			background: rgb(127,129,112);
+			float:left;
+			margin-right:.7em;
+		&-modificar
+				background: rgb(53,131,44);
+		&-eliminar
+			background: rgb(229,52,13);
+			float:right;
+		button
+			color:white;
+			font-size:15px;
+			padding:.3em 1em;
+			margin-top:.5em;
+			border: 0;
+			border-radius:7px;

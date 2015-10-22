@@ -1,0 +1,33 @@
+body.Principal
+	div.Contenedor
+		header.Header
+			figure.Header-logo
+			nav.Header-nav
+				ul 
+					a(ui-sref="inicio")
+						li 
+							span Inicio
+					a(ui-sref="clases")
+						li
+							span Clases
+					a(ui-sref="retos")
+						li
+							span Retos
+					a(ui-sref="pagos")
+						li
+							span Pagos
+					a(ui-sref="instructores")
+						li 
+							span Instructores
+					a(ui-sref="perfil")
+						li 
+							span Perfil
+					a(href="#")
+						li 
+							span Salir
+		label.Nombre ¡Bienvenido Cesar!
+		div.AreaSlider
+			div(style="background-image: url('./img/banner1.jpg')").Banner
+				p.Banner-texto Promocion 2x1 solo viernes 
+				//figure.Imgagen
+				//p.Texto
