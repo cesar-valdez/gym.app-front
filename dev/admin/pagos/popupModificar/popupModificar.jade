@@ -1,0 +1,18 @@
+div(popup-close).PopupPagosModificar
+	div.PopupPagosModificar-contenidoPagosModificar
+		p No.Registro:
+		input.InputRegistro(type="text" name="noRegistro" value="1" disabled)
+		p Nombre:
+		input(type="text" name="nombre" value="Cesar" disabled)
+		p Apellido:
+		input(type="text" name="apellido" value="Valdez" disabled)
+		p.PFecha Fecha:
+		input(type="date" name="fecha" ).CajaAncho
+		p.PEstado Estado:
+		select(name="estado").CajaAncho
+			option Pagado
+			option No Pagado
+		p.Pago Pago:
+		input(type="text" name="pago").CajaPago
+		button.BtnCancelar.popup-close Cancelar
+		button.BtnGuardar Guardar

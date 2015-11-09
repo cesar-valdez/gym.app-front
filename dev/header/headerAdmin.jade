@@ -1,0 +1,26 @@
+header.Header
+	figure.Header-logo
+	nav.Header-nav
+		ul 
+			a(ui-sref="admin.inicio")
+				li 
+					span Inicio
+			a(ui-sref="admin.clases")
+				li
+					span Clases
+			a(ui-sref="admin.retos")
+				li
+					span Retos
+			a(ui-sref="admin.pagos")
+				li
+					span Pagos
+			a(ui-sref="admin.instructores")
+				li 
+					span Instructores
+			//a(ui-sref="admin.perfil")
+				li 
+					span Perfiles
+			a(href="#")
+				li.SinBorder 
+					span Salir
+div(ui-view="contentViews")

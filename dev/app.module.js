@@ -3,69 +3,140 @@
 	//modulo de rutas - ui-router
 	angular.module('gymApp', [
 		'ui.router',
+		'gymApp.constants',
 		'gymApp.Helpers',
 		'gymApp.Usuario',
 		'gymApp.Admin',
 		'gymApp.Login'
 		])
 	.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $urlRouterProvider){ 
-	
 		$stateProvider
 			.state('login', {
 				url: '',
-				templateUrl: './login/login.html'
+				templateUrl: './login/login.html',
+				controller: 'LoginController'
 			})
-		$stateProvider
-			.state('inicio', {
-				url: '/inicio',
-				templateUrl: 'usuario/inicio/inicio.html'
-			})
-		$stateProvider
-			.state('inicioAdmin', {
-				url: '/inicioAdmin',
-				templateUrl: 'admin/inicio/inicio.html'
-			})
-		$stateProvider
-			.state('clases', {
-				url: '/clases',
-				templateUrl: 'usuario/clases/clases.html'
-			})
-		$stateProvider
-			.state('clasesAdmin', {
-				url: '/clasesAdmin',
-				templateUrl: 'admin/clases/clases.html'
-			})
-		$stateProvider
-			.state('retos', {
-				url: '/retos',
-				templateUrl: 'usuario/retos/retos.html'
-			})
-		$stateProvider
-			.state('retosAdmin', {
-				url: '/retosAdmin',
-				templateUrl: 'admin/retos/retos.html'
-			})
-		$stateProvider
-			.state('instructores', {
-				url: '/instructores',
-				templateUrl: 'usuario/instructores/instructores.html'
-			})
-		$stateProvider
-			.state('instructoresAdmin', {
-				url: '/instructoresAdmin',
-				templateUrl: 'admin/instructores/instructores.html'
-			})
-		$stateProvider
-			.state('pagos', {
-				url: '/pagos',
-				templateUrl: 'usuario/pagos/pagos.html'
-			})
-		$stateProvider
+/*************************Usuario*************************************/
+			.state('usuario', {
+				asbtract: true,
+				url: '/usuario',
+				templateUrl: 'header/headerUsuario.html'
+				})
+				.state('usuario.inicio', {
+					url: '/inicio',
+					views:{
+						"contentViews":{
+							templateUrl: 'usuario/inicio/inicio.html'
+						}
+					}
+				})
+				.state('usuario.clases', {
+					url: '/clases',
+					views:{
+						"contentViews":{
+							templateUrl: 'usuario/clases/clases.html',
+							controller: 'ClasesController'
+						}
+					}
+				})
+				.state('usuario.retos', {
+					url: '/retos',
+					views:{
+						"contentViews":{
+							templateUrl: 'usuario/retos/retos.html'
+						}
+					}
+				})
+				.state('usuario.instructores', {
+					url: '/instructores',
+					views:{
+						"contentViews":{
+							templateUrl: 'usuario/instructores/instructores.html',
+							controller: 'InstructoresController'
+						}
+					}
+				})
+				.state('usuario.pagos', {
+					url: '/pagos',
+					views:{
+						"contentViews":{
+							templateUrl: 'usuario/pagos/pagos.html'
+						}
+					}
+				})
+				.state('usuario.perfil', {
+					url: '/perfil',
+					views:{
+						"contentViews":{
+							templateUrl: 'usuario/perfil/perfil.html'
+						}
+					}
+				})
+/*************************Administrador***********************************/
+			.state('admin', {
+				asbtract: true,
+				url: '/admin',
+				templateUrl: 'header/headerAdmin.html'
+				})
+				.state('admin.inicio', {
+					url: '/inicio',
+					views:{
+						"contentViews":{
+							templateUrl: 'admin/inicio/inicio.html'
+						}
+					}
+				})
+				.state('admin.clases', {
+					url: '/clases',
+					views:{
+						"contentViews":{
+							templateUrl: 'admin/clases/clases.html',
+							controller: 'ClasesAdminController'
+						}
+					}
+				})
+				.state('admin.retos', {
+					url: '/retos',
+					views:{
+						"contentViews":{
+							templateUrl: 'admin/retos/retos.html'
+						}
+					}
+				})
+				.state('admin.instructores', {
+					url: '/instructores',
+					views:{
+						"contentViews":{
+							templateUrl: 'admin/instructores/instructores.html',
+							controller: 'InstructoresAdminController'
+						}
+					}
+				})
+				.state('admin.pagos', {
+					url: '/pagos',
+					views:{
+						"contentViews":{
+							templateUrl: 'admin/pagos/pagos.html'
+						}
+					}
+				})
+		/*$stateProvider
 			.state('pagosAdmin', {
 				url: '/pagosAdmin',
 				templateUrl: 'admin/pagos/pagos.html'
-			})
+			})*/
 	}])
+
+	.run(['$rootScope','$state','$stateParams',
+		function ($rootScope,$state,$stateParams) {
+			$rootScope.$on('$stateChangeSuccess',
+			  function(event, toState, toParams, fromState, fromParams) {
+			    $state.current = toState;
+			    $rootScope.seccionActual = toState;
+			  }
+			)
+		}
+	]);
 
 
 })();

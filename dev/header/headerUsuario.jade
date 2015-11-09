@@ -1,0 +1,26 @@
+header.Header
+	figure.Header-logo
+	nav.Header-nav
+		ul 
+			a(ui-sref="usuario.inicio")
+				li 
+					span Inicio
+			a(ui-sref="usuario.clases")
+				li
+					span Clases
+			a(ui-sref="usuario.retos")
+				li
+					span Retos
+			a(ui-sref="usuario.pagos")
+				li
+					span Pagos
+			a(ui-sref="usuario.instructores")
+				li 
+					span Instructores
+			a(ui-sref="usuario.perfil")
+				li 
+					span Perfil
+			a(href="#")
+				li.SinBorder 
+					span Salir
+div.views(ui-view="contentViews")

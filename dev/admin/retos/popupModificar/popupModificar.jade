@@ -1,0 +1,14 @@
+div(popup-close).PopupRetosModificar
+	div.PopupRetosModificar-contenidoRetosModificar
+		figure(style="background-image: url(./img/reto.jpg)").ImgModificar
+			div.ImgModificar-cambiarImg
+				p cambiar imagen
+				div: i.icomoon.images
+		p Reto:
+		input(type="text" name="clase" required).CajaReto
+		p Fecha:
+		input(type="date" name="fecha")
+		p.Descripcion Descripción:
+		textArea(name="textarea" rows="1" cols="1" maxlength="200" placeholder="Escribir los detalles del reto").TextArea
+		button.BtnCancel.popup-close Cancelar
+		button.BtnGuardar Guardar

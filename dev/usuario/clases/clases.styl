@@ -1,87 +1,39 @@
 @import './popupDetalle/popupDetalle.styl'
 @import './popupAgendar/popupAgendar.styl'
-//------------------fondo Login--------------------------
-body.Principal
-	background: linear-gradient(
-      rgba(black, 0.60), 
-      rgba(black, 0.60)),
-    url(../img/fondo.jpg);
-	background-size: cover;
-	background-position:top center;
 //--------------------globales-------------------------	
 .ContenedorClase
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-around;
 	padding: 4.5em 3em 0em 3em;
-.Contenedor 
-	width:80%;
-	max-width:80em;
-	margin: 0 auto;
-	overflow: hidden;
-	.Header
-		width:100%;
-		border-bottom: 3px solid rgb(232,167,47);
-		overflow: hidden
-		&-logo
-			width:20em;
-			height:5em;
-			margin:0;
-			display: inline-block;
-			background-image: url(../img/logo.png);
-			background-size: 100% 100%;
-			background-repeat: no-repeat;
-			position:relative;
-			float:left;
-		&-nav
-			ul
-				float:right;
-				margin:0;
-				padding:0;
-				a
-					li
-						list-style: none;
-						text-align:center;
-						display: inline-block;
-						margin: 2.2em .7em 1em 0em;
-						padding: .5em .8em 0em 0em;
-						border-right: 1px solid gray;
-						span 
-							color:white;
-						&:first-child
-							text-decoration: underline;
-							color:white;
-					&:last-child
-						li
-							border:0;
-	.Clase
-		width:17em;
-		background:white;
-		border-radius:15px;
-		padding:.7em .7em .7em .7em;
-		margin: 0em 2em 3em 0em;
-		&-imagenClase
-			width:15.5em;
-			height:7.5em;
-			background-repeat:no-repeat;
-			background-size:cover;
-			background-position:center center;
-		figcaption
-			font-size:1.3em;
-			text-align:center;
-			margin-top:.3em;
-		&-detalle
-			background: rgb(231,150,28);
-			margin:.5em 0em 0em 1.5em;
-			display:inline-block;
-			float:left;
-		&-agendar
-			background: rgb(53,131,44);
-			margin:.5em 2em 0em 0em;
-			float:right;
-		button
-			color:white;
-			font-size:15px;
-			padding:.3em .9em;
-			border: 0;
-			border-radius:7px;
+.Clase
+	width:17em;
+	background:white;
+	border-radius:15px;
+	padding:.7em .7em .7em .7em;
+	margin: 0em 2em 3em 0em;
+	&-imagenClase
+		width:15.5em;
+		height:7.5em;
+		background-repeat:no-repeat;
+		background-size:cover;
+		background-position:center center;
+	figcaption
+		font-size:1.3em;
+		text-align:center;
+		margin-top:.3em;
+	&-detalle
+		background: rgb(231,150,28);
+		margin:.5em 0em 0em 1em;
+		display:inline-block;
+		float:left;
+	&-agendar
+		background: rgb(53,131,44);
+		margin:.5em 1.5em 0em 0em;
+		float:right;
+	button
+		color:white;
+		font-size:15px;
+		padding:.2em .9em;
+		border: 0;
+		border-radius:7px;

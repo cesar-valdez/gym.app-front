@@ -93,9 +93,9 @@ gulp.task('fonts', function () {
 //observar los cambios y cada cambio borra dep
 gulp.task('watch', ['clean'], function(){
   livereload.listen()
-  gulp.watch('./dev/**/**/**/*.styl', ['styl']);
-  gulp.watch('./dev/**/**/**/*.jade', ['jade']);
-  gulp.watch('./dev/**/**/**/*.js', ['js']);
+  gulp.watch('./dev/**/*.styl', ['styl']);
+  gulp.watch('./dev/**/*.jade', ['jade']);
+  gulp.watch('./dev/**/*.js', ['js']);
   gulp.watch(['./dev/img/*.png','./dev/img/*.jpg'], ['img']);
 })
 

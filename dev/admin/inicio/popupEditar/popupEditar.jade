@@ -1,0 +1,10 @@
+div(popup-close).PopupInicioEditar
+	div.PopupInicioEditar-contenidoInicioEditar
+		//h2 ¡Agrega nuevo banner!<br>
+		figure(style="background-image: url(./img/banner1.jpg)").ImgAgregarBanner
+			div.ImgAgregarBanner-cambiarImg
+				p cambiar imagen
+				div: i.icomoon.images
+		textArea(name="textarea" rows="1" cols="1" maxlength="200" placeholder="Escribir anuncio, o algun mensaje..").Anuncio
+		button.BtnCancelar.popup-close Cancelar
+		button.BtnGuardar Guardar

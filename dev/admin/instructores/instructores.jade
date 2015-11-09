@@ -1,66 +1,8 @@
-body.Principal
-	div.Contenedor
-		header.Header
-			figure.Header-logo
-			nav.Header-nav
-				ul 
-					a(ui-sref="inicioAdmin")
-						li 
-							span Inicio
-					a(ui-sref="clasesAdmin")
-						li
-							span Clases
-					a(ui-sref="retosAdmin")
-						li
-							span Retos
-					a(ui-sref="pagosAdmin")
-						li
-							span Pagos
-					a(ui-sref="instructoresAdmin")
-						li 
-							span Instructores
-					a(ui-sref="perfilAdmin")
-						li 
-							span Perfiles
-					a(href="#")
-						li 
-							span Salir
-		button.AgregarInstructor Agregar instructor
-		div.ContenedorInstructorAdmin
-			div.InstructorAdmin
-				figure(style="background-image: url('./img/instructor.jpg')").InstructorAdmin-imagenInstructor
-				figcaption.Instructor-nombre Andrea Delgado
-				button.InstructorAdmin-ver ver
-				button.InstructorAdmin-modificar Modificar
-				button.InstructorAdmin-eliminar Eliminar
-			div.InstructorAdmin
-				figure(style="background-image: url('./img/instructor.jpg')").InstructorAdmin-imagenInstructor
-				figcaption.Instructor-nombre Andrea Delgado
-				button.InstructorAdmin-ver ver
-				button.InstructorAdmin-modificar Modificar
-				button.InstructorAdmin-eliminar Eliminar
-			div.InstructorAdmin
-				figure(style="background-image: url('./img/instructor.jpg')").InstructorAdmin-imagenInstructor
-				figcaption.Instructor-nombre Andrea Delgado
-				button.InstructorAdmin-ver ver
-				button.InstructorAdmin-modificar Modificar
-				button.InstructorAdmin-eliminar Eliminar
-			div.InstructorAdmin
-				figure(style="background-image: url('./img/instructor.jpg')").InstructorAdmin-imagenInstructor
-				figcaption.Instructor-nombre Andrea Delgado
-				button.InstructorAdmin-ver ver
-				button.InstructorAdmin-modificar Modificar
-				button.InstructorAdmin-eliminar Eliminar
-			div.InstructorAdmin
-				figure(style="background-image: url('./img/instructor.jpg')").InstructorAdmin-imagenInstructor
-				figcaption.Instructor-nombre Andrea Delgado
-				button.InstructorAdmin-ver ver
-				button.InstructorAdmin-modificar Modificar
-				button.InstructorAdmin-eliminar Eliminar
-			div.InstructorAdmin
-				figure(style="background-image: url('./img/instructor.jpg')").InstructorAdmin-imagenInstructor
-				figcaption.Instructor-nombre Andrea Delgado
-				button.InstructorAdmin-ver ver
-				button.InstructorAdmin-modificar Modificar
-				button.InstructorAdmin-eliminar Eliminar
-			
+button(class="AgregarInstructor  PopupAdd" popup-add="<instructores-agregar><instructores-agregar/>") Agregar instructor
+div.ContenedorInstructorAdmin
+	div(ng-repeat="instructor in instructores").InstructorAdmin
+		figure(style="background-image: url('{{instructor.imgInstructor}}')").InstructorAdmin-imagenInstructor
+		figcaption.Instructor-nombre {{instructor.nombre}} {{instructor.apellido}}
+		button(class="InstructorAdmin-ver  PopupAdd" popup-add="<instructores-ver><instructores-ver/>") ver
+		button(class="InstructorAdmin-modificar  PopupAdd" popup-add="<instructores-modificar><instructores-modificar/>") Modificar
+		button(class="InstructorAdmin-eliminar  PopupAdd" popup-add="<instructores-eliminar><instructores-eliminar/>") Eliminar

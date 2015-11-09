@@ -3,21 +3,35 @@
 *
 	box-sizing: border-box;
 body
-	font-size:16px;
+	font-size:14px;
 	
 a
 	text-decoration: none;
 	color:inherit;
 
-body.Principal
+body
+&-Login
 	background: linear-gradient(
-      rgba(black, 0.60), 
-      rgba(black, 0.60)),
-    url('../img/fondo.jpg');
+	rgba(black, 0.60), 
+	rgba(black, 0.60)),
+	url('../img/fondoLogin.jpg');
+	background-size: cover;
+	background-position:top center
+&-Principal
+	background: linear-gradient(
+	rgba(black, 0.60), 
+	rgba(black, 0.60)),
+	url('../img/fondo.jpg');
 	background-size: cover;
 	background-position:top center;
-	
+.Contenedor
+	width:80%;
+	max-width:80em;
+	margin: 0 auto;
+	overflow: hidden;
+		
 @import './fonts/fonts'
 @import '../admin/admin'
 @import '../usuario/usuario'
 @import '../login/login'
+@import '../header/header'

@@ -1,109 +1,67 @@
-
-//------------------fondo Login--------------------------
-body.Principal
-	background: linear-gradient(
-      rgba(black, 0.60), 
-      rgba(black, 0.60)),
-    url(../img/fondo.jpg);
-	background-size: cover;
-	background-position:top center;
+@import './popupAgregar/popupAgregar.styl'
+@import './popupModificar/popupModificar.styl'
+@import './popupEliminar/popupEliminar.styl'
 //--------------------globales-------------------------	
 .ContenedorClase
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-around;
 	padding: 4.5em 3em 0em 3em;
-.Contenedor 
-	width:80%;
-	max-width:80em;
-	margin: 0 auto;
-	overflow: hidden;
-	.Header
-		width:100%;
-		border-bottom: 3px solid rgb(232,167,47);
-		overflow: hidden
-		&-logo
-			width:20em;
-			height:5em;
-			margin:0;
-			display: inline-block;
-			background-image: url(../img/logo.png);
-			background-size: 100% 100%;
-			background-repeat: no-repeat;
-			position:relative;
-			float:left;
-		&-nav
-			ul
-				float:right;
-				margin:0;
-				padding:0;
-				a
-					li
-						list-style: none;
-						text-align:center;
-						display: inline-block;
-						margin: 2.2em .7em 1em 0em;
-						padding: .5em .8em 0em 0em;
-						border-right: 1px solid gray;
-						span 
-							color:white;
-						&:first-child
-							text-decoration: underline;
-							color:white;
-					&:last-child
-						li
-							border:0;
-	.Costos
-		width:30em;
-		background:white;
-		padding:1em 2em;
-		margin:3em 0em 0em 20em;
-		border-radius:15px;
-		span
-			font-size:15px;
-	.AgregarPago
-		color:white;
+.Costos
+	width:30em;
+	background:white;
+	padding:1em 2em;
+	margin:3em 0em 0em 20em;
+	border-radius:15px;
+	span
 		font-size:15px;
-		padding:.3em 1em;
-		margin:2em 0em 0em 58em;
-		border: 0;
-		border-radius:7px;
-		background: rgb(53,131,44);
-	.AreaTablaAdmin
-		width:55em;
-		margin: 1em 0em 0em 8em
-		&-encabezadoAdmin
+.AgregarPago
+	color:white;
+	font-size:15px;
+	padding:.3em 1em;
+	margin:2em 0em 0em 50em;
+	border: 0;
+	border-radius:7px;
+	background: rgb(53,131,44);
+.AreaTablaAdmin
+	width:55em;
+	margin: 1em 0em 0em 8em
+	&-encabezadoAdmin
+		width:100%;
+		background:rgb(178,178,178);
+		padding:.8em 0em
+		border-right: 1px solid rgb(140,139,139);
+		font-size:17px;
+		border-top-left-radius:25px;
+		border-top-right-radius:25px;
+		.Pagos
+			border-bottom:1px solid black;
+			margin:0em 7em 0em 8em;
+			cursor:pointer;
+		.Vencidos
+			padding:0em 0em 0em 5em;
+			border-left: 1px solid gray;
+			cursor:pointer;
+	&-scrollAdmin
+		width:100%;
+		height:20.6em;
+		overflow:auto;
+		&-tablaAdmin
 			width:100%;
-			background:rgb(178,178,178);
-			padding:.8em 0em
-			border-right: 1px solid rgb(140,139,139);
-			font-size:17px;
-			border-top-left-radius:25px;
-			border-top-right-radius:25px;
-			//border-style:hidden;
-			.Pagos
-				border-bottom:1px solid black;
-				margin:0em 7em 0em 11em;
-			.Vencidos
-				padding:0em 0em 0em 7em;
-				border-left: 1px solid gray;
-		&-scrollAdmin
-			width:100%;
-			height:20.6em;
-			overflow:auto;
-			&-tablaAdmin
-				width:100%;
-				tr
-					td
-						border: 1px solid rgb(193,193,193);
-						background:white;
-						text-align:center;
-						padding:.4em 0em;
-					&:first-child
-						font-weight:bold;
-					div
-						display:inline-block;
-						padding:0em 0em 0em 1.5em;
-						i
-							color:gray;
-							font-size:16px;
+			tr
+				td
+					border: 1px solid rgb(193,193,193);
+					background:white;
+					text-align:center;
+					padding:.4em 0em;
+				&:first-child
+					font-weight:bold;
+				figure
+					background:red;
+				div
+					display:inline-block;
+					padding:0em 0em 0em 1.5em;
+					cursor:pointer;
+					i
+						color:gray;
+						font-size:16px;

@@ -1,0 +1,39 @@
+.Header
+	width:100%;
+	border-bottom: 3px solid rgb(232,167,47);
+	overflow: hidden
+	&-logo
+		width:20em;
+		height:5em;
+		margin:0;
+		display: inline-block;
+		background-image: url(../img/logo.png);
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+		position:relative;
+		float:left;
+	&-nav
+		ul
+			float:right;
+			margin:0;
+			padding:0;
+			a
+				.SinBorder
+					border:0;
+				li
+					list-style: none;
+					text-align:center;
+					display: inline-block;
+					margin: 2.2em .7em 1em 0em;
+					padding: .5em .8em 0em 0em;
+					border-right: 1px solid gray;
+					span 
+						color:white;
+						//transition: all .3s ease-out;
+						//&:hover
+						//	color:red;
+						//	font-size:30px;
+							//transform:scale3d(2,2,2);
+					&:first-child
+						text-decoration: underline;
+						color:white;

@@ -2,10 +2,10 @@
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Admin')
-	.controller('RetosAdminController', RetosAdminController);
+	.controller('RetosController', RetosController);
 
-	function RetosAdminController(){
-		console.log("RetosAdmin controller");
+	function RetosController(){
+		console.log("Retos controller");
 	}
 
 })();

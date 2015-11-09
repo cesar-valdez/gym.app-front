@@ -1,8 +1,7 @@
 div(popup-close).Popup
 	div.Popup-contenido
-		h2 Clase de zumba<br>
+		h2 {{clases.clase}}<br>
 		div: i.icomoon.cancel-circle.popup-close
-		p <br>Horario: Lunes-Viernes<br>
-		p Hora: 8:00am<br>
-		p precio: $300 mensuales<br>
-		p duracion : 1hora<br>
+		p <br>Horario: {{clases.dia}}<br>
+		p Hora: {{clases.hora}}<br>
+		p duracion : {{clases.horaDuracion}} {{clases.minDuracion}}<br>

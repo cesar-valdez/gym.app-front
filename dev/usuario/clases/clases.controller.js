@@ -4,8 +4,20 @@
 	angular.module('gymApp.Usuario')
 	.controller('ClasesController', ClasesController);
 
-	function ClasesController(){
+	ClasesController.$inject = ["$state","$scope","ClasesService"];
+
+	function ClasesController($state, $scope, ClasesService){
 		console.log("Clases controller");
+		
+		$scope.clases = [];
+
+		ClasesService.clases().then(
+			function(response){
+			console.log(response)
+			$scope.clases = response;
+		}).catch(function(err){
+			console.log(err)
+		});
 	}
 
 })();

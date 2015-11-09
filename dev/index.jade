@@ -5,7 +5,9 @@ html(lang="es", ng-app="gymApp")
 		link(rel="stylesheet", href="./css/app.css")
 		link(rel="stylesheet", href="http://fonts.googleapis.com/css?family=Crimson Text")
 		title app Gym
-	body.Login
-		div(ui-view)
+	body(ng-class="{Login: (seccionActual.name =='login'), Principal: (seccionActual.name !='login')}")
+		
+		div(ui-view).Contenedor
+		
 		script(src="./js/vendor.js")
 		script(src="./js/app.js")

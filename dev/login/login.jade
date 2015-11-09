@@ -1,24 +1,23 @@
-
-div.Contenedor
-	header.Header
-		figure.Header-logoLogin
-		div.Header-login
-			div.Header-login-user
-				label Correo electronico
-				input(type="text")
-			div.Header-login-password
-				label Contraseña
-				input(type="text")
-			div.Header-login-button
-				button.Header-login-button-entrar <a ui-sref="inicio">Entrar</a>
-	section.Direccion
-		p.Direccion-titulo¿Cómo llegar?
-		p.Direccion-contenido Direccion: Presidente Cardenas No.210 entre Bravo y Taylon <br><br> Tel: 844 208 24 52
-		section#Direccion-map.Direccion-map
-	section.Registro
-		p ¿Aún no te registras? ¡¿Que esperas?!  
-		input.Registro-nombre(type="text",placeholder="Nombre")
-		input.Registro-apellido(type="text",placeholder="Apellido")
-		input.Registro-largo(type="text",placeholder="Correo electronico")
-		input.Registro-largo(type="text",placeholder="Contraseña")
-		button.Registro-registrate <a ui-sref="inicioAdmin">Registrate</a>
+//body.Login
+header.Header
+	figure.Header-logoLogin
+	form.Header-login
+		div.Header-login-user
+			label Correo electronico
+			input(type="text" ng-model="usuario.correo")
+		div.Header-login-password
+			label Contraseña
+			input(type="password" ng-model="usuario.password")
+		div.Header-login-button
+			button(ng-click="addUsuario()").Header-login-button-entrar Entrar
+section.Direccion
+	p.Direccion-titulo¿Cómo llegar?
+	p.Direccion-contenido Direccion: Presidente Cardenas No.210 entre Bravo y Taylon <br><br> Tel: 844 208 24 52
+	section#Direccion-map.Direccion-map
+form.Registro
+	p ¿Aún no te registras? ¡¿Que esperas?!  
+	input.Registro-nombre(type="text",placeholder="Nombre" ng-model="cliente.nombre")
+	input.Registro-apellido(type="text",placeholder="Apellido" ng-model="cliente.apellido")
+	input.Registro-largo(type="text",placeholder="Correo electronico" ng-model="cliente.correo")
+	input.Registro-largo(type="text",placeholder="Contraseña" ng-model="cliente.password")
+	button(ng-click="addCliente()").Registro-registrate Registrate

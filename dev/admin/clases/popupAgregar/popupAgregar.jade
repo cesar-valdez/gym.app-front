@@ -1,0 +1,43 @@
+div(popup-close).PopupClasesAgregar
+	div.PopupClasesAgregar-contenidoClasesAgregar
+		figure.ImgAgregarClase
+			span Subir foto
+			div: i.icomoon.camera
+		p Clase:
+		input(type="text" name="clase" required).CajaClase
+		p Instructor:
+		select(name="instructor" required).CajaInstructor
+			option Andrea Martinez
+			option jorge Avalos
+		p Precio:
+		input(type="text" name="precio" required).CajaPrecio
+		p Hora:
+		select(name="hora")
+			option 6:00am
+			option 7:00am
+			option 8:00am
+			option 9:00am
+			option 10:00am
+			option 11:00am
+		p Duración:
+		input(type="number" min="1" max="12").CajaDuracion
+		p.CajaHoras hrs
+		input(type="number" min="1" max="60").CajaDuracion
+		p mm
+		p Dias:
+		p.Dias L
+		input(type="checkbox" name="lunes" value="lunes")
+		p.Dias M
+		input(type="checkbox" name="martes" value="martes")
+		p.Dias M
+		input(type="checkbox" name="miercoles" value="miercoles")
+		p.Dias J
+		input(type="checkbox" name="jueves" value="jueves")
+		p.Dias V
+		input(type="checkbox" name="viernes" value="viernes")
+		p.Dias S
+		input(type="checkbox" name="sabado" value="sabado")
+		p.Dias D
+		input(type="checkbox" name="domingo" value="domingo")
+		button.BtnCancelar.popup-close Cancelar
+		button.BtnCrear Crear
