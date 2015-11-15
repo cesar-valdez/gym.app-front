@@ -1,8 +1,10 @@
 div(popup-close).PopupInstructoresAgregar
 	form.PopupInstructoresAgregar-contenidoInstructoresAgregar
-		figure.ImgAgregar
+		figure(style="background-image:url({{instructor.imgInstructor}});").ImgAgregar
 			span Subir foto
-			div: i.icomoon.camera
+			label.label
+				input(type="file" file-upload="instructor.imgInstructor").SubirImg
+				i.icomoon.camera
 		p Nombre:
 		input(type="text" name="nombre" ng-model="instructor.nombre" required)
 		p Apellido:

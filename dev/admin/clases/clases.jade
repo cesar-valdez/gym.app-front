@@ -1,8 +1,8 @@
 button(class="AgregarClase PopupAdd" popup-add="<clases-agregar><clases-agregar/>") Agregar clase
 div.ContenedorClaseAdmin
-	div(ng-repeat="clases in clases").Clases
-		figure(style="background-image: url('{{clases.imgClase}}')").Clases-imagenClase
-		figcaption.Clases-reto {{clases.clase}}
+	div(ng-repeat="clase in clases").Clases
+		figure(style="background-image: url('{{clase.imgClase}}')").Clases-imagenClase
+		figcaption.Clases-reto {{clase.clase}}
 		button(class="Clases-ver PopupAdd" popup-add="<clases-ver><clases-ver/>").Clase-ver Ver
 		button(class="Clases-modific PopupAdd" popup-add="<clases-modificar><clases-modificar/>") Modificar
 		button(class="Clases-delete PopupAdd" popup-add="<clases-eliminar><clases-eliminar/>") Eliminar

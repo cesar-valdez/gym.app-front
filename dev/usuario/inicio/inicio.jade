@@ -1,6 +1,8 @@
 label.Nombre ¡Bienvenido Cesar!
-div.AreaSlider
-	div(style="background-image: url('./img/banner1.jpg')").Banner
-		p.Banner-texto Promocion 2x1 solo viernes 
-		//figure.Imgagen
-		//p.Texto
+article.Articule
+	ul(rn-carousel class="image" rn-carousel-auto-slide).Ul
+		li(ng-repeat="banner in banners track by $index")
+			//div(rn-carousel-indicators ng-if="banners.length > 1" slides="slides" rn-carousel-index="carouselIndex")
+			div(class="layer").Div
+				figure(style="background-image: url({{banner.imgBanner}});").Figure
+					p.P {{banner.anuncio}} 

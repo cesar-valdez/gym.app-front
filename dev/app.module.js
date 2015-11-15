@@ -3,11 +3,13 @@
 	//modulo de rutas - ui-router
 	angular.module('gymApp', [
 		'ui.router',
+		'angular-carousel',
 		'gymApp.constants',
 		'gymApp.Helpers',
 		'gymApp.Usuario',
 		'gymApp.Admin',
-		'gymApp.Login'
+		'gymApp.Login',
+		'gymApp.Retos'
 		])
 	.config(['$stateProvider','$urlRouterProvider', function($stateProvider, $urlRouterProvider){ 
 		$stateProvider
@@ -26,7 +28,8 @@
 					url: '/inicio',
 					views:{
 						"contentViews":{
-							templateUrl: 'usuario/inicio/inicio.html'
+							templateUrl: 'usuario/inicio/inicio.html',
+							controller: 'InicioController'
 						}
 					}
 				})
@@ -43,7 +46,8 @@
 					url: '/retos',
 					views:{
 						"contentViews":{
-							templateUrl: 'usuario/retos/retos.html'
+							templateUrl: 'usuario/retos/retos.html',
+							controller: 'RetosController'
 						}
 					}
 				})
@@ -60,7 +64,8 @@
 					url: '/pagos',
 					views:{
 						"contentViews":{
-							templateUrl: 'usuario/pagos/pagos.html'
+							templateUrl: 'usuario/pagos/pagos.html',
+							controller: 'PagosController'
 						}
 					}
 				})
@@ -82,7 +87,8 @@
 					url: '/inicio',
 					views:{
 						"contentViews":{
-							templateUrl: 'admin/inicio/inicio.html'
+							templateUrl: 'admin/inicio/inicio.html',
+							controller: 'InicioAdminController'
 						}
 					}
 				})
@@ -99,7 +105,8 @@
 					url: '/retos',
 					views:{
 						"contentViews":{
-							templateUrl: 'admin/retos/retos.html'
+							templateUrl: 'admin/retos/retos.html',
+							controller: 'RetosAdminController'
 						}
 					}
 				})
@@ -116,7 +123,8 @@
 					url: '/pagos',
 					views:{
 						"contentViews":{
-							templateUrl: 'admin/pagos/pagos.html'
+							templateUrl: 'admin/pagos/pagos.html',
+							controller: 'PagosAdminController'
 						}
 					}
 				})

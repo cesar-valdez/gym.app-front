@@ -1,5 +1,6 @@
 require('./clases.controller');
 require('./clases.service');
+require('./popupAgregar/popupAgregar.controller');
 require('./popupAgregar/popupAgregar.directive');
 require('./popupModificar/popupModificar.directive');
 require('./popupEliminar/popupEliminar.directive');

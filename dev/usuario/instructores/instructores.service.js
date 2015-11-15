@@ -7,7 +7,7 @@
 
 	function InstructoresService($q,$http, constants){
 
-		function instructores(){
+		function getInstructores(){
 			var deferred = $q.defer();
 			
 			$http.get(constants.webService + 'getInstructores')

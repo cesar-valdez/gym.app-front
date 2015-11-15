@@ -19,6 +19,8 @@
   "dependencies": {
     "angular": "~1.4.6",
     "jquery": "~2.1.4",
-    "angular-ui-router": "~0.2.15"
+    "angular-ui-router": "~0.2.15",
+    "angular-carousel": "~1.0.1",
+    "Angular-swx-session-storage ($sessionStorage)": "angular-swx-session-storage#~0.0.8"
   }
 }

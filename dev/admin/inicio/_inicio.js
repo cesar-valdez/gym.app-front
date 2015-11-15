@@ -1,3 +1,4 @@
+require('./inicio.service');
 require('./inicio.controller');
 require('./popupAgregar/popupAgregar.directive');
 require('./popupEditar/popupEditar.directive');

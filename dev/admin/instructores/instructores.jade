@@ -4,5 +4,5 @@ div.ContenedorInstructorAdmin
 		figure(style="background-image: url('{{instructor.imgInstructor}}')").InstructorAdmin-imagenInstructor
 		figcaption.Instructor-nombre {{instructor.nombre}} {{instructor.apellido}}
 		button(class="InstructorAdmin-ver  PopupAdd" popup-add="<instructores-ver><instructores-ver/>") ver
-		button(class="InstructorAdmin-modificar  PopupAdd" popup-add="<instructores-modificar><instructores-modificar/>") Modificar
-		button(class="InstructorAdmin-eliminar  PopupAdd" popup-add="<instructores-eliminar><instructores-eliminar/>") Eliminar
+		button(class="InstructorAdmin-modificar  PopupAdd" popup-add="<instructores-modificar edit-instructor='instructor'/>") Modificar
+		button(class="InstructorAdmin-eliminar  PopupAdd" popup-add="<instructores-eliminar del-instructor='instructor' />") Eliminar

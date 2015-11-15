@@ -1,4 +1,4 @@
-(function(){
+/*(function(){
 	angular.module('gymApp.Usuario')
 
 	.service('ClasesService', ClasesService)
@@ -7,7 +7,7 @@
 
 	function ClasesService($q,$http, constants){
 
-		function clases(){
+		function getClases(){
 			var deferred = $q.defer();
 			
 			$http.get(constants.webService + 'getClases')
@@ -26,9 +26,9 @@
 
 		//return de los metodos
 		return{
-			clases: clases
+			getClases: getClases
 		};
 
 	}
 
-})();
+})();*/

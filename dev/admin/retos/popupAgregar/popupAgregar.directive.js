@@ -4,7 +4,8 @@
 	function retosAgregar(){
 		return{
 			restrict:'E',
-			templateUrl: './admin/retos/popupAgregar/popupAgregar.html'
+			templateUrl: './admin/retos/popupAgregar/popupAgregar.html',
+			controller: 'RetosAgregarAdminController'
 		}
 	}
 

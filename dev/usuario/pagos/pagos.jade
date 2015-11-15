@@ -9,97 +9,17 @@ div.AreaTabla
 		table.AreaTabla-scroll-tabla
 			tr
 				td No.registro
-				td Nombre
+				td Nombre 
 				td Apellido
 				td Fecha de pago
 				td Fecha pagado
 				td Costo
 				td Estado de pago
-			tr 
-				td 1
-				td Cesar
-				td Valdez
-				td $300
-				td 4/Agosto/2015
-				td 10/Agosto/2015
-				td Pagado
-			tr 
-				td 1
-				td Cesar
-				td Valdez
-				td $300
-				td 4/Agosto/2015
-				td 10/Agosto/2015
-				td Pagado
-			tr 
-				td 1
-				td Cesar
-				td Valdez
-				td $300
-				td 4/Agosto/2015
-				td 10/Agosto/2015
-				td Pagado
-			tr 
-				td 1
-				td Cesar
-				td Valdez
-				td $300
-				td 4/Agosto/2015
-				td 10/Agosto/2015
-				td Pagado
-			tr 
-				td 1
-				td Cesar
-				td Valdez
-				td $300
-				td 4/Agosto/2015
-				td 10/Agosto/2015
-				td Pagado
-			tr 
-				td 1
-				td Cesar
-				td Valdez
-				td $300
-				td 4/Agosto/2015
-				td 10/Agosto/2015
-				td Pagado
-			tr 
-				td 1
-				td Cesar
-				td Valdez
-				td $300
-				td 4/Agosto/2015
-				td 10/Agosto/2015
-				td Pagado
-			tr 
-				td 1
-				td Cesar
-				td Valdez
-				td $300
-				td 4/Agosto/2015
-				td 10/Agosto/2015
-				td Pagado
-			tr 
-				td 1
-				td Cesar
-				td Valdez
-				td $300
-				td 4/Agosto/2015
-				td 10/Agosto/2015
-				td Pagado
-			tr 
-				td 1
-				td Cesar
-				td Valdez
-				td $300
-				td 4/Agosto/2015
-				td 10/Agosto/2015
-				td Pagado
-			tr 
-				td 1
-				td Cesar
-				td Valdez
-				td $300
-				td 4/Agosto/2015
-				td 10/Agosto/2015
-				td Pagado
+			tr(ng-repeat="pago in pagos")
+				td {{pago.PagosId}}
+				td {{pago.ClientesNombre}}
+				td {{pago.CientesApellido}}
+				td {{pago.PagosMonto}}
+				td {{pago.PagosFechaPagado}}
+				td {{pago.PagosFechaPago}}
+				td {{pago.PagosEstado}}

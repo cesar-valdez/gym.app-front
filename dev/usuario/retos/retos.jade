@@ -1,43 +1,8 @@
 div.ContenedorReto
-	div.Reto
-		figure(style="background-image: url('./img/reto1.jpg')").Reto-imagenReto
-		figcaption.Reto-reto Reto1
-		figcaption.Reto-fecha 17/Octubre/2015
-		button(class="reto-ver PopupAdd" popup-add="<reto-ver><reto-ver/>").Reto-verBtn ver
-		button.Reto-participar Participar
-		button.Reto-rechazar Rechazar
-	div.Reto
-		figure(style="background-image: url('./img/reto1.jpg')").Reto-imagenReto
-		figcaption.Reto-reto Reto1
-		figcaption.Reto-fecha 17/Octubre/2015
-		button(class="reto-ver PopupAdd" popup-add="<reto-ver><reto-ver/>").Reto-verBtn ver
-		button.Reto-participar Participar
-		button.Reto-rechazar Rechazar
-	div.Reto
-		figure(style="background-image: url('./img/reto1.jpg')").Reto-imagenReto
-		figcaption.Reto-reto Reto1
-		figcaption.Reto-fecha 17/Octubre/2015
-		button(class="reto-ver PopupAdd" popup-add="<reto-ver><reto-ver/>").Reto-verBtn ver
-		button.Reto-participar Participar
-		button.Reto-rechazar Rechazar
-	div.Reto
-		figure(style="background-image: url('./img/reto1.jpg')").Reto-imagenReto
-		figcaption.Reto-reto Reto1
-		figcaption.Reto-fecha 17/Octubre/2015
-		button(class="reto-ver PopupAdd" popup-add="<reto-ver><reto-ver/>").Reto-verBtn ver
-		button.Reto-participar Participar
-		button.Reto-rechazar Rechazar
-	div.Reto
-		figure(style="background-image: url('./img/reto1.jpg')").Reto-imagenReto
-		figcaption.Reto-reto Reto1
-		figcaption.Reto-fecha 17/Octubre/2015
-		button(class="reto-ver PopupAdd" popup-add="<reto-ver><reto-ver/>").Reto-verBtn ver
-		button.Reto-participar Participar
-		button.Reto-rechazar Rechazar
-	div.Reto
-		figure(style="background-image: url('./img/reto1.jpg')").Reto-imagenReto
-		figcaption.Reto-reto Reto1
-		figcaption.Reto-fecha 17/Octubre/2015
+	div(ng-repeat="retos in retos").Reto
+		figure(style="background-image: url('{{retos.imgReto}}')").Reto-imagenReto
+		figcaption.Reto-reto {{retos.reto}}
+		figcaption.Reto-fecha {{retos.fechaInicio | date:'fullDate'}}
 		button(class="reto-ver PopupAdd" popup-add="<reto-ver><reto-ver/>").Reto-verBtn ver
 		button.Reto-participar Participar
 		button.Reto-rechazar Rechazar

@@ -1,6 +1,6 @@
 require('./instructores.controller');
 require('./instructores.service');
-require('./popupAgregar/popupAgregar.directive');
-require('./popupModificar/popupModificar.directive');
-require('./popupEliminar/popupEliminar.directive');
-require('./popupVer/popupVer.directive');
+require('./instructores.directive');
+require('./popupModificar/popupModificar.controller');
+require('./popupEliminar/popupEliminar.controller');
+

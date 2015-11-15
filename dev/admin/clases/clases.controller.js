@@ -4,20 +4,23 @@
 	angular.module('gymApp.Admin')
 	.controller('ClasesAdminController', ClasesAdminController);
 
-	ClasesAdminController.$inject = ["$state","$scope","ClasesService"];
+	ClasesAdminController.$inject = ["$state","$scope","ClasesService", "InstructoresService", "HelpersFactory", "constant"];
 
-	function ClasesAdminController($state, $scope, ClasesService){
+	function ClasesAdminController($state, $scope, ClasesService, InstructoresService, HelpersFactory, constants){
 		console.log("ClasesAdmin controller");
 
 		$scope.clases = [];
 
-		ClasesService.clases().then(
-			function(response){
-			console.log(response)
-			$scope.clases = response;
+		//getClases
+		ClasesService
+			.getClases()
+			.then(function(response){
+				console.log(response)
+				$scope.clases = response;
 		}).catch(function(err){
 			console.log(err)
 		});
+		
 	}
 
 })();

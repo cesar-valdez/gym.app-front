@@ -11,7 +11,8 @@
 		
 		$scope.clases = [];
 
-		ClasesService.clases().then(
+		//getClases
+		ClasesService.getClases().then(
 			function(response){
 			console.log(response)
 			$scope.clases = response;

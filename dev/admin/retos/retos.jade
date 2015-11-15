@@ -1,45 +1,9 @@
 button(class="AgregarRetoAdmin PopupAdd" popup-add="<retos-agregar><retos-agregar/>") Agregar reto
 div.ContenedorRetoAdmin
-	div.RetoAdmin
-		figure(style="background-image: url('./img/reto1.jpg')").RetoAdmin-imagenRetoAdmin
-		figcaption.RetoAdmin-reto Reto1
-		figcaption.RetoAdmin-fecha 17/Octubre/2015
+	div(ng-repeat="retos in retos").RetoAdmin
+		figure(style="background-image: url('{{retos.imgReto}}')").RetoAdmin-imagenRetoAdmin
+		figcaption.RetoAdmin-reto {{retos.reto}}
+		figcaption.RetoAdmin-fecha {{retos.fechaInicio | date:'fullDate'}}
 		button(class="RetoAdmin-ver PopupAdd" popup-add="<retos-ver><retos-ver/>") ver
 		button(class="RetoAdmin-modificar PopupAdd" popup-add="<retos-modificar><retos-modificar/>") Modificar
 		button(class="RetoAdmin-eliminar PopupAdd" popup-add="<retos-eliminar><retos-eliminar/>") Eliminar
-	div.RetoAdmin
-		figure(style="background-image: url('./img/reto1.jpg')").RetoAdmin-imagenRetoAdmin
-		figcaption.RetoAdmin-reto Reto1
-		figcaption.RetoAdmin-fecha 17/Octubre/2015
-		button(class="RetoAdmin-ver PopupAdd" popup-add="<retos-ver><retos-ver/>") ver
-		button(class="RetoAdmin-modificar PopupAdd" popup-add="<retos-modificar><retos-modificar/>") Modificar
-		button(class="RetoAdmin-eliminar PopupAdd" popup-add="<retos-eliminar><retos-eliminar/>") Eliminar
-	div.RetoAdmin
-		figure(style="background-image: url('./img/reto1.jpg')").RetoAdmin-imagenRetoAdmin
-		figcaption.RetoAdmin-reto Reto1
-		figcaption.RetoAdmin-fecha 17/Octubre/2015
-		button(class="RetoAdmin-ver PopupAdd" popup-add="<retos-ver><retos-ver/>") ver
-		button(class="RetoAdmin-modificar PopupAdd" popup-add="<retos-modificar><retos-modificar/>") Modificar
-		button(class="RetoAdmin-eliminar PopupAdd" popup-add="<retos-eliminar><retos-eliminar/>") Eliminar
-	div.RetoAdmin
-		figure(style="background-image: url('./img/reto1.jpg')").RetoAdmin-imagenRetoAdmin
-		figcaption.RetoAdmin-reto Reto1
-		figcaption.RetoAdmin-fecha 17/Octubre/2015
-		button(class="RetoAdmin-ver PopupAdd" popup-add="<retos-ver><retos-ver/>") ver
-		button(class="RetoAdmin-modificar PopupAdd" popup-add="<retos-modificar><retos-modificar/>") Modificar
-		button(class="RetoAdmin-eliminar PopupAdd" popup-add="<retos-eliminar><retos-eliminar/>") Eliminar
-	div.RetoAdmin
-		figure(style="background-image: url('./img/reto1.jpg')").RetoAdmin-imagenRetoAdmin
-		figcaption.RetoAdmin-reto Reto1
-		figcaption.RetoAdmin-fecha 17/Octubre/2015
-		button(class="RetoAdmin-ver PopupAdd" popup-add="<retos-ver><retos-ver/>") ver
-		button(class="RetoAdmin-modificar PopupAdd" popup-add="<retos-modificar><retos-modificar/>") Modificar
-		button(class="RetoAdmin-eliminar PopupAdd" popup-add="<retos-eliminar><retos-eliminar/>") Eliminar
-	div.RetoAdmin
-		figure(style="background-image: url('./img/reto1.jpg')").RetoAdmin-imagenRetoAdmin
-		figcaption.RetoAdmin-reto Reto1
-		figcaption.RetoAdmin-fecha 17/Octubre/2015
-		button(class="RetoAdmin-ver PopupAdd" popup-add="<retos-ver><retos-ver/>") ver
-		button(class="RetoAdmin-modificar PopupAdd" popup-add="<retos-modificar><retos-modificar/>") Modificar
-		button(class="RetoAdmin-eliminar PopupAdd" popup-add="<retos-eliminar><retos-eliminar/>") Eliminar
-	

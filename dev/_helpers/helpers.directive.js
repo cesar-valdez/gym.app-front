@@ -2,6 +2,7 @@
 	angular.module('gymApp.Helpers')
 	.directive('popupAdd', popupAdd)
 	.directive('popupClose', popupClose)
+	.directive('fileUpload', fileUpload)
 	
 	popupAdd.$inject=['$compile']
 	
@@ -44,4 +45,30 @@
 		}
 	}
 
+	fileUpload.$inject = ['HelpersService'];
+
+		function fileUpload(HelpersService){
+			return {
+				restrict: 'A',
+				scope:{
+					fileUpload:'='
+				},
+				link: function(scope, element, attrs) {
+					element.bind('change', function(){
+						var file = element[0].files[0];
+						HelpersService
+							.upload(file)
+							.then(function(response){
+								scope.fileUpload = response.url;
+							})
+							.catch(function(response){
+								console.log(response);
+							});
+					});
+				}
+			}
+		}
+
+
 })();
+

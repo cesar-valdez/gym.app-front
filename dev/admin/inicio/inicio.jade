@@ -1,14 +1,15 @@
-//include ../../header/headerAdmin.jade
-label.Nombre ¡Bienvenido!
-div.AreaSlider
-	div(style="background-image: url('./img/banner1.jpg')").Banner
-		div.Botones
-			div(class="icomoon.pencil PopupAdd" popup-add="<inicio-editar><inicio-editar/>")
-				i.icomoon.pencil
-			div(class="icomoon.plus PopupAdd" popup-add="<inicio-agregar><inicio-agregar/>")
-				i.icomoon.plus
-			div(class="icomoon.bin PopupAdd" popup-add="<inicio-eliminar><inicio-eliminar/>")
-				i.icomoon.bin
-		p.Banner-texto 
-		//figure.Imgagen
-		//p.Texto
+label.NombreAdmin ¡Bienvenido!
+article.ArticuleAdmin
+	ul(rn-carousel class="image" rn-carousel-auto-slide).UlAdmin
+		li(ng-repeat="banner in banners track by $index")
+			//div(rn-carousel-indicators ng-if="banners.length > 1" slides="slides" rn-carousel-index="carouselIndex")
+			div(class="layer").DivAdmin
+				figure(style="background-image: url({{banner.imgBanner}});").FigureAdmin
+					div.Botones
+						div(class="icomoon.pencil PopupAdd" popup-add="<inicio-editar><inicio-editar/>")
+							i.icomoon.pencil
+						div(class="icomoon.plus PopupAdd" popup-add="<inicio-agregar><inicio-agregar/>")
+							i.icomoon.plus
+						div(class="icomoon.bin PopupAdd" popup-add="<inicio-eliminar><inicio-eliminar/>")
+							i.icomoon.bin
+					p.PAdmin {{banner.anuncio}} 

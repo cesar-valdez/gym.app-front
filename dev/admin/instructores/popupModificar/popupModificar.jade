@@ -5,21 +5,21 @@ div(popup-close).PopupInstructoresModificar
 				p cambiar imagen
 				div: i.icomoon.images
 		p Nombre:
-		input(type="text" name="nombre" required)
+		input(type="text" name="nombre"  ng-model="instructorDuplicado.nombre" required)
 		p Apellido:
-		input(type="text" name="apellido" required)
+		input(type="text" name="apellido" ng-model="instructorDuplicado.apellido" required)
 		p.class Clase:
-		input(type="text" name="clase" required)
+		input(type="text" name="clase" ng-model="instructorDuplicado.clase" required)
 		p Correo:
-		input(type="text" name="correo" required)
+		input(type="text" name="correo" ng-model="instructorDuplicado.correo" required)
 		p Celular:
-		input(type="text" name="celular" required)
+		input(type="text" name="celular" ng-model="instructorDuplicado.celular" required)
 		p.peso Peso:
-		input.InputPeso(type="text" name="peso" required)
+		input.InputPeso(type="text" name="peso" ng-model="instructorDuplicado.peso" required)
 		p Estatura:
-		input.InputPeso(type="text" name="estatura" required)
+		input.InputPeso(type="text" name="estatura" ng-model="instructorDuplicado.estatura" required)
 		div
 			p Edad:
-			input.InputEdad(type="text" name="edad" required)
+			input.InputEdad(type="text" name="edad" ng-model="instructorDuplicado.edad" required)
 		button.BtnCancelar.popup-close Cancelar
-		button.BtnGuardar Guardar
+		button(ng-click="EditarInstructor()").BtnGuardar Guardar

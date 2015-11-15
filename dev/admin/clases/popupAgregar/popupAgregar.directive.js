@@ -4,7 +4,8 @@
 	function clasesAgregar(){
 		return{
 			restrict:'E',
-			templateUrl: './admin/clases/popupAgregar/popupAgregar.html'
+			templateUrl: './admin/clases/popupAgregar/popupAgregar.html',
+			controller: 'ClasesAgregarAdminController'
 		}
 	}
 

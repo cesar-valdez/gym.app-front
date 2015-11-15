@@ -10,8 +10,8 @@
 		console.log("Instructores controller");
 		
 		$scope.instructores = [];
-
-		InstructoresService.instructores().then(
+		//getInstructor
+		InstructoresService.getInstructores().then(
 			function(response){
 			console.log(response)
 			$scope.instructores = response;
