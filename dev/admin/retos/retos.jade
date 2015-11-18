@@ -1,9 +1,9 @@
 button(class="AgregarRetoAdmin PopupAdd" popup-add="<retos-agregar><retos-agregar/>") Agregar reto
 div.ContenedorRetoAdmin
-	div(ng-repeat="retos in retos").RetoAdmin
-		figure(style="background-image: url('{{retos.imgReto}}')").RetoAdmin-imagenRetoAdmin
-		figcaption.RetoAdmin-reto {{retos.reto}}
-		figcaption.RetoAdmin-fecha {{retos.fechaInicio | date:'fullDate'}}
+	div(ng-repeat="r in retos").RetoAdmin
+		figure(style="background-image: url('{{r.imgReto}}')").RetoAdmin-imagenRetoAdmin
+		figcaption.RetoAdmin-reto {{r.reto}}
+		figcaption.RetoAdmin-fecha {{r.fechaInicio | date:'fullDate'}}
 		button(class="RetoAdmin-ver PopupAdd" popup-add="<retos-ver><retos-ver/>") ver
-		button(class="RetoAdmin-modificar PopupAdd" popup-add="<retos-modificar><retos-modificar/>") Modificar
-		button(class="RetoAdmin-eliminar PopupAdd" popup-add="<retos-eliminar><retos-eliminar/>") Eliminar
+		button(class="RetoAdmin-modificar PopupAdd" popup-add="<retos-modificar edit-reto='r'/>") Modificar
+		button(class="RetoAdmin-eliminar PopupAdd" popup-add="<retos-eliminar del-reto='r'/>") Eliminar

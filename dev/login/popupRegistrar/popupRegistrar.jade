@@ -1,0 +1,27 @@
+div(popup-close).PopupRegistrar
+	form.PopupRegistrar-contenidoRegistrar
+		figure(style="background-image:url({{registro.imgCliente}});").ImgRegistrar
+			span Subir foto
+			label.label
+				input(type="file" file-upload="registro.imgCliente").SubirImg
+				i.icomoon.camera
+		p Nombre:
+		input(type="text" name="nombre")
+		p Apellido:
+		input(type="text" name="apellido")
+		p Celular:
+		input(type="text" name="celular")
+		p Domicilio:
+		input(type="text" name="domicilio")
+		p Correo:
+		input(type="text" name="correo")
+		p Contraseña:
+		input(type="text" name="contrasenia")
+		p Edad:
+		input(type="text" name="edad").CajaChica
+		p.Estatura Estatura:
+		input(type="text" name="estatura").CajaChica
+		p.Peso Peso:
+		input(type="text" name="peso").CajaChica
+		button.BtnCancelar.popup-close Cancelar
+		button.BtnRegistrar Registrar

@@ -4,15 +4,15 @@
 	angular.module('gymApp.Admin')
 	.controller('DeleteInstructoresAdminController', DeleteInstructoresAdminController);
 
-	DeleteInstructoresAdminController.$inject = ["$state","$scope","InstructoresService" , "HelpersFactory", "constant"];
+	DeleteInstructoresAdminController.$inject = ["$state","$scope","InstructoresServiceAdmin" , "HelpersFactory", "constant"];
 
-	function DeleteInstructoresAdminController($state, $scope, InstructoresService, HelpersFactory, constants){
+	function DeleteInstructoresAdminController($state, $scope, InstructoresServiceAdmin, HelpersFactory, constants){
 		
 		var helper=HelpersFactory;
 
 		$scope.instructorDuplicado = angular.copy($scope.delInstructor);
 			$scope.deleteInstructor=function(){
-				InstructoresService
+				InstructoresServiceAdmin
 					.deleteInstructores($scope.instructorDuplicado)
 					.then(function(response){
 						//cerrar popup

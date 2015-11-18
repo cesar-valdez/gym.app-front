@@ -31,12 +31,12 @@
 			restrict:'A',
 			link: function(scope, elem, attrs){
 
-					console.log(elem);
+					//console.log(elem);
 				elem.bind('click', function(e){
 					//console.log('da click');
 					//console.log(e.target);
 					//
-					console.log( e.target != this)
+					//console.log( e.target != this)
 					if(e.target != this && !angular.element(e.target).hasClass('popup-close')) return
 
 					elem.remove();

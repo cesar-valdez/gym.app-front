@@ -1,11 +1,11 @@
 (function(){
 	angular.module('gymApp.Admin')
 
-	.service('ClasesService', ClasesService)
+	.service('ClasesServiceAdmin', ClasesServiceAdmin)
 
-	ClasesService.$inject=['$q','$http','constant'];
+	ClasesServiceAdmin.$inject=['$q','$http','constant'];
 
-	function ClasesService($q,$http, constants){
+	function ClasesServiceAdmin($q,$http, constants){
 
 		function getClases(){
 			var deferred = $q.defer();

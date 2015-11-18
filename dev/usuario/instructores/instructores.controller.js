@@ -4,14 +4,14 @@
 	angular.module('gymApp.Usuario')
 	.controller('InstructoresController', InstructoresController);
 
-	InstructoresController.$inject = ["$state","$scope","InstructoresService"];
+	InstructoresController.$inject = ["$state","$scope","InstructoresServiceAdmin"];
 
-	function InstructoresController($state, $scope, InstructoresService){
+	function InstructoresController($state, $scope, InstructoresServiceAdmin){
 		console.log("Instructores controller");
 		
 		$scope.instructores = [];
 		//getInstructor
-		InstructoresService.getInstructores().then(
+		InstructoresServiceAdmin.getInstructores().then(
 			function(response){
 			console.log(response)
 			$scope.instructores = response;

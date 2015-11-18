@@ -1,14 +1,16 @@
 div(popup-close).PopupRetosModificar
-	div.PopupRetosModificar-contenidoRetosModificar
-		figure(style="background-image: url(./img/reto.jpg)").ImgModificar
+	form.PopupRetosModificar-contenidoRetosModificar
+		figure(style="background-image:url({{retoDuplicado.imgReto}});").ImgModificar
 			div.ImgModificar-cambiarImg
-				p cambiar imagen
-				div: i.icomoon.images
+				label.labelModificar
+					input(type="file" file-upload="retoDuplicado.imgReto").SubirImgModificar
+					p cambiar imagen
+					i.icomoon.images
 		p Reto:
-		input(type="text" name="clase" required).CajaReto
+		input(type="text" name="reto" ng-model="retoDuplicado.reto" required).CajaReto
 		p Fecha:
-		input(type="date" name="fecha")
+		input(type="date" name="fecha" ng-model="retoDuplicado.fechaInicio")
 		p.Descripcion Descripción:
-		textArea(name="textarea" rows="1" cols="1" maxlength="200" placeholder="Escribir los detalles del reto").TextArea
+		textArea(name="textarea" rows="1" cols="1" maxlength="200" placeholder="Escribir los detalles del reto" ng-model="retoDuplicado.descripcion").TextArea
 		button.BtnCancel.popup-close Cancelar
-		button.BtnGuardar Guardar
+		button(ng-click="EditarReto()").BtnGuardar Guardar

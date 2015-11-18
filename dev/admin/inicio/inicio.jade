@@ -1,15 +1,17 @@
 label.NombreAdmin ¡Bienvenido!
 article.ArticuleAdmin
-	ul(rn-carousel class="image" rn-carousel-auto-slide).UlAdmin
-		li(ng-repeat="banner in banners track by $index")
-			//div(rn-carousel-indicators ng-if="banners.length > 1" slides="slides" rn-carousel-index="carouselIndex")
+	ul(rn-carousel rn-carousel-auto-slide rn-carousel-index="carouselIndex").UlAdmin
+		li(ng-repeat="ban in banners track by $index")
+			//div(rn-carousel-indicators ng-if="banners.length > 1" slides="banners" rn-carousel-index="carouselIndex")
 			div(class="layer").DivAdmin
-				figure(style="background-image: url({{banner.imgBanner}});").FigureAdmin
+				figure(style="background-image: url({{ban.imgBanner}});").FigureAdmin
 					div.Botones
-						div(class="icomoon.pencil PopupAdd" popup-add="<inicio-editar><inicio-editar/>")
-							i.icomoon.pencil
 						div(class="icomoon.plus PopupAdd" popup-add="<inicio-agregar><inicio-agregar/>")
 							i.icomoon.plus
-						div(class="icomoon.bin PopupAdd" popup-add="<inicio-eliminar><inicio-eliminar/>")
+						div(class="icomoon.pencil PopupAdd" popup-add="<inicio-editar edit-banner='ban'/>")
+							i.icomoon.pencil
+						div(class="icomoon.bin PopupAdd" popup-add="<inicio-eliminar del-banner='ban'/>")
 							i.icomoon.bin
-					p.PAdmin {{banner.anuncio}} 
+					p.PAdmin {{ban.anuncio}} 
+div.AreaIndicador
+	span(rn-carousel-indicators ng-if="banners.length > 1" slides="banners" ng-class="{'active':carouselIndex==index}").Indicador

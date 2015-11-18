@@ -1,25 +1,24 @@
 div(popup-close).PopupPagosAgregar
 	div.PopupPagosAgregar-contenidoPagosAgregar
-		p.Buscar Buscar:
 		div.AreaBuscar
-			input.InputBuscar(type="search" name="buscadorRegistro" placeholder="Buscar por No.Rgistro")
-			div: i.icomoon.search
-		div.AreaBuscar
-			input.InputBuscar(type="search" name="buscadorNombre" placeholder="Buscar por Nombre")
-			div: i.icomoon.search
+			p.Buscar Buscar:
+			p Por No.Registro:
+			select( ng-options="client as client.no_registro for client in clientes track by client.no_registro" ng-model="selected").InputRegistro
+			p.PorNombre Por Nombre:
+			select( ng-options="client as client.nombre for client in clientes track by client.no_registro" ng-model="selected").InputRegistro
 		p No.Registro:
-		input.InputRegistro(type="text" name="noRegistro" value="1" disabled)
+		input(type="text" name="noRegistro" value="1" ng-model="selected.no_registro" disabled).InputRegistro
 		p Nombre:
-		input(type="text" name="nombre" value="Cesar" disabled)
+		input(type="text" name="nombre" value="Cesar" ng-model="selected.nombre" disabled)
 		p Apellido:
-		input(type="text" name="apellido" value="Valdez" disabled)
+		input(type="text" name="apellido" value="Valdez" ng-model="selected.apellido" disabled)
 		p.PFecha Fecha:
-		input(type="date" name="fecha" ).CajaAncho
+		input(type="date" name="fecha" ng-model="newPago.fechaPagado").CajaAncho
 		p.PEstado Estado:
-		select(name="estado").CajaAncho
+		select(name="estado" ng-model="newPago.estadoPagado").CajaAncho
 			option Pagado
 			option No Pagado
 		p.Pago Pago:
-		input(type="text" name="pago").CajaPago
+		input(type="text" name="pago" ng-model="newPago.montoPagado" ).CajaPago
 		button.BtnCancelar.popup-close Cancelar
-		button.BtnCrear Crear
+		button(ng-click="addPagos()").BtnCrear Crear

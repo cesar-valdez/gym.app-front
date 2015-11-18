@@ -1,9 +1,11 @@
 div(popup-close).PopupInstructoresModificar
-	div.PopupInstructoresModificar-contenidoInstructoresModificar
-		figure(style="background-image: url(./img/instructor.jpg)").ImgModificar
+	form.PopupInstructoresModificar-contenidoInstructoresModificar
+		figure(style="background-image:url({{instructorDuplicado.imgInstructor}});").ImgModificar
 			div.ImgModificar-cambiarImg
-				p cambiar imagen
-				div: i.icomoon.images
+				label.labelModificar
+					input(type="file" file-upload="instructorDuplicado.imgInstructor").SubirImgModificar
+					p cambiar imagen
+					i.icomoon.images
 		p Nombre:
 		input(type="text" name="nombre"  ng-model="instructorDuplicado.nombre" required)
 		p Apellido:

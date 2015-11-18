@@ -3,6 +3,7 @@
 	//modulo de rutas - ui-router
 	angular.module('gymApp', [
 		'ui.router',
+		'swxSessionStorage',
 		'angular-carousel',
 		'gymApp.constants',
 		'gymApp.Helpers',
@@ -73,7 +74,8 @@
 					url: '/perfil',
 					views:{
 						"contentViews":{
-							templateUrl: 'usuario/perfil/perfil.html'
+							templateUrl: 'usuario/perfil/perfil.html',
+							controller: 'PerfilController'
 						}
 					}
 				})
@@ -125,6 +127,16 @@
 						"contentViews":{
 							templateUrl: 'admin/pagos/pagos.html',
 							controller: 'PagosAdminController'
+						}
+					}
+				})
+				.state('admin.perfiles', {
+					url: '/perfiles',
+					views:{
+						"contentViews":{
+							templateUrl: 'admin/perfiles/perfiles.html',
+							controller: 'PerfilController'
+							
 						}
 					}
 				})

@@ -1,11 +1,11 @@
 (function(){
 	angular.module('gymApp.Admin')
 
-	.service('InstructoresService', InstructoresService)
+	.service('InstructoresServiceAdmin', InstructoresServiceAdmin)
 
-	InstructoresService.$inject=['$q','$http','constant'];
+	InstructoresServiceAdmin.$inject=['$q','$http','constant'];
 
-	function InstructoresService($q,$http, constants){
+	function InstructoresServiceAdmin($q,$http, constants){
 
 		function getInstructores(){
 			var deferred = $q.defer();
@@ -47,8 +47,6 @@
 		}
 
 		function deleteInstructores(instructor){
-			console.log("instructor")
-			console.log(instructor)
 			var deferred = $q.defer();
 			var instructor = angular.fromJson(instructor);
 			$http.delete(constants.webService + 'deleteInstructores', {data: instructor})

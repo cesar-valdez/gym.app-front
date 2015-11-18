@@ -1,9 +1,11 @@
 div(popup-close).PopupClasesModificar
-	div.PopupClasesModificar-contenidoClasesModificar
-		figure(style="background-image: url(./img/zumba.jpg)").ImgModificar
+	form.PopupClasesModificar-contenidoClasesModificar
+		figure(style="background-image:url({{claseDuplicado.imgClase}});").ImgModificar
 			div.ImgModificar-cambiarImg
-				p cambiar imagen
-				div: i.icomoon.images
+				label.labelModificar
+					input(type="file" file-upload="claseDuplicado.imgClase").SubirImgModificar
+					p cambiar imagen
+					i.icomoon.images
 		p Clase:
 		input(type="text" name="clase" required).CajaClase
 		p Instructor:

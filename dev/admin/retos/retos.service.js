@@ -1,4 +1,4 @@
-/*(function(){
+(function(){
 	angular.module('gymApp.Admin')
 
 	.service('RetosServiceAdmin', RetosServiceAdmin)
@@ -34,16 +34,42 @@
 			return deferred.promise;
 		}
 
+		function setRetos(reto){
+			var deferred = $q.defer();
+			var reto = angular.fromJson(reto);
+			$http.put(constants.webService + 'putRetos', reto)
+			.success(function(response){
+				deferred.resolve(response)
+			})
+			.catch(function(err){
+				deferred.reject(err)
+			});
+			return deferred.promise;
+		}
 
+		function deleteRetos(reto){
+			var deferred = $q.defer();
+			var reto = angular.fromJson(reto);
+			$http.delete(constants.webService + 'deleteRetos', {data: reto})
+			.success(function(response){
+				deferred.resolve(response)
+			})
+			.catch(function(err){
+				deferred.reject(err)
+			});
+			return deferred.promise;
+		}
 
 
 
 		//return de los metodos
 		return{
 			getRetos: getRetos,
-			addRetos: addRetos
+			addRetos: addRetos,
+			setRetos: setRetos,
+			deleteRetos: deleteRetos
 		};
 
 	}
 
-})();*/
+})();

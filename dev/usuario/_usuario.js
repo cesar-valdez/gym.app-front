@@ -1,4 +1,6 @@
 require('./usuario.module');
+require('./usuario.service');
+require('./usuario.factory');
 require('./inicio/_inicio');
 require('./clases/_clases');
 require('./retos/_retos');

@@ -4,16 +4,16 @@
 	angular.module('gymApp.Admin')
 	.controller('ClasesAgregarAdminController', ClasesAgregarAdminController);
 
-	ClasesAgregarAdminController.$inject = ["$state","$scope","ClasesService", "InstructoresService", "HelpersFactory", "constant"];
+	ClasesAgregarAdminController.$inject = ["$state","$scope","ClasesServiceAdmin", "InstructoresServiceAdmin", "HelpersFactory", "constant"];
 
-	function ClasesAgregarAdminController($state, $scope, ClasesService, InstructoresService, HelpersFactory, constants){
+	function ClasesAgregarAdminController($state, $scope, ClasesServiceAdmin, InstructoresServiceAdmin, HelpersFactory, constants){
 		console.log("ClasesAgregarAdmin controller");
 
 		//getinstructor, para mostrar todos los instructores en el campo 
 		$scope.instructores = [];
 		var helper = HelpersFactory;
 
-		InstructoresService
+		InstructoresServiceAdmin
 			.getInstructores()
 			.then(function(response){
 				$scope.instructores = response;
@@ -26,7 +26,7 @@
 		//addClase
 		$scope.clase={};
 		//imagen por default
-		$scope.clase.imgClase=constants.imgDefault;
+		$scope.clase.imgClase=constants.imgDefaultClase;
 
 		//AddClase
 		$scope.addClases=function(){
@@ -44,7 +44,7 @@
 			}
 			$scope.clase.dias = days;
 			console.log($scope.clase)
-			ClasesService
+			ClasesServiceAdmin
 				.addClases($scope.clase)
 				.then(function(res){
 

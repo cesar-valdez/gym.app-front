@@ -4,14 +4,14 @@
 	angular.module('gymApp.Retos')
 	.controller('RetosController', RetosController);
 
-	RetosController.$inject = ["$state","$scope","RetosService"];
+	RetosController.$inject = ["$state","$scope","RetosServiceAdmin"];
 
-	function RetosController($state, $scope, RetosService){
+	function RetosController($state, $scope, RetosServiceAdmin){
 		console.log("Retos Controller");
 		$scope.retos = [];
 
 		//gerREtos
-		RetosService.getRetos().then(
+		RetosServiceAdmin.getRetos().then(
 			function(response){
 			console.log(response)
 			$scope.retos = response;

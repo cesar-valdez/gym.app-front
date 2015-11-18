@@ -1,2 +1,3 @@
 require('./perfil.controller');
-require('./popupModificar/popupModificar.directive');
+require('./perfil.directive');
+require('./popupModificar/popupModificar.controller');

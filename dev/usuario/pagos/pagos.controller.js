@@ -4,15 +4,15 @@
 	angular.module('gymApp.Usuario')
 	.controller('PagosController', PagosController);
 
-	PagosController.$inject = ["$state","$scope","PagosService"];
+	PagosController.$inject = ["$state","$scope","PagosServiceAdmin"];
 
-	function PagosController($state, $scope, PagosService){
+	function PagosController($state, $scope, PagosServiceAdmin){
 		console.log("Pagos controller");
 
 		$scope.Pagos = [];
 
 		//getPagos
-		PagosService.getPagos().then(
+		PagosServiceAdmin.getPagos().then(
 			function(response){
 			console.log(response)
 			$scope.pagos = response;

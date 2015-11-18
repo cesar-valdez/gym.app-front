@@ -4,17 +4,18 @@
 	angular.module('gymApp.Admin')
 	.controller('SetInstructoresAdminController', SetInstructoresAdminController);
 
-	SetInstructoresAdminController.$inject = ["$state","$scope","InstructoresService" , "HelpersFactory", "constant"];
+	SetInstructoresAdminController.$inject = ["$state","$scope","InstructoresServiceAdmin" , "HelpersFactory", "constant"];
 
-	function SetInstructoresAdminController($state, $scope, InstructoresService, HelpersFactory, constants){
+	function SetInstructoresAdminController($state, $scope, InstructoresServiceAdmin, HelpersFactory, constants){
 		$scope.instructorDuplicado = angular.copy($scope.editInstructor);
+		
 		var helper=HelpersFactory;
+		
 			$scope.EditarInstructor=function(){
-				InstructoresService
+				InstructoresServiceAdmin
 					.setInstructores($scope.instructorDuplicado)
 					.then(function(response){
 						$scope.editInstructor = response;
-						//agregar uno mas al areglo y pueda utilizar el get
 						//cerrar popup
 						helper.popupClose();
 					})

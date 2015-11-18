@@ -13,39 +13,36 @@
 		border-radius:17px;
 		background:white;
 		padding:2em 2em 3em;
-		h2 
-			font-size:20px;
-			color:black;
-			//font-family:Roboto Condensed;
-			font-weight:lighter;
-			border-bottom: 3px solid rgb(232,167,47);
-			text-align:center;
-			display:inline-block;
-			margin: 0em 0em .6em 1.1em;
-		.ImgAgregarBanner
+		.ImgModificar
 			width:18em;
-			height:8.2	em;
-			border: 1px solid rgb(51,51,51);
+			height:8.2em;
 			margin-left:1em;
-			cursor:pointer;
-			background-size:cover;
+			border: 1px solid rgb(51,51,51);
+			background-size:100% 100%;
 			background-position:center top;
 			background-repeat:no-repeat;
 			&-cambiarImg
+				cursor:pointer;
 				width:100%;
 				background: rgba(black, 0.60);
 				margin:5.3em 0em 0em 0em;
 				padding:.6em 0em;
-				p
-					color white;
-					margin:0em 0em 0em 2em;
-					display:inline-block;
-				div
-					display:inline-block;
-					margin-left:.5em;
+				.labelModificar
+					cursor:pointer;
+					color: white;
+					.SubirImgModificar
+						position: absolute;
+						opacity: 0;
+						cursor:pointer;
+					p
+						color white;
+						margin:0em 0em 0em 2em;
+						display:inline-block;
 					i
 						font-size:20px;
 						color:white;
+						display:inline-block;
+						margin-left:.5em;
 		.Anuncio
 			width:20em;
 			height:7em;
@@ -54,7 +51,6 @@
 			border-radius:10px;
 			margin:1em 0em 0em 0em;
 			resize:none;
-			display:block;
 		.BtnCancelar
 			background:rgb(170,170,160);
 			display:inline-block;

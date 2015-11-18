@@ -1,10 +1,11 @@
 div(popup-close).PopupInicioEditar
-	div.PopupInicioEditar-contenidoInicioEditar
-		//h2 ¡Agrega nuevo banner!<br>
-		figure(style="background-image: url(./img/banner1.jpg)").ImgAgregarBanner
-			div.ImgAgregarBanner-cambiarImg
-				p cambiar imagen
-				div: i.icomoon.images
-		textArea(name="textarea" rows="1" cols="1" maxlength="200" placeholder="Escribir anuncio, o algun mensaje..").Anuncio
+	form.PopupInicioEditar-contenidoInicioEditar
+		figure(style="background-image:url({{bannerDuplicado.imgBanner}});").ImgModificar
+			div.ImgModificar-cambiarImg
+				label.labelModificar
+					input(type="file" file-upload="bannerDuplicado.imgBanner").SubirImgModificar
+					p cambiar imagen
+					i.icomoon.images
+		textArea(name="textarea" rows="1" cols="1" maxlength="200" placeholder="Escribir anuncio, o algun mensaje.." ng-model="bannerDuplicado.anuncio").Anuncio
 		button.BtnCancelar.popup-close Cancelar
-		button.BtnGuardar Guardar
+		button(ng-click="EditarBanner()").BtnGuardar Guardar

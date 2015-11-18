@@ -1,16 +1,16 @@
-(function(){
+/*(function(){
 	angular.module('gymApp.Usuario')
 
-	.service('InicioService', InicioService)
+	.service('ClientesService', ClientesService)
 
-	InicioService.$inject=['$q','$http','constant'];
+	ClientesService.$inject=['$q','$http','constant'];
 
-	function InicioService($q,$http, constants){
+	function ClientesService($q,$http, constants){
 
-		function getBanner(){
+		function getClientes(){
 			var deferred = $q.defer();
 			
-			$http.get(constants.webService + 'getBanner')
+			$http.get(constants.webService + 'getClientes')
 			.success(function(response){
 				deferred.resolve(response)
 			})
@@ -26,9 +26,9 @@
 
 		//return de los metodos
 		return{
-			getBanner: getBanner
+			getClientes: getClientes
 		};
 
 	}
 
-})();
+})();*/

@@ -4,3 +4,4 @@ require('./clases/_clases');
 require('./retos/_retos');
 require('./instructores/_instructores');
 require('./pagos/_pagos');
+require('./perfiles/_perfiles');

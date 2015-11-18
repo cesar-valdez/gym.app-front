@@ -1,4 +1,3 @@
-//body.Login
 header.Header
 	figure.Header-logoLogin
 	form.Header-login
@@ -16,8 +15,8 @@ section.Direccion
 	section#Direccion-map.Direccion-map
 form.Registro
 	p ¿Aún no te registras? ¡¿Que esperas?!  
-	input.Registro-nombre(type="text",placeholder="Nombre" ng-model="cliente.nombre")
-	input.Registro-apellido(type="text",placeholder="Apellido" ng-model="cliente.apellido")
-	input.Registro-largo(type="text",placeholder="Correo electronico" ng-model="cliente.correo")
-	input.Registro-largo(type="text",placeholder="Contraseña" ng-model="cliente.password")
-	button(ng-click="addCliente()").Registro-registrate Registrate
+	//input.Registro-nombre(type="text",placeholder="Nombre" ng-model="cliente.nombre")
+	//input.Registro-apellido(type="text",placeholder="Apellido" ng-model="cliente.apellido")
+	//input.Registro-largo(type="text",placeholder="Correo electronico" ng-model="cliente.correo")
+	//input.Registro-largo(type="text",placeholder="Contraseña" ng-model="cliente.password")
+	button(class="Registro-registrate PopupAdd" popup-add="<login-registrar><login-registrar/>") Registrate

@@ -4,15 +4,15 @@
 	angular.module('gymApp.Usuario')
 	.controller('InicioController', InicioController);
 
-	InicioController.$inject = ["$state","$scope","InicioService"];
+	InicioController.$inject = ["$state","$scope","InicioServiceAdmin"];
 
-	function InicioController($state, $scope, InicioService){
+	function InicioController($state, $scope, InicioServiceAdmin){
 		console.log("Inicio controller");
 
 		$scope.banners = [];
 
 		//getBanner
-		InicioService.getBanner().then(
+		InicioServiceAdmin.getBanner().then(
 			function(response){
 			console.log(response)
 			$scope.banners = response;

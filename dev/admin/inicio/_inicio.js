@@ -1,5 +1,6 @@
 require('./inicio.service');
 require('./inicio.controller');
-require('./popupAgregar/popupAgregar.directive');
-require('./popupEditar/popupEditar.directive');
-require('./popupEliminar/popupEliminar.directive');
+require('./inicio.directive');
+require('./popupAgregar/popupAgregar.controller');
+require('./popupEditar/popupEditar.controller');
+require('./popupEliminar/popupEliminar.controller');

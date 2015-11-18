@@ -16,14 +16,16 @@ div.AreaTablaAdmin
 				td Fecha pagado
 				td Costo
 				td Estado de pago
-			tr(ng-repeat="pago in pagos")
-				td {{pago.PagosId}}
+				td
+			tr(ng-repeat="pago in pagos" ng-class="{'fechaVencida': pago.fechaVencida}")
+				td {{pago.ClientesRegistro}}
 				td {{pago.ClientesNombre}}
-				td {{pago.CientesApellido}}
+				td {{pago.ClientesApellido}}
+				td {{pago.PagosFechaPago | date:'dd/MMM/yyyy'}}
+				td {{pago.PagosFechaPagado | date:'dd/MMM/yyyy'}}
 				td {{pago.PagosMonto}}
-				td {{pago.PagosFechaPagado}}
-				td {{pago.PagosFechaPago}}
 				td {{pago.PagosEstado}}
+				td
 					div(class="icomoon.pencil PopupAdd" popup-add="<pagos-modificar><pagos-modificar/>")
 						i.icomoon.pencil
 					div(class="icomoon.bin PopupAdd" popup-add="<pagos-eliminar><pagos-eliminar/>")
