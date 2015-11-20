@@ -6,7 +6,11 @@
 	function perfilModificar(){
 		return{
 			restrict:'E',
-			templateUrl: './usuario/perfil/popupModificar/popupModificar.html'
+			scope: {
+				usuario: "="
+			},
+			templateUrl: './usuario/perfil/popupModificar/popupModificar.html',
+			controller: 'ModificarPerfilController'
 		}
 	}
 

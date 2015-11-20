@@ -7,40 +7,35 @@ div(popup-close).PopupClasesModificar
 					p cambiar imagen
 					i.icomoon.images
 		p Clase:
-		input(type="text" name="clase" required).CajaClase
+		input(type="text" name="clase" ng-model="claseDuplicado.clase" required).CajaClase
 		p Instructor:
-		select(name="instructor" required).CajaInstructor
-			option Andrea Martinez
-			option jorge Avalos
-		p Precio:
-		input(type="text" name="precio" required).CajaPrecio
+		select(name="instructor" ng-model="claseDuplicado.id_instructor"  required).CajaInstructor
+			option(ng-repeat="instructor in instructores" value="{{instructor.id_instructor}}") {{instructor.nombre}} 
 		p Hora:
-		select(name="hora")
-			option 6:00am
-			option 7:00am
-			option 8:00am
-			option 9:00am
-			option 10:00am
-			option 11:00am
+		select(name="hora" ng-model="claseDuplicado.newHora").CajaHora
+			option(value="6:00am") 6:00am
+			option(value="7:00am") 7:00am
+			option(value="8:00am") 8:00am
+			option(value="9:00am") 9:00am
+			option(value="10:00am") 10:00am
+			option(value="12:00pm") 12:00pm
+			option(value="1:00pm") 1:00pm
+			option(value="2:00pm") 2:00pm
+			option(value="3:00pm") 3:00pm
+			option(value="4:00pm") 4:00pm
+			option(value="5:00pm") 5:00pm
+			option(value="6:00pm") 6:00pm
+			option(value="7:00pm") 7:00pm
+			option(value="8:00pm") 8:00pm
+			option(value="9:00pm") 9:00pm
+			option(value="10:00pm") 10:00pm
+			option(value="11:00pm") 11:00pm
+			option(value="12:00am") 12:00am
 		p Duración:
-		input(type="number" min="1" max="12").CajaDuracion
+		input(type="text" min="1" max="12" ng-model="claseDuplicado.horaDuracion").CajaDuracion
 		p.CajaHoras hrs
-		input(type="number" min="1" max="60").CajaDuracion
+		input(type="text" min="1" max="60" ng-model="claseDuplicado.minDuracion").CajaDuracion
 		p mm
-		p Dias:
-		p.Dias L
-		input(type="checkbox" name="lunes" value="lunes")
-		p.Dias M
-		input(type="checkbox" name="martes" value="martes")
-		p.Dias M
-		input(type="checkbox" name="miercoles" value="miercoles")
-		p.Dias J
-		input(type="checkbox" name="jueves" value="jueves")
-		p.Dias V
-		input(type="checkbox" name="viernes" value="viernes")
-		p.Dias S
-		input(type="checkbox" name="sabado" value="sabado")
-		p.Dias D
-		input(type="checkbox" name="domingo" value="domingo")
+		
 		button.BtnCancelar.popup-close Cancelar
-		button.BtnGuardar Guardar
+		button(ng-click="setClase()").BtnGuardar Guardar

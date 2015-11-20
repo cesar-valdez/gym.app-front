@@ -4,6 +4,5 @@ div.ContenedorClaseAdmin
 		figure(style="background-image: url('{{clase.imgClase}}')").Clases-imagenClase
 		figcaption.Clases-reto {{clase.clase}}
 		button(class="Clases-ver PopupAdd" popup-add="<clases-ver><clases-ver/>").Clase-ver Ver
-		button(class="Clases-modific PopupAdd" popup-add="<clases-modificar><clases-modificar/>") Modificar
-		button(class="Clases-delete PopupAdd" popup-add="<clases-eliminar><clases-eliminar/>") Eliminar
-	
+		button(class="Clases-modific PopupAdd" popup-add="<clases-modificar edit-clase='clase'/>") Modificar
+		button(class="Clases-delete PopupAdd" popup-add="<clases-eliminar del-clase='clase'/>") Eliminar

@@ -1,5 +1,5 @@
 div.ContPerfil
-	figure(style="background-image: url('./img/perfil.jpg')").ContPerfil-imgPerfil
+	figure(style="background-image: url('{{c.imgCliente}}')").ContPerfil-imgPerfil
 	div.ContPerfil-datos
 		h2 {{c.nombre}} {{c.apellido}}
 		p Edad {{c.edad}}
@@ -8,4 +8,4 @@ div.ContPerfil
 		p Domicilio: {{c.domicilio}}
 		p estatura: {{c.estatura}}
 		p peso {{c.peso}}
-		button(popup-add="<perfil-modificar><perfil-modificar/>") Modificar
+		button(popup-add="<perfil-modificar usuario='c'><perfil-modificar/>") Modificar

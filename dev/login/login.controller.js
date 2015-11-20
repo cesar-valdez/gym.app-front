@@ -4,13 +4,14 @@
 	angular.module('gymApp.Login')
 	.controller('LoginController', LoginController);
 
-	LoginController.$inject = ["$state","$scope","LoginService", "UsuarioFactory"];
+	LoginController.$inject = ["$compile","$state","$scope","LoginService", "UsuarioFactory"];
 
-	function LoginController($state, $scope, LoginService, UsuarioFactory){
+	function LoginController($compile, $state, $scope, LoginService, UsuarioFactory){
 		console.log("Login controller");
 		$scope.usuario = {};
 		var usuario = UsuarioFactory;
 
+		var body =angular.element(document).find('body');
 		console.log(usuario)
 
 		$scope.addUsuario=function(){
@@ -28,10 +29,12 @@
 							}
 
 						} else {
-							console.log(data.msj)
+						console.log(data.msj)
+						body.append($compile("<mensaje-error error='" + data.msj + "'></mensaje-error>")($scope));
 						}
 					} else {
 						console.log(data.msj)
+						body.append($compile("<mensaje-error error='" + data.msj + "'></mensaje-error>")($scope));
 					}
 				})
 				.catch(function(error){

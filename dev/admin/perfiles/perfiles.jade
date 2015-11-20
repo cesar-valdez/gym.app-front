@@ -1,28 +1,7 @@
-div.AreaTablaClientes
-	div.AreaTablaClientes-encabezadoClientes
-		spana(ui-sref="admin.pagos").Pagos Clientes
-	div.AreaTablaClientes-scrollAdmin
-		table.AreaTablaClientes-scrollClientes-tablaClientes
-			tr
-				td No.registro
-				td Nombre 
-				td Apellido
-				td Fecha de pago
-				td Fecha pagado
-				td Costo
-				td Estado de pago
-				td
-			tr(ng-repeat="pago in pagos" ng-class="{'fechaVencida': pago.fechaVencida}")
-				td {{pago.ClientesRegistro}}
-				td {{pago.ClientesNombre}}
-				td {{pago.ClientesApellido}}
-				td {{pago.PagosFechaPago | date:'dd/MMM/yyyy'}}
-				td {{pago.PagosFechaPagado | date:'dd/MMM/yyyy'}}
-				td {{pago.PagosMonto}}
-				td {{pago.PagosEstado}}
-				td
-					div(class="icomoon.pencil PopupAdd" popup-add="<pagos-modificar><pagos-modificar/>")
-						i.icomoon.pencil
-					div(class="icomoon.bin PopupAdd" popup-add="<pagos-eliminar><pagos-eliminar/>")
-						i.icomoon.bin
-			
+div.Area
+//div.ContenedorPerfiles
+	div(ng-repeat="perfil in perfiles").PerfilAdmin
+		figure(style="background-image: url('{{perfil.imgCliente}}')").PerfilAdmin-imagenPerfil
+		figcaption.PerfilAdmin-nombre {{perfil.nombre}} {{perfil.apellido}}
+		button(class="PerfilAdmin-ver  PopupAdd" popup-add="<perfiles-ver><perfiles-ver/>") ver
+		button(class="PerfilAdmin-eliminar  PopupAdd" popup-add="<perfiles-eliminar del-perfil='perfil' />") Eliminar

@@ -35,10 +35,11 @@
 			return deferred.promise;
 		}
 
-		/* addRetos(reto){
+
+		function setClientes(cliente){
 			var deferred = $q.defer();
-			var reto = angular.fromJson(reto);
-			$http.post(constants.webService + 'addRetos', reto)
+			var cliente = angular.fromJson(cliente);
+			$http.put(constants.webService + 'putClientes', cliente)
 			.success(function(response){
 				deferred.resolve(response)
 			})
@@ -48,10 +49,10 @@
 			return deferred.promise;
 		}
 
-		function setRetos(reto){
+		/* addRetos(reto){
 			var deferred = $q.defer();
 			var reto = angular.fromJson(reto);
-			$http.put(constants.webService + 'putRetos', reto)
+			$http.post(constants.webService + 'addRetos', reto)
 			.success(function(response){
 				deferred.resolve(response)
 			})
@@ -79,7 +80,8 @@
 		//return de los metodos
 		return{
 			getClientes: getClientes,
-			getCliente: getCliente
+			getCliente: getCliente,
+			setClientes: setClientes
 		};
 
 	}

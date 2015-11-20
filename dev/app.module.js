@@ -5,6 +5,7 @@
 		'ui.router',
 		'swxSessionStorage',
 		'angular-carousel',
+		'gymApp.Error',
 		'gymApp.constants',
 		'gymApp.Helpers',
 		'gymApp.Usuario',
@@ -134,9 +135,7 @@
 					url: '/perfiles',
 					views:{
 						"contentViews":{
-							templateUrl: 'admin/perfiles/perfiles.html',
-							controller: 'PerfilController'
-							
+							templateUrl: 'admin/perfiles/perfiles.html'							
 						}
 					}
 				})

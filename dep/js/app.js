@@ -220,7 +220,7 @@ require('./retos/_retos');
 require('./instructores/_instructores');
 require('./pagos/_pagos');
 require('./perfiles/_perfiles');
-},{"./admin.module":7,"./clases/_clases":8,"./inicio/_inicio":16,"./instructores/_instructores":23,"./pagos/_pagos":30,"./perfiles/_perfiles":36,"./retos/_retos":40}],7:[function(require,module,exports){
+},{"./admin.module":7,"./clases/_clases":8,"./inicio/_inicio":15,"./instructores/_instructores":22,"./pagos/_pagos":29,"./perfiles/_perfiles":35,"./retos/_retos":39}],7:[function(require,module,exports){
 (function(){
 
 	angular.module('gymApp.Admin', []);
@@ -229,12 +229,11 @@ require('./perfiles/_perfiles');
 },{}],8:[function(require,module,exports){
 require('./clases.controller');
 require('./clases.service');
+require('./clases.directive');
 require('./popupAgregar/popupAgregar.controller');
-require('./popupAgregar/popupAgregar.directive');
-require('./popupModificar/popupModificar.directive');
-require('./popupEliminar/popupEliminar.directive');
-require('./popupVer/popupVer.directive');
-},{"./clases.controller":9,"./clases.service":10,"./popupAgregar/popupAgregar.controller":11,"./popupAgregar/popupAgregar.directive":12,"./popupEliminar/popupEliminar.directive":13,"./popupModificar/popupModificar.directive":14,"./popupVer/popupVer.directive":15}],9:[function(require,module,exports){
+require('./popupModificar/popupModificar.controller');
+require('./popupEliminar/popupEliminar.controller');
+},{"./clases.controller":9,"./clases.directive":10,"./clases.service":11,"./popupAgregar/popupAgregar.controller":12,"./popupEliminar/popupEliminar.controller":13,"./popupModificar/popupModificar.controller":14}],9:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -262,6 +261,53 @@ require('./popupVer/popupVer.directive');
 
 })();
 },{}],10:[function(require,module,exports){
+(function(){
+	angular.module('gymApp.Admin')
+	.directive('clasesAgregar', clasesAgregar)
+	.directive('clasesModificar', clasesModificar)
+	.directive('clasesEliminar', clasesEliminar)
+	.directive('clasesVer', clasesVer)
+
+	function clasesAgregar(){
+		return{
+			restrict:'E',
+			templateUrl: './admin/clases/popupAgregar/popupAgregar.html',
+			controller: 'ClasesAgregarAdminController'
+		}
+	}
+
+	function clasesModificar(){
+		return{
+			restrict:'E',
+			scope:{
+				editClase : '='
+			},
+			templateUrl: './admin/clases/popupModificar/popupModificar.html',
+			controller: 'ClasesModificarAdminController'
+		}
+	}
+
+	function clasesEliminar(){
+		return{
+			restrict:'E',
+			scope:{
+				delClase : '='
+			},
+			templateUrl: './admin/clases/popupEliminar/popupEliminar.html',
+			controller: 'DeleteClasesAdminController'
+		}
+	}
+
+	function clasesVer(){
+		return{
+			restrict:'E',
+			templateUrl: './admin/clases/popupVer/popupVer.html'
+		}
+	}
+
+
+})();
+},{}],11:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 
@@ -295,6 +341,35 @@ require('./popupVer/popupVer.directive');
 			})
 			.catch(function(err){
 				deferred.reject(err)
+			}) ;
+			return deferred.promise;
+		}
+
+
+
+		function setClases(clase){
+			var deferred = $q.defer();
+			var clase = angular.fromJson(clase);
+
+			$http.put(constants.webService + 'putClases', clase)
+			.success(function(response){
+				deferred.resolve(response)
+			})
+			.catch(function(err){
+				deferred.reject(err)
+			});
+			return deferred.promise;
+		}
+
+		function deleteClases(clase){
+			var deferred = $q.defer();
+			var clase = angular.fromJson(clase);
+			$http.delete(constants.webService + 'deleteClases', {data: clase})
+			.success(function(response){
+				deferred.resolve(response)
+			})
+			.catch(function(err){
+				deferred.reject(err)
 			});
 			return deferred.promise;
 		}
@@ -302,17 +377,18 @@ require('./popupVer/popupVer.directive');
 
 
 
-
 		//return de los metodos
 		return{
 			getClases: getClases,
-			addClases: addClases
+			addClases: addClases,
+			setClases: setClases,
+			deleteClases: deleteClases
 		};
 
 	}
 
 })();
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -405,63 +481,96 @@ require('./popupVer/popupVer.directive');
 	}
 
 })();
-},{}],12:[function(require,module,exports){
-(function(){
-	angular.module('gymApp.Admin')
-	.directive('clasesAgregar', clasesAgregar)
-	function clasesAgregar(){
-		return{
-			restrict:'E',
-			templateUrl: './admin/clases/popupAgregar/popupAgregar.html',
-			controller: 'ClasesAgregarAdminController'
-		}
-	}
-
-})();
 },{}],13:[function(require,module,exports){
-(function(){
+(function() {
+
+	//modulo al qe pertenece
 	angular.module('gymApp.Admin')
-	.directive('clasesEliminar', clasesEliminar)
-	function clasesEliminar(){
-		return{
-			restrict:'E',
-			templateUrl: './admin/clases/popupEliminar/popupEliminar.html'
-		}
+	.controller('DeleteClasesAdminController', DeleteClasesAdminController);
+
+	DeleteClasesAdminController.$inject = ["$state","$scope","ClasesServiceAdmin" , "HelpersFactory", "constant"];
+
+	function DeleteClasesAdminController($state, $scope, ClasesServiceAdmin, HelpersFactory, constants){
+		
+		var helper=HelpersFactory;
+
+		$scope.claseDuplicado = angular.copy($scope.delClase);
+		
+			$scope.deleteClase=function(){
+				ClasesServiceAdmin
+					.deleteClases($scope.claseDuplicado)
+					.then(function(response){
+						//cerrar popup
+						helper.popupClose();
+						$state.reload();
+					})
+					.catch(function(err){
+							console.log(err)
+					});
+			}
 	}
 
 })();
+
 },{}],14:[function(require,module,exports){
-(function(){
+(function() {
+
+	//modulo al qe pertenece
 	angular.module('gymApp.Admin')
-	.directive('clasesModificar', clasesModificar)
-	function clasesModificar(){
-		return{
-			restrict:'E',
-			templateUrl: './admin/clases/popupModificar/popupModificar.html'
-		}
+	.controller('ClasesModificarAdminController', ClasesModificarAdminController);
+
+	ClasesModificarAdminController.$inject = ["$state","$scope","ClasesServiceAdmin", "InstructoresServiceAdmin", "HelpersFactory", "constant"];
+
+	function ClasesModificarAdminController($state, $scope, ClasesServiceAdmin, InstructoresServiceAdmin, HelpersFactory, constants){
+		console.log("ClasesMOdificarAdmin controller");
+
+		//getinstructor, para mostrar todos los instructores en el campo 
+		$scope.instructores = [];
+		var helper = HelpersFactory;
+
+		InstructoresServiceAdmin
+			.getInstructores()
+			.then(function(response){
+				$scope.instructores = response;
+
+		}).catch(function(err){
+			console.log(err)
+		});
+
+
+		$scope.claseDuplicado = angular.copy($scope.editClase);
+		$scope.claseDuplicado.newHora = $scope.editClase.hora;
+
+		$scope.setClase=function(){
+			console.log($scope.claseDuplicado)
+				ClasesServiceAdmin
+					.setClases($scope.claseDuplicado)
+					.then(function(response){
+						console.log(response)
+						$scope.editClase.hora = response.newHora;
+						$scope.editClase = response;
+						//cerrar popup
+						helper.popupClose();
+					})
+					.catch(function(err){
+							console.log(err)
+					});
+			}
+		
+
+
+
 	}
 
 })();
 },{}],15:[function(require,module,exports){
-(function(){
-	angular.module('gymApp.Admin')
-	.directive('clasesVer', clasesVer)
-	function clasesVer(){
-		return{
-			restrict:'E',
-			templateUrl: './admin/clases/popupVer/popupVer.html'
-		}
-	}
-
-})();
-},{}],16:[function(require,module,exports){
 require('./inicio.service');
 require('./inicio.controller');
 require('./inicio.directive');
 require('./popupAgregar/popupAgregar.controller');
 require('./popupEditar/popupEditar.controller');
 require('./popupEliminar/popupEliminar.controller');
-},{"./inicio.controller":17,"./inicio.directive":18,"./inicio.service":19,"./popupAgregar/popupAgregar.controller":20,"./popupEditar/popupEditar.controller":21,"./popupEliminar/popupEliminar.controller":22}],17:[function(require,module,exports){
+},{"./inicio.controller":16,"./inicio.directive":17,"./inicio.service":18,"./popupAgregar/popupAgregar.controller":19,"./popupEditar/popupEditar.controller":20,"./popupEliminar/popupEliminar.controller":21}],16:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -489,7 +598,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 	.directive('inicioAgregar', inicioAgregar)
@@ -528,7 +637,7 @@ require('./popupEliminar/popupEliminar.controller');
 
 
 })();
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 
@@ -605,7 +714,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -644,7 +753,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],21:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -673,7 +782,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],22:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -704,7 +813,7 @@ require('./popupEliminar/popupEliminar.controller');
 
 })();
 
-},{}],23:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 require('./instructores.controller');
 require('./instructores.service');
 require('./instructores.directive');
@@ -713,7 +822,7 @@ require('./popupModificar/popupModificar.controller');
 require('./popupEliminar/popupEliminar.controller');
 
 
-},{"./instructores.controller":24,"./instructores.directive":25,"./instructores.service":26,"./popupAgregar/popupAgregar.controller":27,"./popupEliminar/popupEliminar.controller":28,"./popupModificar/popupModificar.controller":29}],24:[function(require,module,exports){
+},{"./instructores.controller":23,"./instructores.directive":24,"./instructores.service":25,"./popupAgregar/popupAgregar.controller":26,"./popupEliminar/popupEliminar.controller":27,"./popupModificar/popupModificar.controller":28}],23:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -742,7 +851,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],25:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 	.directive('instructoresAgregar', instructoresAgregar)	
@@ -790,7 +899,7 @@ require('./popupEliminar/popupEliminar.controller');
 
 
 })();
-},{}],26:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 
@@ -875,7 +984,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -910,7 +1019,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],28:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -940,7 +1049,7 @@ require('./popupEliminar/popupEliminar.controller');
 
 })();
 
-},{}],29:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -969,13 +1078,13 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],30:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 require('./pagos.controller');
 require('./pagos.service');
 require('./pagos.directive');
 require('./popupAgregar/popupAgregar.controller');
 require('./popupModificar/popupModificar.controller');
-},{"./pagos.controller":31,"./pagos.directive":32,"./pagos.service":33,"./popupAgregar/popupAgregar.controller":34,"./popupModificar/popupModificar.controller":35}],31:[function(require,module,exports){
+},{"./pagos.controller":30,"./pagos.directive":31,"./pagos.service":32,"./popupAgregar/popupAgregar.controller":33,"./popupModificar/popupModificar.controller":34}],30:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -1012,7 +1121,7 @@ require('./popupModificar/popupModificar.controller');
 	}
 
 })();
-},{}],32:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 	.directive('pagosAgregar', pagosAgregar)
@@ -1047,7 +1156,7 @@ require('./popupModificar/popupModificar.controller');
 
 
 })();
-},{}],33:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 
@@ -1110,7 +1219,7 @@ require('./popupModificar/popupModificar.controller');
 	}
 
 })();
-},{}],34:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -1178,17 +1287,17 @@ require('./popupModificar/popupModificar.controller');
 	}
 
 })();
-},{}],35:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 
-},{}],36:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 require('./perfiles.controller');
 require('./perfiles.service');
 require('./perfiles.directive');
-},{"./perfiles.controller":37,"./perfiles.directive":38,"./perfiles.service":39}],37:[function(require,module,exports){
-arguments[4][35][0].apply(exports,arguments)
-},{"dup":35}],38:[function(require,module,exports){
-arguments[4][35][0].apply(exports,arguments)
-},{"dup":35}],39:[function(require,module,exports){
+},{"./perfiles.controller":36,"./perfiles.directive":37,"./perfiles.service":38}],36:[function(require,module,exports){
+arguments[4][34][0].apply(exports,arguments)
+},{"dup":34}],37:[function(require,module,exports){
+arguments[4][34][0].apply(exports,arguments)
+},{"dup":34}],38:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 
@@ -1226,10 +1335,11 @@ arguments[4][35][0].apply(exports,arguments)
 			return deferred.promise;
 		}
 
-		/* addRetos(reto){
+
+		function setClientes(cliente){
 			var deferred = $q.defer();
-			var reto = angular.fromJson(reto);
-			$http.post(constants.webService + 'addRetos', reto)
+			var cliente = angular.fromJson(cliente);
+			$http.put(constants.webService + 'putClientes', cliente)
 			.success(function(response){
 				deferred.resolve(response)
 			})
@@ -1239,10 +1349,10 @@ arguments[4][35][0].apply(exports,arguments)
 			return deferred.promise;
 		}
 
-		function setRetos(reto){
+		/* addRetos(reto){
 			var deferred = $q.defer();
 			var reto = angular.fromJson(reto);
-			$http.put(constants.webService + 'putRetos', reto)
+			$http.post(constants.webService + 'addRetos', reto)
 			.success(function(response){
 				deferred.resolve(response)
 			})
@@ -1270,13 +1380,14 @@ arguments[4][35][0].apply(exports,arguments)
 		//return de los metodos
 		return{
 			getClientes: getClientes,
-			getCliente: getCliente
+			getCliente: getCliente,
+			setClientes: setClientes
 		};
 
 	}
 
 })();
-},{}],40:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 require('./retos.controller');
 require('./retos.service');
 require('./retos.directive');
@@ -1284,7 +1395,7 @@ require('./popupAgregar/popupAgregar.controller');
 require('./popupModificar/popupModificar.controller');
 require('./popupEliminar/popupEliminar.controller');
 
-},{"./popupAgregar/popupAgregar.controller":41,"./popupEliminar/popupEliminar.controller":42,"./popupModificar/popupModificar.controller":43,"./retos.controller":44,"./retos.directive":45,"./retos.service":46}],41:[function(require,module,exports){
+},{"./popupAgregar/popupAgregar.controller":40,"./popupEliminar/popupEliminar.controller":41,"./popupModificar/popupModificar.controller":42,"./retos.controller":43,"./retos.directive":44,"./retos.service":45}],40:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -1327,7 +1438,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],42:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -1357,7 +1468,7 @@ require('./popupEliminar/popupEliminar.controller');
 
 })();
 
-},{}],43:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -1386,7 +1497,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],44:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -1418,7 +1529,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],45:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 	.directive('retosAgregar', retosAgregar)
@@ -1466,7 +1577,7 @@ require('./popupEliminar/popupEliminar.controller');
 
 
 })();
-},{}],46:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 
@@ -1542,7 +1653,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],47:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 (function(){
 	//appTec - modulo principal (aplicacion)
 	//modulo de rutas - ui-router
@@ -1550,6 +1661,7 @@ require('./popupEliminar/popupEliminar.controller');
 		'ui.router',
 		'swxSessionStorage',
 		'angular-carousel',
+		'gymApp.Error',
 		'gymApp.constants',
 		'gymApp.Helpers',
 		'gymApp.Usuario',
@@ -1679,9 +1791,7 @@ require('./popupEliminar/popupEliminar.controller');
 					url: '/perfiles',
 					views:{
 						"contentViews":{
-							templateUrl: 'admin/perfiles/perfiles.html',
-							controller: 'PerfilController'
-							
+							templateUrl: 'admin/perfiles/perfiles.html'							
 						}
 					}
 				})
@@ -1705,7 +1815,7 @@ require('./popupEliminar/popupEliminar.controller');
 
 
 })();
-},{}],48:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 (function () {
 
 angular
@@ -1719,36 +1829,38 @@ angular
     });
 
 })();
-},{}],49:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 //manda a llamar a la libreria jquery
 require('./app.module');
+require('./mensajeError/_error');
 require('./constants');
 require('./login/_login');
 require('./_helpers/_helpers');
 require('./admin/_admin');
 require('./usuario/_usuario');
 
-},{"./_helpers/_helpers":1,"./admin/_admin":6,"./app.module":47,"./constants":48,"./login/_login":50,"./usuario/_usuario":56}],50:[function(require,module,exports){
+},{"./_helpers/_helpers":1,"./admin/_admin":6,"./app.module":46,"./constants":47,"./login/_login":49,"./mensajeError/_error":55,"./usuario/_usuario":58}],49:[function(require,module,exports){
 require('./login.module');
 require('./login.controller');
 require('./login.service');
 require('./login.directive');
 require('./popupRegistrar/popupRegistrar.controller');
 
-},{"./login.controller":51,"./login.directive":52,"./login.module":53,"./login.service":54,"./popupRegistrar/popupRegistrar.controller":55}],51:[function(require,module,exports){
+},{"./login.controller":50,"./login.directive":51,"./login.module":52,"./login.service":53,"./popupRegistrar/popupRegistrar.controller":54}],50:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Login')
 	.controller('LoginController', LoginController);
 
-	LoginController.$inject = ["$state","$scope","LoginService", "UsuarioFactory"];
+	LoginController.$inject = ["$compile","$state","$scope","LoginService", "UsuarioFactory"];
 
-	function LoginController($state, $scope, LoginService, UsuarioFactory){
+	function LoginController($compile, $state, $scope, LoginService, UsuarioFactory){
 		console.log("Login controller");
 		$scope.usuario = {};
 		var usuario = UsuarioFactory;
 
+		var body =angular.element(document).find('body');
 		console.log(usuario)
 
 		$scope.addUsuario=function(){
@@ -1766,10 +1878,12 @@ require('./popupRegistrar/popupRegistrar.controller');
 							}
 
 						} else {
-							console.log(data.msj)
+						console.log(data.msj)
+						body.append($compile("<mensaje-error error='" + data.msj + "'></mensaje-error>")($scope));
 						}
 					} else {
 						console.log(data.msj)
+						body.append($compile("<mensaje-error error='" + data.msj + "'></mensaje-error>")($scope));
 					}
 				})
 				.catch(function(error){
@@ -1786,7 +1900,7 @@ require('./popupRegistrar/popupRegistrar.controller');
 	}
 
 })();
-},{}],52:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Login')
 	.directive('loginRegistrar', loginRegistrar)
@@ -1800,13 +1914,13 @@ require('./popupRegistrar/popupRegistrar.controller');
 	}
 
 })();
-},{}],53:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 (function(){
 
 	angular.module('gymApp.Login', []);
 
 })();
-},{}],54:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Login')
 
@@ -1875,7 +1989,7 @@ require('./popupRegistrar/popupRegistrar.controller');
 	}
 
 })();
-},{}],55:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -1895,7 +2009,38 @@ require('./popupRegistrar/popupRegistrar.controller');
 	}
 
 })();
-},{}],56:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
+require('./error.module')
+require('./error.directive')
+},{"./error.directive":56,"./error.module":57}],56:[function(require,module,exports){
+(function(){
+
+	//modulo al qe pertenece
+	angular.module('gymApp.Error')
+	.directive('mensajeError', mensajeError)
+
+	function mensajeError(){
+		return{
+			restrict: 'E',
+			scope: {
+				error: "@"
+			},
+			templateUrl:'./mensajeError/error.html'
+		}
+	}
+
+
+})();
+},{}],57:[function(require,module,exports){
+(function() {
+
+	//modulo al qe pertenece
+	angular.module('gymApp.Error', []);
+
+	
+
+})();
+},{}],58:[function(require,module,exports){
 require('./usuario.module');
 require('./usuario.service');
 require('./usuario.factory');
@@ -1905,11 +2050,11 @@ require('./retos/_retos');
 require('./instructores/_instructores');
 require('./pagos/_pagos');
 require('./perfil/_perfil');
-},{"./clases/_clases":57,"./inicio/_inicio":61,"./instructores/_instructores":63,"./pagos/_pagos":66,"./perfil/_perfil":68,"./retos/_retos":72,"./usuario.factory":76,"./usuario.module":77,"./usuario.service":78}],57:[function(require,module,exports){
+},{"./clases/_clases":59,"./inicio/_inicio":63,"./instructores/_instructores":65,"./pagos/_pagos":68,"./perfil/_perfil":70,"./retos/_retos":74,"./usuario.factory":78,"./usuario.module":79,"./usuario.service":80}],59:[function(require,module,exports){
 require('./clases.controller');
 require('./popupDetalle/popupDetalle.directive');
 require('./popupAgendar/popupAgendar.directive');
-},{"./clases.controller":58,"./popupAgendar/popupAgendar.directive":59,"./popupDetalle/popupDetalle.directive":60}],58:[function(require,module,exports){
+},{"./clases.controller":60,"./popupAgendar/popupAgendar.directive":61,"./popupDetalle/popupDetalle.directive":62}],60:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -1934,7 +2079,7 @@ require('./popupAgendar/popupAgendar.directive');
 	}
 
 })();
-},{}],59:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Usuario')
 	.directive('claseAgendar', claseAgendar)
@@ -1946,7 +2091,7 @@ require('./popupAgendar/popupAgendar.directive');
 	}
 
 })();
-},{}],60:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Usuario')
 	.directive('claseDetalle', claseDetalle)
@@ -1959,9 +2104,9 @@ require('./popupAgendar/popupAgendar.directive');
 
 })();
 
-},{}],61:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 require('./inicio.controller');
-},{"./inicio.controller":62}],62:[function(require,module,exports){
+},{"./inicio.controller":64}],64:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -1987,10 +2132,10 @@ require('./inicio.controller');
 	}
 
 })();
-},{}],63:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 require('./instructores.controller');
 require('./popupInformacion/popupInformacion.directive');
-},{"./instructores.controller":64,"./popupInformacion/popupInformacion.directive":65}],64:[function(require,module,exports){
+},{"./instructores.controller":66,"./popupInformacion/popupInformacion.directive":67}],66:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -2014,7 +2159,7 @@ require('./popupInformacion/popupInformacion.directive');
 	}
 
 })();
-},{}],65:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Usuario')
 	.directive('instructorInfo', instructorInfo)
@@ -2027,9 +2172,9 @@ require('./popupInformacion/popupInformacion.directive');
 
 })();
 
-},{}],66:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 require('./pagos.controller');
-},{"./pagos.controller":67}],67:[function(require,module,exports){
+},{"./pagos.controller":69}],69:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -2054,12 +2199,12 @@ require('./pagos.controller');
 	}
 
 })();
-},{}],68:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 require('./perfil.controller');
 require('./perfil.directive');
 require('./popupModificar/popupModificar.controller');
 
-},{"./perfil.controller":69,"./perfil.directive":70,"./popupModificar/popupModificar.controller":71}],69:[function(require,module,exports){
+},{"./perfil.controller":71,"./perfil.directive":72,"./popupModificar/popupModificar.controller":73}],71:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -2088,7 +2233,7 @@ require('./popupModificar/popupModificar.controller');
 	}
 
 })();
-},{}],70:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Usuario')
 	.directive('perfilModificar', perfilModificar)
@@ -2097,12 +2242,16 @@ require('./popupModificar/popupModificar.controller');
 	function perfilModificar(){
 		return{
 			restrict:'E',
-			templateUrl: './usuario/perfil/popupModificar/popupModificar.html'
+			scope: {
+				usuario: "="
+			},
+			templateUrl: './usuario/perfil/popupModificar/popupModificar.html',
+			controller: 'ModificarPerfilController'
 		}
 	}
 
 })();
-},{}],71:[function(require,module,exports){
+},{}],73:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -2113,20 +2262,33 @@ require('./popupModificar/popupModificar.controller');
 
 	function ModificarPerfilController($state, $scope, ClientesServiceAdmin, InstructoresServiceAdmin, HelpersFactory, constants){
 		console.log("ModificarPerfil controller");
+		console.log($scope.usuario);
 
-		$scope.registro={};
+		$scope.usuarioUpdate=angular.copy($scope.usuario);
 		var helper = HelpersFactory;
+
+		$scope.SetCliente = function(){
+			ClientesServiceAdmin
+				.setClientes($scope.usuarioUpdate)
+				.then(function(res){
+					helper.popupClose();
+					$state.reload();
+				})
+				.catch(function(err){
+					console.log(err);
+				})
+		}
 		//imagen por default
-		$scope.registro.imgCliente=constants.imgDefault;
+		//$scope.registro.imgCliente=constants.imgDefault;
 		
 	}
 
 })();
-},{}],72:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 require('./retos.module');
 require('./retos.controller');
 require('./popupVer/popupVer.directive');
-},{"./popupVer/popupVer.directive":73,"./retos.controller":74,"./retos.module":75}],73:[function(require,module,exports){
+},{"./popupVer/popupVer.directive":75,"./retos.controller":76,"./retos.module":77}],75:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Usuario')
 	.directive('retoVer', retoVer)
@@ -2138,7 +2300,7 @@ require('./popupVer/popupVer.directive');
 	}
 
 })();
-},{}],74:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -2163,13 +2325,13 @@ require('./popupVer/popupVer.directive');
 
 })();
 
-},{}],75:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 (function(){
 
 	angular.module('gymApp.Retos', []);
 
 })();
-},{}],76:[function(require,module,exports){
+},{}],78:[function(require,module,exports){
 (function(){
 	angular
 		.module('gymApp.Usuario')
@@ -2193,13 +2355,13 @@ require('./popupVer/popupVer.directive');
 		}
 
 })();
-},{}],77:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 (function(){
 
 	angular.module('gymApp.Usuario', []);
 
 })();
-},{}],78:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 /*(function(){
 	angular.module('gymApp.Usuario')
 
@@ -2234,4 +2396,4 @@ require('./popupVer/popupVer.directive');
 	}
 
 })();*/
-},{}]},{},[49]);
+},{}]},{},[48]);

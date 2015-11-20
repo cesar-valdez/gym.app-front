@@ -8,11 +8,24 @@
 
 	function ModificarPerfilController($state, $scope, ClientesServiceAdmin, InstructoresServiceAdmin, HelpersFactory, constants){
 		console.log("ModificarPerfil controller");
+		console.log($scope.usuario);
 
-		$scope.registro={};
+		$scope.usuarioUpdate=angular.copy($scope.usuario);
 		var helper = HelpersFactory;
+
+		$scope.SetCliente = function(){
+			ClientesServiceAdmin
+				.setClientes($scope.usuarioUpdate)
+				.then(function(res){
+					helper.popupClose();
+					$state.reload();
+				})
+				.catch(function(err){
+					console.log(err);
+				})
+		}
 		//imagen por default
-		$scope.registro.imgCliente=constants.imgDefault;
+		//$scope.registro.imgCliente=constants.imgDefault;
 		
 	}
 

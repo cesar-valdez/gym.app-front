@@ -1,31 +1,29 @@
 div(popup-close).PopupPerfilMod
 	form.PopupPerfilMod-contenidoPerfilMod
-		figure(style="background-image:url({{retoDuplicado.imgReto}});").ImgModificar
+		figure(style="background-image:url({{usuarioUpdate.imgCliente}});").ImgModificar
 			div.ImgModificar-cambiarImg
 				label.labelModificar
-					input(type="file" file-upload="retoDuplicado.imgReto").SubirImgModificar
+					input(type="file" file-upload="usuarioUpdate.imgCliente").SubirImgModificar
 					p cambiar imagen
 					i.icomoon.images
 		p Nombre:
-		input(type="text" name="nombre")
+		input(type="text" name="nombre" ng-model="usuarioUpdate.nombre")
 		p Apellido:
-		input(type="text" name="apellido")
+		input(type="text" name="apellido" ng-model="usuarioUpdate.apellido")
 		p Celular:
-		input(type="text" name="celular")
+		input(type="text" name="celular" ng-model="usuarioUpdate.celular")
 		p Domicilio:
-		input(type="text" name="domicilio")
-		p Correo:
-		input(type="text" name="correo")
+		input(type="text" name="domicilio" ng-model="usuarioUpdate.domicilio")
 		p Contraseña:
-		input(type="text" name="contrasenia")
-		p Edad:
-		input(type="text" name="edad").CajaChica
+		input(type="text" name="contrasenia" ng-model="usuarioUpdate.password")
+		p edad:
+		input(type="text" name="edad" ng-model="usuarioUpdate.edad").CajaChica
 		p.Estatura Estatura:
-		input(type="text" name="estatura").CajaChica
+		input(type="text" name="estatura" ng-model="usuarioUpdate.estatura").CajaChica
 		p.Peso Peso:
-		input(type="text" name="peso").CajaChica
+		input(type="text" name="peso" ng-model="usuarioUpdate.peso").CajaChica
 		button.BtnCancelar.popup-close Cancelar
-		button.BtnGuardar Guardar
+		button.BtnGuardar(ng-click="SetCliente()") Guardar
 
 
 
