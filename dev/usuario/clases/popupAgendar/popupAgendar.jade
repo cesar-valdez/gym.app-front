@@ -3,14 +3,29 @@ div(popup-close).PopupAgendar
 		h2 ¡Agenda tu clase!<br>
 		//select(disabled) para no poder seleccionar los datos
 		p.ClaseTxt Clase:
-		input(type="text" name="clase" value="Zumba" disabled)
+		input(type="text" name="clase" ng-model="claseDup.clase" disabled)
 		p Instructor:
-		select(name="instructor")
-			option Alondra Morales
-			option Jose Angeles
+		select(name="instructor" ng-model="claseDup.id_instructor"  required disabled).CajaInstructor
+			option(ng-repeat="instructor in instructores" value="{{instructor.id_instructor}}") {{instructor.nombre}} 
 		p.Hora Hora:
-		select(name="hora")
-			option 8:00am
-			option 11:00am
+		select(name="hora" ng-model="claseDup.hora" disabled)
+			option(value="6:00am") 6:00am
+			option(value="7:00am") 7:00am
+			option(value="8:00am") 8:00am
+			option(value="9:00am") 9:00am
+			option(value="10:00am") 10:00am
+			option(value="12:00pm") 12:00pm
+			option(value="1:00pm") 1:00pm
+			option(value="2:00pm") 2:00pm
+			option(value="3:00pm") 3:00pm
+			option(value="4:00pm") 4:00pm
+			option(value="5:00pm") 5:00pm
+			option(value="6:00pm") 6:00pm
+			option(value="7:00pm") 7:00pm
+			option(value="8:00pm") 8:00pm
+			option(value="9:00pm") 9:00pm
+			option(value="10:00pm") 10:00pm
+			option(value="11:00pm") 11:00pm
+			option(value="12:00am") 12:00am
 		button.Cancelar.popup-close Cancelar
-		button.Agendar Agendar
+		button(ng-click="agendar()").Agendar Agendar

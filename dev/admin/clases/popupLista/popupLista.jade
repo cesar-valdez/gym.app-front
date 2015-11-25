@@ -1,0 +1,41 @@
+div(popup-close).PopupClasesLista
+	div.PopupClasesLista-contenidoClasesLista
+		h2 todos los clientes<br>
+		table.TablaLista
+			tr
+				td Id_agenda
+				td Hora 
+				td Dia
+				td No_registro
+				td Nombre
+				td Apellido
+				td Celular
+				td Peso
+				td Estatura
+				td Edad
+				td Domicilio
+			tr(ng-repeat="lista in listas")
+				td {{lista.agendarclaseIDAgendar}}
+				td {{lista.agendarclaseHora}}
+				td {{lista.agendarclaseDia}}
+				td {{lista.ClientesRegistro}}
+				td {{lista.ClientesNombre}}
+				td {{lista.ClientesApellido}}
+				td {{lista.ClientesCelular}}
+				td {{lista.ClientesPeso}}
+				td {{lista.ClientesEstatura}}
+				td {{lista.ClientesEdad}}
+				td {{lista.ClientesDomicilio}}
+		//div(ng-repeat="lista in listas").Area
+			p{{lista.agendarclaseIDAgendar}}
+			p{{lista.agendarclaseHora}}
+			p{{lista.agendarclaseDia}}
+			p{{lista.ClientesRegistro}}
+			p{{lista.ClientesNombre}}
+			p{{lista.ClientesApellido}}
+			p{{lista.ClientesCelular}}
+			p{{lista.ClientesPeso}}
+			p{{lista.ClientesEstatura}}
+			p{{lista.ClientesEdad}}
+			p{{lista.ClientesDomicilio}}
+		div: i.icomoon.cancel-circle.popup-close

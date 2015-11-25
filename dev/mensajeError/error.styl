@@ -6,23 +6,32 @@
 	right:0;
 	left:0;
 	display:flex;
-	justify-content:center;
+	justify-content:center; 
 	align-items:center;
 	&-ContenidoError
-		border-radius:17px;
+		border-radius:17px; 
 		background:white;
-		padding:2em 2em 3em;
-		p
-			font-size:15px;
-			color:black;
-		.BtnAceptar
-			background:rgb(232,167,47);
+		padding:1em 2em 2em;
+		.Imagen
+			width:7em; 
+			height:7em;
+			display: inline-block;
+			background-image: url(../img/logo1D.png);
+			background-size: 100% 100%;
+			background-repeat: no-repeat;
+		.Texto
 			display:inline-block;
-			margin-right:.5em;
-			margin:2em 2em 0em 11em;
-		button
-			color:black;
-			font-size:15px;
-			border-radius:7px;
-			border: 1px solid rgb(110,110,100);
-			padding:.4em 1em;
+			.PError
+				margin-top:2.5em;
+				font-size:18px;
+				border-bottom: 3px solid rgb(210, 0, 0);
+			.BtnAceptar
+				background:rgb(232,167,47);
+				display:inline-block;
+				margin:.7em 2em 0em 5em;
+				padding:.3em 1em; 
+			button
+				color:black;
+				font-size:15px;
+				border-radius:7px;
+				border: 1px solid rgb(110,110,100);

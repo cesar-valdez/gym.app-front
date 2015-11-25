@@ -22,7 +22,13 @@
 		}).catch(function(err){
 			console.log(err)
 		});
-		
+		$scope.$watch('instructores', function(v){
+			if(v){
+				
+				console.log(v);
+				$scope.instructores = v;
+			}
+		})
 	}
 
 })();

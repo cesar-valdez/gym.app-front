@@ -26,7 +26,7 @@
 			var deferred = $q.defer();
 			var usuario = angular.fromJson(usuario);
 			
-			$http.post(constants.webService + 'login', usuario)
+			$http.post(constants.webService + 'clientes', usuario)
 			.success(function(response){
 				
 				deferred.resolve(response)

@@ -2,10 +2,12 @@ div.Costos
 	span Inscripcion....................................................................$100<br>
 	span Por mes........................................................................$300
 button(class="AgregarPago PopupAdd" popup-add="<pagos-agregar><pagos-agregar/>") Agregar pago
+form(action="http://localhost:8080/gym.app/back/pdf/pagos.php" method="POST").FormPDF
+	button(type="submit").FormPDF-btn
+		i.icomoon.file-pdf    Guardar
 div.AreaTablaAdmin
 	div.AreaTablaAdmin-encabezadoAdmin
 		spana(ui-sref="admin.pagos").Pagos Pagos mensuales
-		span.Vencidos Mensualidad vencida
 	div.AreaTablaAdmin-scrollAdmin
 		table.AreaTablaAdmin-scrollAdmin-tablaAdmin
 			tr
@@ -17,17 +19,17 @@ div.AreaTablaAdmin
 				td Costo
 				td Estado de pago
 				td
-			tr(ng-repeat="pago in pagos" ng-class="{'fechaVencida': pago.fechaVencida}")
-				td {{pago.ClientesRegistro}}
-				td {{pago.ClientesNombre}}
-				td {{pago.ClientesApellido}}
-				td {{pago.PagosFechaPago | date:'dd/MMM/yyyy'}}
-				td {{pago.PagosFechaPagado | date:'dd/MMM/yyyy'}}
-				td {{pago.PagosMonto}}
-				td {{pago.PagosEstado}}
+			tr(ng-repeat="p in pagosC" ng-class="{'fechaVencida': p.fechaVencida}")
+				td {{p.ClientesRegistro}}
+				td {{p.ClientesNombre}}
+				td {{p.ClientesApellido}}
+				td {{p.PagosFechaPago | date:'dd/MMM/yyyy'}}
+				td {{p.PagosFechaPagado | date:'dd/MMM/yyyy'}}
+				td {{p.PagosMonto}}
+				td {{p.PagosEstado}}
 				td
-					div(class="icomoon.pencil PopupAdd" popup-add="<pagos-modificar><pagos-modificar/>")
+					div(class="icomoon.pencil PopupAdd" popup-add="<pagos-modificar edit-pago='p'/>")
 						i.icomoon.pencil
-					div(class="icomoon.bin PopupAdd" popup-add="<pagos-eliminar><pagos-eliminar/>")
+					div(class="icomoon.bin PopupAdd" popup-add="<pagos-eliminar del-pago='p'/>")
 						i.icomoon.bin
 			

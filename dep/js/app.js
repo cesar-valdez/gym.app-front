@@ -34,7 +34,8 @@ require('./helpers.factory');
 		}
 	}
 
-	function popupClose(){
+	popupClose.$inject = ['$state'];
+	function popupClose($state){
 		return {
 			restrict:'A',
 			link: function(scope, elem, attrs){
@@ -48,6 +49,7 @@ require('./helpers.factory');
 					if(e.target != this && !angular.element(e.target).hasClass('popup-close')) return
 
 					elem.remove();
+					$state.reload();
 				})
 			}
 		}
@@ -220,7 +222,7 @@ require('./retos/_retos');
 require('./instructores/_instructores');
 require('./pagos/_pagos');
 require('./perfiles/_perfiles');
-},{"./admin.module":7,"./clases/_clases":8,"./inicio/_inicio":15,"./instructores/_instructores":22,"./pagos/_pagos":29,"./perfiles/_perfiles":35,"./retos/_retos":39}],7:[function(require,module,exports){
+},{"./admin.module":7,"./clases/_clases":8,"./inicio/_inicio":16,"./instructores/_instructores":23,"./pagos/_pagos":30,"./perfiles/_perfiles":37,"./retos/_retos":42}],7:[function(require,module,exports){
 (function(){
 
 	angular.module('gymApp.Admin', []);
@@ -233,7 +235,8 @@ require('./clases.directive');
 require('./popupAgregar/popupAgregar.controller');
 require('./popupModificar/popupModificar.controller');
 require('./popupEliminar/popupEliminar.controller');
-},{"./clases.controller":9,"./clases.directive":10,"./clases.service":11,"./popupAgregar/popupAgregar.controller":12,"./popupEliminar/popupEliminar.controller":13,"./popupModificar/popupModificar.controller":14}],9:[function(require,module,exports){
+require('./popupLista/popupLista.controller');
+},{"./clases.controller":9,"./clases.directive":10,"./clases.service":11,"./popupAgregar/popupAgregar.controller":12,"./popupEliminar/popupEliminar.controller":13,"./popupLista/popupLista.controller":14,"./popupModificar/popupModificar.controller":15}],9:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -267,6 +270,7 @@ require('./popupEliminar/popupEliminar.controller');
 	.directive('clasesModificar', clasesModificar)
 	.directive('clasesEliminar', clasesEliminar)
 	.directive('clasesVer', clasesVer)
+	.directive('clasesLista', clasesLista)
 
 	function clasesAgregar(){
 		return{
@@ -305,6 +309,17 @@ require('./popupEliminar/popupEliminar.controller');
 		}
 	}
 
+	function clasesLista(){
+		return{
+			restrict:'E',
+			scope:{
+				clase : '='
+			},
+			templateUrl: './admin/clases/popupLista/popupLista.html',
+			controller: 'ClasesListaAdminController'
+		}
+	}
+
 
 })();
 },{}],11:[function(require,module,exports){
@@ -330,6 +345,8 @@ require('./popupEliminar/popupEliminar.controller');
 			return deferred.promise;
 		}
 
+
+
 		function addClases(clase){
 			var deferred = $q.defer();
 			var clase = angular.fromJson(clase);
@@ -345,6 +362,34 @@ require('./popupEliminar/popupEliminar.controller');
 			return deferred.promise;
 		}
 
+		//servicio para mostrar todos los clientes que se agenda en una clase
+		function getAgendarClase(hora, dia){
+			var deferred = $q.defer();
+			
+			$http.get(constants.webService + 'getAgendarClase/'+hora + "/" + dia)
+			.success(function(response){
+				deferred.resolve(response)
+			})
+			.catch(function(err){
+				deferred.reject(err)
+			});
+			return deferred.promise;
+		}
+
+		function AgendarClase(clase){
+			var deferred = $q.defer();
+			var clase = angular.fromJson(clase);
+			var dias = angular.fromJson(clase.dias)
+			clase.dias = dias;
+			$http.post(constants.webService + 'AgendarClase', clase)
+			.success(function(response){
+				deferred.resolve(response)
+			})
+			.catch(function(err){
+				deferred.reject(err)
+			}) ;
+			return deferred.promise;
+		}
 
 
 		function setClases(clase){
@@ -381,6 +426,8 @@ require('./popupEliminar/popupEliminar.controller');
 		return{
 			getClases: getClases,
 			addClases: addClases,
+			AgendarClase: AgendarClase,
+			getAgendarClase: getAgendarClase,
 			setClases: setClases,
 			deleteClases: deleteClases
 		};
@@ -421,7 +468,7 @@ require('./popupEliminar/popupEliminar.controller');
 
 		//AddClase
 		$scope.addClases=function(){
-			$scope.clase.no_registro = "1";
+			$scope.clase.no_registro = "12";
 			var d = ["Lunes", "Martes", "Miercoles", "Jueves","Viernes", "Sabado", "Domingo"];
 			//var insertExitoso = false;
 			var days =[];
@@ -488,11 +535,15 @@ require('./popupEliminar/popupEliminar.controller');
 	angular.module('gymApp.Admin')
 	.controller('DeleteClasesAdminController', DeleteClasesAdminController);
 
-	DeleteClasesAdminController.$inject = ["$state","$scope","ClasesServiceAdmin" , "HelpersFactory", "constant"];
+	DeleteClasesAdminController.$inject = ["$compile", "$state","$scope","ClasesServiceAdmin" , "HelpersFactory", "constant"];
 
-	function DeleteClasesAdminController($state, $scope, ClasesServiceAdmin, HelpersFactory, constants){
+	function DeleteClasesAdminController($compile, $state, $scope, ClasesServiceAdmin, HelpersFactory, constants){
 		
 		var helper=HelpersFactory;
+
+
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
 
 		$scope.claseDuplicado = angular.copy($scope.delClase);
 		
@@ -500,9 +551,19 @@ require('./popupEliminar/popupEliminar.controller');
 				ClasesServiceAdmin
 					.deleteClases($scope.claseDuplicado)
 					.then(function(response){
+
+						//validacion con mensaje error y ok
+						if(response.estatus == 'ok'){
+							helper.popupClose();
+							body.append($compile("<mensaje-ok ok='"+ response.msj +"'></mensaje-ok>")($scope));
+							//$state.reload();
+						} else {
+							helper.popupClose();
+							body.append($compile("<mensaje-error error='"+ response.msj +"'></mensaje-error>")($scope));
+						}
 						//cerrar popup
-						helper.popupClose();
-						$state.reload();
+						//helper.popupClose();
+						//$state.reload();
 					})
 					.catch(function(err){
 							console.log(err)
@@ -517,16 +578,48 @@ require('./popupEliminar/popupEliminar.controller');
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Admin')
+	.controller('ClasesListaAdminController', ClasesListaAdminController);
+
+	ClasesListaAdminController.$inject = ["$state","$scope","ClasesServiceAdmin", "HelpersFactory", "constant"];
+
+	function ClasesListaAdminController($state, $scope, ClasesServiceAdmin, HelpersFactory, constants){
+		console.log("ClasesListaAdmin controller", $scope.clase);
+
+		$scope.listas = [];
+
+		//getLista de clientes de cada Clase
+		ClasesServiceAdmin
+			.getAgendarClase($scope.clase.hora, $scope.clase.dia)
+			.then(function(response){
+				console.log(response)
+				$scope.listas = response;
+
+		}).catch(function(err){
+			console.log(err)
+		});
+		
+	}
+
+})();
+},{}],15:[function(require,module,exports){
+(function() {
+
+	//modulo al qe pertenece
+	angular.module('gymApp.Admin')
 	.controller('ClasesModificarAdminController', ClasesModificarAdminController);
 
-	ClasesModificarAdminController.$inject = ["$state","$scope","ClasesServiceAdmin", "InstructoresServiceAdmin", "HelpersFactory", "constant"];
+	ClasesModificarAdminController.$inject = ["$compile", "$state","$scope","ClasesServiceAdmin", "InstructoresServiceAdmin", "HelpersFactory", "constant"];
 
-	function ClasesModificarAdminController($state, $scope, ClasesServiceAdmin, InstructoresServiceAdmin, HelpersFactory, constants){
-		console.log("ClasesMOdificarAdmin controller");
+	function ClasesModificarAdminController($compile, $state, $scope, ClasesServiceAdmin, InstructoresServiceAdmin, HelpersFactory, constants){
+		console.log("ClasesModificarAdmin controller");
 
 		//getinstructor, para mostrar todos los instructores en el campo 
 		$scope.instructores = [];
 		var helper = HelpersFactory;
+
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
+
 
 		InstructoresServiceAdmin
 			.getInstructores()
@@ -549,8 +642,18 @@ require('./popupEliminar/popupEliminar.controller');
 						console.log(response)
 						$scope.editClase.hora = response.newHora;
 						$scope.editClase = response;
+
+						//validacion con mensaje error y ok
+						if(response.estatus == 'ok'){
+							helper.popupClose();
+							body.append($compile("<mensaje-ok ok='"+ response.msj +"'></mensaje-ok>")($scope));
+							//$state.reload();
+						} else {
+							helper.popupClose();
+							body.append($compile("<mensaje-error error='"+ response.msj +"'></mensaje-error>")($scope));
+						}
 						//cerrar popup
-						helper.popupClose();
+						//helper.popupClose();
 					})
 					.catch(function(err){
 							console.log(err)
@@ -563,14 +666,14 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 require('./inicio.service');
 require('./inicio.controller');
 require('./inicio.directive');
 require('./popupAgregar/popupAgregar.controller');
 require('./popupEditar/popupEditar.controller');
 require('./popupEliminar/popupEliminar.controller');
-},{"./inicio.controller":16,"./inicio.directive":17,"./inicio.service":18,"./popupAgregar/popupAgregar.controller":19,"./popupEditar/popupEditar.controller":20,"./popupEliminar/popupEliminar.controller":21}],16:[function(require,module,exports){
+},{"./inicio.controller":17,"./inicio.directive":18,"./inicio.service":19,"./popupAgregar/popupAgregar.controller":20,"./popupEditar/popupEditar.controller":21,"./popupEliminar/popupEliminar.controller":22}],17:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -598,7 +701,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 	.directive('inicioAgregar', inicioAgregar)
@@ -637,7 +740,7 @@ require('./popupEliminar/popupEliminar.controller');
 
 
 })();
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 
@@ -714,19 +817,22 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Admin')
 	.controller('BannerAgregarAdminController', BannerAgregarAdminController);
 
-	BannerAgregarAdminController.$inject = ["$state","$scope","InicioServiceAdmin", "HelpersFactory", "constant"];
+	BannerAgregarAdminController.$inject = ["$compile","$state","$scope","InicioServiceAdmin", "HelpersFactory", "constant"];
 
-	function BannerAgregarAdminController($state, $scope, InicioServiceAdmin, HelpersFactory, constants){
+	function BannerAgregarAdminController($compile, $state, $scope, InicioServiceAdmin, HelpersFactory, constants){
 		console.log("RetosAgregarAdmin controller");
 		
 		var helper = HelpersFactory;
+		//validar con mensaje de ok
+		var body = angular.element(document).find('body');
+
 
 		//addBanner
 		$scope.bannerAgregar={};
@@ -738,6 +844,15 @@ require('./popupEliminar/popupEliminar.controller');
 			InicioServiceAdmin
 				.addBanner($scope.bannerAgregar)
 				.then(function(res){
+					//validacion con mensaje de ok
+					if(res.estatus == 'ok'){
+						helper.popupClose();
+						body.append($compile("<mensaje-ok ok='"+ res.msj +"'></mensaje-ok>")($scope));
+						//$state.reload();
+					} else {
+						helper.popupClose();
+						body.append($compile("<mensaje-error error='"+ res.msj +"'></mensaje-error>")($scope));
+					}
 					console.log(res);
 					//agregar uno mas al areglo y pueda utilizar el get
 					$scope.banners.push(res);
@@ -753,27 +868,39 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Admin')
 	.controller('SetBannerAdminController', SetBannerAdminController);
 
-	SetBannerAdminController.$inject = ["$state","$scope","InicioServiceAdmin" , "HelpersFactory", "constant"];
+	SetBannerAdminController.$inject = ["$compile", "$state","$scope","InicioServiceAdmin" , "HelpersFactory", "constant"];
 
-	function SetBannerAdminController($state, $scope, InicioServiceAdmin, HelpersFactory, constants){
+	function SetBannerAdminController($compile, $state, $scope, InicioServiceAdmin, HelpersFactory, constants){
 		$scope.bannerDuplicado = angular.copy($scope.editBanner);
 		
 		var helper=HelpersFactory;
+
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
 		
 			$scope.EditarBanner=function(){
 				InicioServiceAdmin
 					.setBanner($scope.bannerDuplicado)
 					.then(function(response){
 						$scope.editBanner = response;
+						//validacion con mensaje error y ok
+						if(response.estatus == 'ok'){
+							helper.popupClose();
+							body.append($compile("<mensaje-ok ok='"+ response.msj +"'></mensaje-ok>")($scope));
+							//$state.reload();
+						} else {
+							helper.popupClose();
+							body.append($compile("<mensaje-error error='"+ response.msj +"'></mensaje-error>")($scope));
+						}
 						//cerrar popup
-						helper.popupClose();
+						//helper.popupClose();
 					})
 					.catch(function(err){
 							console.log(err)
@@ -782,18 +909,21 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Admin')
 	.controller('DeleteBannerAdminController', DeleteBannerAdminController);
 
-	DeleteBannerAdminController.$inject = ["$state","$scope","InicioServiceAdmin" , "HelpersFactory", "constant"];
+	DeleteBannerAdminController.$inject = ["$compile", "$state","$scope","InicioServiceAdmin" , "HelpersFactory", "constant"];
 
-	function DeleteBannerAdminController($state, $scope, InicioServiceAdmin, HelpersFactory, constants){
+	function DeleteBannerAdminController($compile, $state, $scope, InicioServiceAdmin, HelpersFactory, constants){
 		
 		var helper=HelpersFactory;
+		
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
 
 		$scope.bannerDuplicado = angular.copy($scope.delBanner);
 			
@@ -801,6 +931,16 @@ require('./popupEliminar/popupEliminar.controller');
 				InicioServiceAdmin
 					.deleteBanner($scope.bannerDuplicado)
 					.then(function(response){
+
+						//validacion con mensaje error y ok
+						if(response.estatus == 'ok'){
+							helper.popupClose();
+							body.append($compile("<mensaje-ok ok='"+ response.msj +"'></mensaje-ok>")($scope));
+							//$state.reload();
+						} else {
+							helper.popupClose();
+							body.append($compile("<mensaje-error error='"+ response.msj +"'></mensaje-error>")($scope));
+						}
 						//cerrar popup
 						helper.popupClose();
 						$state.reload();
@@ -813,7 +953,7 @@ require('./popupEliminar/popupEliminar.controller');
 
 })();
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 require('./instructores.controller');
 require('./instructores.service');
 require('./instructores.directive');
@@ -822,7 +962,7 @@ require('./popupModificar/popupModificar.controller');
 require('./popupEliminar/popupEliminar.controller');
 
 
-},{"./instructores.controller":23,"./instructores.directive":24,"./instructores.service":25,"./popupAgregar/popupAgregar.controller":26,"./popupEliminar/popupEliminar.controller":27,"./popupModificar/popupModificar.controller":28}],23:[function(require,module,exports){
+},{"./instructores.controller":24,"./instructores.directive":25,"./instructores.service":26,"./popupAgregar/popupAgregar.controller":27,"./popupEliminar/popupEliminar.controller":28,"./popupModificar/popupModificar.controller":29}],24:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -847,11 +987,17 @@ require('./popupEliminar/popupEliminar.controller');
 		}).catch(function(err){
 			console.log(err)
 		});
-		
+		$scope.$watch('instructores', function(v){
+			if(v){
+				
+				console.log(v);
+				$scope.instructores = v;
+			}
+		})
 	}
 
 })();
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 	.directive('instructoresAgregar', instructoresAgregar)	
@@ -889,7 +1035,8 @@ require('./popupEliminar/popupEliminar.controller');
 		return{
 			restrict:'E',
 			scope:{
-				delInstructor : '='
+				delInstructor : '=',
+				instructores : '='
 			},
 			templateUrl: './admin/instructores/popupEliminar/popupEliminar.html',
 			controller: 'DeleteInstructoresAdminController',
@@ -899,7 +1046,7 @@ require('./popupEliminar/popupEliminar.controller');
 
 
 })();
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 
@@ -984,18 +1131,21 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Admin')
 	.controller('AddInstructoresAdminController', AddInstructoresAdminController);
 
-	AddInstructoresAdminController.$inject = ["$state","$scope","InstructoresServiceAdmin" , "HelpersFactory", "constant"];
+	AddInstructoresAdminController.$inject = ["$compile", "$state","$scope","InstructoresServiceAdmin" , "HelpersFactory", "constant"];
 
-	function AddInstructoresAdminController($state, $scope, InstructoresServiceAdmin, HelpersFactory, constants){
+	function AddInstructoresAdminController($compile, $state, $scope, InstructoresServiceAdmin, HelpersFactory, constants){
 		
 		var helper=HelpersFactory;
+
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
 
 		$scope.instructor={};
 		//imagen por default
@@ -1005,12 +1155,18 @@ require('./popupEliminar/popupEliminar.controller');
 			InstructoresServiceAdmin
 				.addInstructores($scope.instructor)
 				.then(function(response){
-					console.log("response")
-					console.log(response)
+					if(response.estatus == 'ok'){
+							helper.popupClose();
+							body.append($compile("<mensaje-ok ok='"+ response.msj +"'></mensaje-ok>")($scope));
+							//$state.reload();
+						} else {
+							helper.popupClose();
+							body.append($compile("<mensaje-error error='"+ response.msj +"'></mensaje-error>")($scope));
+						}
 					//agregar uno mas al areglo y pueda utilizar el get
 					$scope.instructores.push(response);
 					//cerrar popup
-					helper.popupClose();
+					//helper.popupClose();
 				})
 				.catch(function(err){
 						console.log(err)
@@ -1019,27 +1175,38 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Admin')
 	.controller('DeleteInstructoresAdminController', DeleteInstructoresAdminController);
 
-	DeleteInstructoresAdminController.$inject = ["$state","$scope","InstructoresServiceAdmin" , "HelpersFactory", "constant"];
+	DeleteInstructoresAdminController.$inject = ["$state","$scope", "$compile","InstructoresServiceAdmin" , "HelpersFactory", "constant"];
 
-	function DeleteInstructoresAdminController($state, $scope, InstructoresServiceAdmin, HelpersFactory, constants){
+	function DeleteInstructoresAdminController($state, $scope, $compile, InstructoresServiceAdmin, HelpersFactory, constants){
 		
 		var helper=HelpersFactory;
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
+
 
 		$scope.instructorDuplicado = angular.copy($scope.delInstructor);
 			$scope.deleteInstructor=function(){
 				InstructoresServiceAdmin
 					.deleteInstructores($scope.instructorDuplicado)
 					.then(function(response){
+						//validacion con mensaje error y ok
+						if(response.estatus == 'ok'){
+							helper.popupClose();
+							body.append($compile("<mensaje-ok ok='"+ response.msj +"'></mensaje-ok>")($scope));
+							//$state.reload();
+						} else {
+							helper.popupClose();
+							body.append($compile("<mensaje-error error='"+ response.msj +"'></mensaje-error>")($scope));
+						}
 						//cerrar popup
-						helper.popupClose();
-						$state.reload();
+						//$state.reload();
 					})
 					.catch(function(err){
 							console.log(err)
@@ -1049,27 +1216,41 @@ require('./popupEliminar/popupEliminar.controller');
 
 })();
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Admin')
 	.controller('SetInstructoresAdminController', SetInstructoresAdminController);
 
-	SetInstructoresAdminController.$inject = ["$state","$scope","InstructoresServiceAdmin" , "HelpersFactory", "constant"];
+	SetInstructoresAdminController.$inject = ["$compile", "$state","$scope","InstructoresServiceAdmin" , "HelpersFactory", "constant"];
 
-	function SetInstructoresAdminController($state, $scope, InstructoresServiceAdmin, HelpersFactory, constants){
+	function SetInstructoresAdminController($compile, $state, $scope, InstructoresServiceAdmin, HelpersFactory, constants){
 		$scope.instructorDuplicado = angular.copy($scope.editInstructor);
 		
 		var helper=HelpersFactory;
+
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
+
 		
 			$scope.EditarInstructor=function(){
 				InstructoresServiceAdmin
 					.setInstructores($scope.instructorDuplicado)
 					.then(function(response){
 						$scope.editInstructor = response;
+						
+						//validacion con mensaje error y ok
+						if(response.estatus == 'ok'){
+							helper.popupClose();
+							body.append($compile("<mensaje-ok ok='"+ response.msj +"'></mensaje-ok>")($scope));
+							//$state.reload();
+						} else {
+							helper.popupClose();
+							body.append($compile("<mensaje-error error='"+ response.msj +"'></mensaje-error>")($scope));
+						}
 						//cerrar popup
-						helper.popupClose();
+						//helper.popupClose();
 					})
 					.catch(function(err){
 							console.log(err)
@@ -1078,41 +1259,47 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 require('./pagos.controller');
 require('./pagos.service');
 require('./pagos.directive');
 require('./popupAgregar/popupAgregar.controller');
 require('./popupModificar/popupModificar.controller');
-},{"./pagos.controller":30,"./pagos.directive":31,"./pagos.service":32,"./popupAgregar/popupAgregar.controller":33,"./popupModificar/popupModificar.controller":34}],30:[function(require,module,exports){
+require('./popupEliminar/popupEliminar.controller');
+},{"./pagos.controller":31,"./pagos.directive":32,"./pagos.service":33,"./popupAgregar/popupAgregar.controller":34,"./popupEliminar/popupEliminar.controller":35,"./popupModificar/popupModificar.controller":36}],31:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Admin')
 	.controller('PagosAdminController', PagosAdminController);
 
-	PagosAdminController.$inject = ["$state","$scope","PagosServiceAdmin"];
+	PagosAdminController.$inject = ["$state","$scope","PagosServiceAdmin", "HelpersFactory", "constant"];
 
-	function PagosAdminController($state, $scope, PagosServiceAdmin){
+	function PagosAdminController($state, $scope, PagosServiceAdmin, HelpersFactory, constants){
 		console.log("PagosAdmin controller");
 
-		$scope.Pagos = [];
-
+		$scope.pagosC = [];
+		var helper=HelpersFactory;
 		var fechaActual = new Date();
 
 		//getPagos
-		PagosServiceAdmin.getPagos().then(
-			function(response){
-			console.log(response)
-			$scope.pagos = response;
+		PagosServiceAdmin
+			.getPagos()
+			.then(function(response){
+				console.log(response)
+				$scope.pagosC = response;
 
-			for(var i=0; i < response.length; i++){
-				console.log($scope.pagos[i].PagosFechaPago)
-				if(new Date($scope.pagos[i].PagosFechaPago) <= fechaActual){
-					$scope.pagos[i].fechaVencida = true;
-					$scope.pagos[i].PagosEstado = "No Pagado";
+				for(var i=0; i < response.length; i++){
+					console.log($scope.pagosC[i].PagosFechaPago)
+					if(new Date($scope.pagosC[i].PagosFechaPago) <= fechaActual){
+						$scope.pagosC[i].fechaVencida = true;
+						$scope.pagosC[i].PagosEstado = "No Pagado";
+					}
 				}
-			}
+				//en modificar le pago salga la fecha con formato date
+				for(var i=0; i<response.length; i++){
+					$scope.pagosC[i].PagosFechaPagado = new Date($scope.pagosC[i].PagosFechaPagado);
+				}
 
 		}).catch(function(err){
 			console.log(err)
@@ -1121,7 +1308,7 @@ require('./popupModificar/popupModificar.controller');
 	}
 
 })();
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 	.directive('pagosAgregar', pagosAgregar)
@@ -1140,23 +1327,27 @@ require('./popupModificar/popupModificar.controller');
 		return{
 			restrict:'E',
 			scope:{
-				editPago : '='
+				editPago: '='
 			},
-			templateUrl: './admin/pagos/popupModificar/popupModificar.html'
-			//controller: 'SetPagosAdminController'
+			templateUrl: './admin/pagos/popupModificar/popupModificar.html',
+			controller: 'SetPagosAdminController'
 		}
 	}
 
 	function pagosEliminar(){
 		return{
 			restrict:'E',
-			templateUrl: './admin/pagos/popupEliminar/popupEliminar.html'
+			scope:{
+				delPago: '='
+			},
+			templateUrl: './admin/pagos/popupEliminar/popupEliminar.html',
+			controller: 'DeletePagosAdminController'
 		}
 	}
 
 
 })();
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 
@@ -1178,6 +1369,21 @@ require('./popupModificar/popupModificar.controller');
 			});
 			return deferred.promise;
 		}
+
+		//getPago para mostrar al usuario
+		function getPago(noRegistro){
+			var deferred = $q.defer();
+			
+			$http.get(constants.webService + 'getPago/'+noRegistro)
+			.success(function(response){
+				deferred.resolve(response)
+			})
+			.catch(function(err){
+				deferred.reject(err)
+			});
+			return deferred.promise;
+		}
+
 
 		//para comprobar si la fecha de pago que se insertara es por primera vez
 		function pagoExistente(clienteId){
@@ -1206,20 +1412,47 @@ require('./popupModificar/popupModificar.controller');
 			return deferred.promise;
 		}
 
+		function setPagos(pago){
+			var deferred = $q.defer();
+			var pago = angular.fromJson(pago);
+			$http.put(constants.webService + 'putPagos', pago)
+			.success(function(response){
+				deferred.resolve(response)
+			})
+			.catch(function(err){
+				deferred.reject(err)
+			});
+			return deferred.promise;
+		}
 
+		function deletePagos(pago){
+			var deferred = $q.defer();
+			var pago = angular.fromJson(pago);
+			$http.delete(constants.webService + 'deletePagos', {data: pago})
+			.success(function(response){
+				deferred.resolve(response)
+			})
+			.catch(function(err){
+				deferred.reject(err)
+			});
+			return deferred.promise;
+		}
 
 
 		//return de los metodos
 		return{
 			getPagos: getPagos,
+			getPago: getPago,
 			pagoExistente: pagoExistente,
-			addPago: addPago
+			addPago: addPago,
+			setPagos: setPagos,
+			deletePagos: deletePagos
 		};
 
 	}
 
 })();
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -1235,8 +1468,10 @@ require('./popupModificar/popupModificar.controller');
 		$scope.selected = {};
 
 		//getClientes
-		ClientesServiceAdmin.getClientes().then(function(response){
-			$scope.clientes = response;
+		ClientesServiceAdmin
+			.getClientes()
+			.then(function(response){
+				$scope.clientes = response;
 		});
 
 
@@ -1247,7 +1482,7 @@ require('./popupModificar/popupModificar.controller');
 		//AddPago
 		$scope.addPagos=function(){
 			//$scope.pago.no_registro = "1";
-			$scope.newPago.no_registro = $scope.selected.no_registro;
+			$scope.newPago.no_registro = $scope.selected.ClientesNoRegistro;
 
 			//Servicio para validar si es la primera vez que paga
 			PagosServiceAdmin
@@ -1287,17 +1522,162 @@ require('./popupModificar/popupModificar.controller');
 	}
 
 })();
-},{}],34:[function(require,module,exports){
-
 },{}],35:[function(require,module,exports){
+(function() {
+
+	//modulo al qe pertenece
+	angular.module('gymApp.Admin')
+	.controller('DeletePagosAdminController', DeletePagosAdminController);
+
+	DeletePagosAdminController.$inject = ["$state","$scope","PagosServiceAdmin" , "HelpersFactory", "constant"];
+
+	function DeletePagosAdminController($state, $scope, PagosServiceAdmin, HelpersFactory, constants){
+		
+		var helper=HelpersFactory;
+
+		$scope.pagoDuplicado = angular.copy($scope.delPago);
+			$scope.deletePago=function(){
+
+				var pago = {};
+				pago.id_pago = $scope.pagoDuplicado.PagosId;
+
+				PagosServiceAdmin
+					.deletePagos(pago)
+					.then(function(response){
+						console.log(response)
+						//cerrar popup
+						helper.popupClose();
+						$state.reload();
+					})
+					.catch(function(err){
+							console.log(err)
+					});
+		}
+	}
+
+})();
+
+},{}],36:[function(require,module,exports){
+(function() {
+
+	//modulo al qe pertenece
+	angular.module('gymApp.Admin')
+	.controller('SetPagosAdminController', SetPagosAdminController);
+
+	SetPagosAdminController.$inject = ["$state","$scope","PagosServiceAdmin" , "HelpersFactory", "constant"];
+
+	function SetPagosAdminController($state, $scope, PagosServiceAdmin, HelpersFactory, constants){
+		$scope.pagoDuplicado = angular.copy($scope.editPago);
+		var helper=HelpersFactory;
+
+		$scope.EditarPago=function(){
+
+			var pago = {};
+			pago.id_pago = $scope.pagoDuplicado.PagosId;
+			pago.fechaPago = $scope.pagoDuplicado.PagosFechaPago;
+			pago.fechaPagado = $scope.pagoDuplicado.PagosFechaPagado;
+			pago.estadoPagado = $scope.pagoDuplicado.PagosEstado;
+			pago.montoPagado = $scope.pagoDuplicado.PagosMonto;
+			pago.no_registro = $scope.pagoDuplicado.ClientesRegistro;
+
+			PagosServiceAdmin
+				.setPagos(pago)
+				.then(function(response){
+					$scope.editPago = response;
+					//cerrar popup
+					helper.popupClose();
+					$state.reload();
+				})
+				.catch(function(err){
+						console.log(err)
+				});
+		}
+		
+	}
+
+})();
+},{}],37:[function(require,module,exports){
 require('./perfiles.controller');
 require('./perfiles.service');
 require('./perfiles.directive');
-},{"./perfiles.controller":36,"./perfiles.directive":37,"./perfiles.service":38}],36:[function(require,module,exports){
-arguments[4][34][0].apply(exports,arguments)
-},{"dup":34}],37:[function(require,module,exports){
-arguments[4][34][0].apply(exports,arguments)
-},{"dup":34}],38:[function(require,module,exports){
+require('./popupEliminar/popupEliminar.controller');
+},{"./perfiles.controller":38,"./perfiles.directive":39,"./perfiles.service":40,"./popupEliminar/popupEliminar.controller":41}],38:[function(require,module,exports){
+(function() {
+
+	//modulo al qe pertenece
+	angular.module('gymApp.Admin')
+	.controller('PerfilesAdminController', PerfilesAdminController);
+
+	PerfilesAdminController.$inject = ["$state","$scope","ClientesServiceAdmin" , "HelpersFactory", "constant"];
+	
+	function PerfilesAdminController($state, $scope, ClientesServiceAdmin, HelpersFactory, constants){
+		console.log("PerfilesAdmin controller");
+
+
+		$scope.clientes = [];
+		var helper=HelpersFactory;
+
+		var cliente = {};
+			cliente.apellido = $scope.clientes.ClientesApellido;
+			cliente.celular = $scope.clientes.ClientesCelular;
+			cliente.correo = $scope.clientes.ClientesCorreo;
+			cliente.domicilio = $scope.clientes.ClientesDomicilio;
+			cliente.edad = $scope.clientes.ClientesEdad;
+			cliente.estatura = $scope.clientes.ClientesEstatura;
+			cliente.imgCliente = $scope.clientes.ClientesImgCliente;
+			cliente.no_registro = $scope.clientes.ClientesNoRegistro;
+			cliente.nombre = $scope.clientes.ClientesNombre;
+			cliente.peso = $scope.clientes.ClientesPeso;
+			cliente.correo = $scope.clientes.UsuariosCorreo;
+			cliente.password = $scope.clientes.UsuariosPassword;
+			cliente.tipoUsuario = $scope.clientes.UsuariosTipoUsuario;
+
+
+		//getPerfil del cliente
+		ClientesServiceAdmin
+			.getClientes(cliente)
+			.then(function(response){
+				console.log(response)
+				$scope.clientes = response;
+
+		}).catch(function(err){
+			console.log(err)
+		});
+
+		/*$scope.buscar = function(){
+			$scope.filtro = $scope.search;
+		}*/
+
+	}
+
+})();
+},{}],39:[function(require,module,exports){
+(function(){
+	angular.module('gymApp.Admin')
+	.directive('perfilesEliminar', perfilesEliminar)
+	.directive('perfilesVer', perfilesVer)
+
+	function perfilesEliminar(){
+		return{
+			restrict:'E',
+			scope:{
+				delCliente : '='
+			},
+			templateUrl: './admin/perfiles/popupEliminar/popupEliminar.html',
+			controller: 'DeleteClientesAdminController'
+		}
+	}
+
+	function perfilesVer(){
+		return{
+			restrict:'E',
+			templateUrl: './admin/perfiles/popupVer/popupVer.html'
+		}
+	}
+
+
+})();
+},{}],40:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 
@@ -1349,6 +1729,19 @@ arguments[4][34][0].apply(exports,arguments)
 			return deferred.promise;
 		}
 
+		function deleteClientes(cliente){
+			var deferred = $q.defer();
+			var cliente = angular.fromJson(cliente);
+			$http.delete(constants.webService + 'deleteClientes', {data: cliente})
+			.success(function(response){
+				deferred.resolve(response)
+			})
+			.catch(function(err){
+				deferred.reject(err)
+			});
+			return deferred.promise;
+		}
+
 		/* addRetos(reto){
 			var deferred = $q.defer();
 			var reto = angular.fromJson(reto);
@@ -1361,18 +1754,6 @@ arguments[4][34][0].apply(exports,arguments)
 			});
 			return deferred.promise;
 		}
-
-		function deleteRetos(reto){
-			var deferred = $q.defer();
-			var reto = angular.fromJson(reto);
-			$http.delete(constants.webService + 'deleteRetos', {data: reto})
-			.success(function(response){
-				deferred.resolve(response)
-			})
-			.catch(function(err){
-				deferred.reject(err)
-			});
-			return deferred.promise;
 		}*/
 
 
@@ -1381,59 +1762,9 @@ arguments[4][34][0].apply(exports,arguments)
 		return{
 			getClientes: getClientes,
 			getCliente: getCliente,
-			setClientes: setClientes
+			setClientes: setClientes,
+			deleteClientes: deleteClientes
 		};
-
-	}
-
-})();
-},{}],39:[function(require,module,exports){
-require('./retos.controller');
-require('./retos.service');
-require('./retos.directive');
-require('./popupAgregar/popupAgregar.controller');
-require('./popupModificar/popupModificar.controller');
-require('./popupEliminar/popupEliminar.controller');
-
-},{"./popupAgregar/popupAgregar.controller":40,"./popupEliminar/popupEliminar.controller":41,"./popupModificar/popupModificar.controller":42,"./retos.controller":43,"./retos.directive":44,"./retos.service":45}],40:[function(require,module,exports){
-(function() {
-
-	//modulo al qe pertenece
-	angular.module('gymApp.Admin')
-	.controller('RetosAgregarAdminController', RetosAgregarAdminController);
-
-	RetosAgregarAdminController.$inject = ["$state","$scope","RetosServiceAdmin", "HelpersFactory", "constant"];
-
-	function RetosAgregarAdminController($state, $scope, RetosServiceAdmin, HelpersFactory, constants){
-		console.log("RetosAgregarAdmin controller");
-		
-		var helper = HelpersFactory;
-
-		//addReto
-		$scope.reto={};
-		//imagen por default
-		$scope.reto.imgReto=constants.imgDefaultReto;
-
-		//AddReto
-		$scope.addRetos=function(){
-			$scope.reto.no_registro = "1";
-
-			$scope.reto.fechaPago = false;
-
-			RetosServiceAdmin
-				.addRetos($scope.reto)
-				.then(function(res){
-					console.log(res);
-					//agregar uno mas al areglo y pueda utilizar el get
-					$scope.retos.push(res);
-					//cerrar popup
-					helper.popupClose();
-				})
-				.catch(function(err){
-					console.log(err)
-				});
-		}
-
 
 	}
 
@@ -1443,22 +1774,40 @@ require('./popupEliminar/popupEliminar.controller');
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Admin')
-	.controller('DeleteRetosAdminController', DeleteRetosAdminController);
+	.controller('DeleteClientesAdminController', DeleteClientesAdminController);
 
-	DeleteRetosAdminController.$inject = ["$state","$scope","RetosServiceAdmin" , "HelpersFactory", "constant"];
+	DeleteClientesAdminController.$inject = ["$compile", "$state","$scope","ClientesServiceAdmin" , "HelpersFactory", "constant"];
 
-	function DeleteRetosAdminController($state, $scope, RetosServiceAdmin, HelpersFactory, constants){
+	function DeleteClientesAdminController($compile, $state, $scope, ClientesServiceAdmin, HelpersFactory, constants){
 		
 		var helper=HelpersFactory;
 
-		$scope.retoDuplicado = angular.copy($scope.delReto);
-			$scope.deleteReto=function(){
-				RetosServiceAdmin
-					.deleteRetos($scope.retoDuplicado)
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
+
+
+		$scope.clienteDuplicado = angular.copy($scope.delCliente);
+			
+			$scope.deleteCliente=function(){
+				
+				var cliente = {};
+				cliente.no_registro = $scope.clienteDuplicado.ClientesNoRegistro;
+
+				ClientesServiceAdmin
+					.deleteClientes(cliente)
 					.then(function(response){
-						//cerrar popup
-						helper.popupClose();
-						$state.reload();
+
+						//validacion con mensaje error y ok
+						if(response.estatus == 'ok'){
+							helper.popupClose();
+							body.append($compile("<mensaje-ok ok='"+ response.msj +"'></mensaje-ok>")($scope));
+							//$state.reload();
+						} else {
+							helper.popupClose();
+							body.append($compile("<mensaje-error error='"+ response.msj +"'></mensaje-error>")($scope));
+						}
+						//helper.popupClose();
+						//$state.reload();
 					})
 					.catch(function(err){
 							console.log(err)
@@ -1469,26 +1818,101 @@ require('./popupEliminar/popupEliminar.controller');
 })();
 
 },{}],42:[function(require,module,exports){
+require('./retos.controller');
+require('./retos.service');
+require('./retos.directive');
+require('./popupAgregar/popupAgregar.controller');
+require('./popupModificar/popupModificar.controller');
+require('./popupEliminar/popupEliminar.controller');
+
+},{"./popupAgregar/popupAgregar.controller":43,"./popupEliminar/popupEliminar.controller":44,"./popupModificar/popupModificar.controller":45,"./retos.controller":46,"./retos.directive":47,"./retos.service":48}],43:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Admin')
-	.controller('SetRetosAdminController', SetRetosAdminController);
+	.controller('RetosAgregarAdminController', RetosAgregarAdminController);
 
-	SetRetosAdminController.$inject = ["$state","$scope","RetosServiceAdmin" , "HelpersFactory", "constant"];
+	RetosAgregarAdminController.$inject = ["$compile", "$state","$scope","RetosServiceAdmin", "HelpersFactory", "constant"];
 
-	function SetRetosAdminController($state, $scope, RetosServiceAdmin, HelpersFactory, constants){
-
-		$scope.retoDuplicado = angular.copy($scope.editReto);
-		var helper=HelpersFactory;
+	function RetosAgregarAdminController($compile, $state, $scope, RetosServiceAdmin, HelpersFactory, constants){
+		console.log("RetosAgregarAdmin controller");
 		
-			$scope.EditarReto=function(){
-				RetosServiceAdmin
-					.setRetos($scope.retoDuplicado)
-					.then(function(response){
-						$scope.editReto = response;
-						//cerrar popup
+		var helper = HelpersFactory;
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
+
+
+		//addReto
+		$scope.reto={};
+		//imagen por default
+		$scope.reto.imgReto=constants.imgDefaultReto;
+
+		//AddReto
+		$scope.addRetos=function(){
+			$scope.reto.no_registro = "12";
+
+			$scope.reto.fechaPago = false;
+
+			RetosServiceAdmin
+				.addRetos($scope.reto)
+				.then(function(res){
+					console.log(res);
+					//agregar uno mas al areglo y pueda utilizar el get
+					$scope.retos.push(res);
+
+					//validacion con mensaje error y ok
+					if(res.estatus == 'ok'){
 						helper.popupClose();
+						body.append($compile("<mensaje-ok ok='"+ res.msj +"'></mensaje-ok>")($scope));
+						//$state.reload();
+					} else {
+						helper.popupClose();
+						body.append($compile("<mensaje-error error='"+ res.msj +"'></mensaje-error>")($scope));
+					}
+					//cerrar popup
+					//helper.popupClose();
+				})
+				.catch(function(err){
+					console.log(err)
+				});
+		}
+
+
+	}
+
+})();
+},{}],44:[function(require,module,exports){
+(function() {
+
+	//modulo al qe pertenece
+	angular.module('gymApp.Admin')
+	.controller('DeleteRetosAdminController', DeleteRetosAdminController);
+
+	DeleteRetosAdminController.$inject = ["$compile", "$state","$scope","RetosServiceAdmin" , "HelpersFactory", "constant"];
+
+	function DeleteRetosAdminController($compile, $state, $scope, RetosServiceAdmin, HelpersFactory, constants){
+		
+		var helper=HelpersFactory;
+
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
+
+		$scope.retoDuplicado = angular.copy($scope.delReto);
+			$scope.deleteReto=function(){
+				RetosServiceAdmin
+					.deleteRetos($scope.retoDuplicado)
+					.then(function(response){
+
+						//validacion con mensaje error y ok
+						if(response.estatus == 'ok'){
+							helper.popupClose();
+							body.append($compile("<mensaje-ok ok='"+ response.msj +"'></mensaje-ok>")($scope));
+							//$state.reload();
+						} else {
+							helper.popupClose();
+							body.append($compile("<mensaje-error error='"+ response.msj +"'></mensaje-error>")($scope));
+						}
+						
 					})
 					.catch(function(err){
 							console.log(err)
@@ -1497,7 +1921,50 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],43:[function(require,module,exports){
+
+},{}],45:[function(require,module,exports){
+(function() {
+
+	//modulo al qe pertenece
+	angular.module('gymApp.Admin')
+	.controller('SetRetosAdminController', SetRetosAdminController);
+
+	SetRetosAdminController.$inject = ["$compile", "$state","$scope","RetosServiceAdmin" , "HelpersFactory", "constant"];
+
+	function SetRetosAdminController($compile, $state, $scope, RetosServiceAdmin, HelpersFactory, constants){
+
+		$scope.retoDuplicado = angular.copy($scope.editReto);
+		var helper=HelpersFactory;
+
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
+		
+			$scope.EditarReto=function(){
+				RetosServiceAdmin
+					.setRetos($scope.retoDuplicado)
+					.then(function(response){
+						$scope.editReto = response;
+						
+						//validacion con mensaje error y ok
+						if(response.estatus == 'ok'){
+							helper.popupClose();
+							body.append($compile("<mensaje-ok ok='"+ response.msj +"'></mensaje-ok>")($scope));
+							//$state.reload();
+						} else {
+							helper.popupClose();
+							body.append($compile("<mensaje-error error='"+ response.msj +"'></mensaje-error>")($scope));
+						}
+						//cerrar popup
+						//helper.popupClose();
+					})
+					.catch(function(err){
+							console.log(err)
+					});
+			}
+	}
+
+})();
+},{}],46:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -1529,7 +1996,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],44:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 	.directive('retosAgregar', retosAgregar)
@@ -1577,7 +2044,7 @@ require('./popupEliminar/popupEliminar.controller');
 
 
 })();
-},{}],45:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Admin')
 
@@ -1653,7 +2120,7 @@ require('./popupEliminar/popupEliminar.controller');
 	}
 
 })();
-},{}],46:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 (function(){
 	//appTec - modulo principal (aplicacion)
 	//modulo de rutas - ui-router
@@ -1662,6 +2129,7 @@ require('./popupEliminar/popupEliminar.controller');
 		'swxSessionStorage',
 		'angular-carousel',
 		'gymApp.Error',
+		'gymApp.Ok',
 		'gymApp.constants',
 		'gymApp.Helpers',
 		'gymApp.Usuario',
@@ -1791,7 +2259,8 @@ require('./popupEliminar/popupEliminar.controller');
 					url: '/perfiles',
 					views:{
 						"contentViews":{
-							templateUrl: 'admin/perfiles/perfiles.html'							
+							templateUrl: 'admin/perfiles/perfiles.html',
+							controller: 'PerfilesAdminController'
 						}
 					}
 				})
@@ -1815,7 +2284,7 @@ require('./popupEliminar/popupEliminar.controller');
 
 
 })();
-},{}],47:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 (function () {
 
 angular
@@ -1829,33 +2298,34 @@ angular
     });
 
 })();
-},{}],48:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 //manda a llamar a la libreria jquery
 require('./app.module');
 require('./mensajeError/_error');
+require('./mensajeOk/_ok');
 require('./constants');
 require('./login/_login');
 require('./_helpers/_helpers');
 require('./admin/_admin');
 require('./usuario/_usuario');
 
-},{"./_helpers/_helpers":1,"./admin/_admin":6,"./app.module":46,"./constants":47,"./login/_login":49,"./mensajeError/_error":55,"./usuario/_usuario":58}],49:[function(require,module,exports){
+},{"./_helpers/_helpers":1,"./admin/_admin":6,"./app.module":49,"./constants":50,"./login/_login":52,"./mensajeError/_error":59,"./mensajeOk/_ok":62,"./usuario/_usuario":65}],52:[function(require,module,exports){
 require('./login.module');
 require('./login.controller');
 require('./login.service');
 require('./login.directive');
 require('./popupRegistrar/popupRegistrar.controller');
-
-},{"./login.controller":50,"./login.directive":51,"./login.module":52,"./login.service":53,"./popupRegistrar/popupRegistrar.controller":54}],50:[function(require,module,exports){
+require ('./mapa')
+},{"./login.controller":53,"./login.directive":54,"./login.module":55,"./login.service":56,"./mapa":57,"./popupRegistrar/popupRegistrar.controller":58}],53:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Login')
 	.controller('LoginController', LoginController);
 
-	LoginController.$inject = ["$compile","$state","$scope","LoginService", "UsuarioFactory"];
+	LoginController.$inject = ["$compile","$state","$scope", "$timeout","LoginService", "UsuarioFactory"];
 
-	function LoginController($compile, $state, $scope, LoginService, UsuarioFactory){
+	function LoginController($compile, $state, $scope, $timeout, LoginService, UsuarioFactory){
 		console.log("Login controller");
 		$scope.usuario = {};
 		var usuario = UsuarioFactory;
@@ -1875,6 +2345,7 @@ require('./popupRegistrar/popupRegistrar.controller');
 					console.log(data);
 								usuario.setInfo(data.usuario);
 								$state.go('usuario.inicio')
+								body.append($compile("<mensaje-ok ok='" + data.msj + "'></mensaje-ok>")($scope));
 							}
 
 						} else {
@@ -1900,7 +2371,7 @@ require('./popupRegistrar/popupRegistrar.controller');
 	}
 
 })();
-},{}],51:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Login')
 	.directive('loginRegistrar', loginRegistrar)
@@ -1914,13 +2385,13 @@ require('./popupRegistrar/popupRegistrar.controller');
 	}
 
 })();
-},{}],52:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 (function(){
 
 	angular.module('gymApp.Login', []);
 
 })();
-},{}],53:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Login')
 
@@ -1949,7 +2420,7 @@ require('./popupRegistrar/popupRegistrar.controller');
 			var deferred = $q.defer();
 			var usuario = angular.fromJson(usuario);
 			
-			$http.post(constants.webService + 'login', usuario)
+			$http.post(constants.webService + 'clientes', usuario)
 			.success(function(response){
 				
 				deferred.resolve(response)
@@ -1989,30 +2460,82 @@ require('./popupRegistrar/popupRegistrar.controller');
 	}
 
 })();
-},{}],54:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
+(function(){
+	console.log("mapa");
+	/*var myLatlng = new google.maps.LatLng(25.379232, -100.978686);
+	var mapOptions = {
+		zoom: 14,
+		center: myLatlng
+	}
+	var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+	var marker = new google.maps.Marker({
+		position: myLatlng,
+		title:"Hello World!"
+	});
+
+	// To add the marker to the map, call setMap();
+	marker.setMap(map);*/
+})();
+},{}],58:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Login')
 	.controller('LoginRegistrarController', LoginRegistrarController);
 
-	LoginRegistrarController.$inject = ["$state","$scope","LoginService", "InstructoresServiceAdmin", "HelpersFactory", "constant"];
+	LoginRegistrarController.$inject = ['$compile', "$state","$scope","LoginService", "InstructoresServiceAdmin", "HelpersFactory", "constant"];
 
-	function LoginRegistrarController($state, $scope, LoginService, InstructoresServiceAdmin, HelpersFactory, constants){
+	function LoginRegistrarController($compile, $state, $scope, LoginService, InstructoresServiceAdmin, HelpersFactory, constants){
 		console.log("LoginRegistrar controller");
 
-		$scope.registro={};
+		$scope.usuario={};
 		var helper = HelpersFactory;
 		//imagen por default
-		$scope.registro.imgCliente=constants.imgDefault;
+		$scope.usuario.imgCliente=constants.imgDefault;
+		$scope.usuario.tipoUsuario = "usuario";
+
+
+		var body =angular.element(document).find('body');
+		$scope.registrar = function(){
+			/*var usuario = {
+				"nombre":"jorge",
+				"apellido":"Avalos",
+				"imgCliente":"http://localhost:8080/gym.app/front/dep/img/reto4.jpg",
+				"celular":"8443454345",
+				"peso":"60kg",
+				"estatura":"1.60m",
+				"edad":"25",
+				"domicilio":"Calle n",
+				"correo":"ram@hotmail.com",
+				"password":"ram",
+				"tipoUsuario": "usuario"
+			}*/
+			LoginService
+				.addUsuario($scope.usuario)
+				//.addUsuario(usuario)
+				.then(function(data){
+					console.log(data)
+					if(data.estatus == 'ok'){
+						body.append($compile("<mensaje-ok ok='" + data.msj + "'></mensaje-ok>")($scope));
+						helper.popupClose();
+					} else {
+						body.append($compile("<mensaje-error error='" + data.msj + "'></mensaje-error>")($scope));
+					}
+				})
+				.catch(function(err){
+					console.log(err)
+				})
+		}
 
 	}
 
 })();
-},{}],55:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 require('./error.module')
 require('./error.directive')
-},{"./error.directive":56,"./error.module":57}],56:[function(require,module,exports){
+},{"./error.directive":60,"./error.module":61}],60:[function(require,module,exports){
 (function(){
 
 	//modulo al qe pertenece
@@ -2031,7 +2554,7 @@ require('./error.directive')
 
 
 })();
-},{}],57:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -2040,7 +2563,38 @@ require('./error.directive')
 	
 
 })();
-},{}],58:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
+require('./ok.module')
+require('./ok.directive')
+},{"./ok.directive":63,"./ok.module":64}],63:[function(require,module,exports){
+(function(){
+
+	//modulo al qe pertenece
+	angular.module('gymApp.Ok')
+	.directive('mensajeOk', mensajeOk)
+
+	function mensajeOk(){
+		return{
+			restrict: 'E',
+			scope: {
+				ok: "@"
+			},
+			templateUrl:'./mensajeOk/ok.html'
+		}
+	}
+
+
+})();
+},{}],64:[function(require,module,exports){
+(function() {
+
+	//modulo al qe pertenece
+	angular.module('gymApp.Ok', []);
+
+	
+
+})();
+},{}],65:[function(require,module,exports){
 require('./usuario.module');
 require('./usuario.service');
 require('./usuario.factory');
@@ -2050,11 +2604,11 @@ require('./retos/_retos');
 require('./instructores/_instructores');
 require('./pagos/_pagos');
 require('./perfil/_perfil');
-},{"./clases/_clases":59,"./inicio/_inicio":63,"./instructores/_instructores":65,"./pagos/_pagos":68,"./perfil/_perfil":70,"./retos/_retos":74,"./usuario.factory":78,"./usuario.module":79,"./usuario.service":80}],59:[function(require,module,exports){
+},{"./clases/_clases":66,"./inicio/_inicio":70,"./instructores/_instructores":72,"./pagos/_pagos":75,"./perfil/_perfil":77,"./retos/_retos":81,"./usuario.factory":85,"./usuario.module":86,"./usuario.service":87}],66:[function(require,module,exports){
 require('./clases.controller');
-require('./popupDetalle/popupDetalle.directive');
-require('./popupAgendar/popupAgendar.directive');
-},{"./clases.controller":60,"./popupAgendar/popupAgendar.directive":61,"./popupDetalle/popupDetalle.directive":62}],60:[function(require,module,exports){
+require('./clases.directive');
+require('./popupAgendar/popupAgendar.controller');
+},{"./clases.controller":67,"./clases.directive":68,"./popupAgendar/popupAgendar.controller":69}],67:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -2079,22 +2633,23 @@ require('./popupAgendar/popupAgendar.directive');
 	}
 
 })();
-},{}],61:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Usuario')
 	.directive('claseAgendar', claseAgendar)
+	.directive('claseDetalle', claseDetalle)
+
 	function claseAgendar(){
 		return{
 			restrict:'E',
-			templateUrl: './usuario/clases/popupAgendar/popupAgendar.html'
+			scope:{
+				agendarClase : '='
+			},
+			templateUrl: './usuario/clases/popupAgendar/popupAgendar.html',
+			controller: 'AgendarClaseController'
 		}
 	}
 
-})();
-},{}],62:[function(require,module,exports){
-(function(){
-	angular.module('gymApp.Usuario')
-	.directive('claseDetalle', claseDetalle)
 	function claseDetalle(){
 		return{
 			restrict:'E',
@@ -2103,39 +2658,113 @@ require('./popupAgendar/popupAgendar.directive');
 	}
 
 })();
+},{}],69:[function(require,module,exports){
+(function() {
 
-},{}],63:[function(require,module,exports){
+	//modulo al qe pertenece modificar
+	angular.module('gymApp.Usuario')
+	.controller('AgendarClaseController', AgendarClaseController);
+
+	AgendarClaseController.$inject = ["$state","$scope","ClasesServiceAdmin", "InstructoresServiceAdmin", "HelpersFactory", "constant", "UsuarioFactory"];
+
+	function AgendarClaseController($state, $scope, ClasesServiceAdmin, InstructoresServiceAdmin, HelpersFactory, constants, UsuarioFactory){
+		console.log("AgendarClaseAdmin controller");
+		var usuarioActual = UsuarioFactory.getInfo();
+
+		//getinstructor, para mostrar todos los instructores en el campo 
+		$scope.instructores = [];
+		var helper = HelpersFactory;
+
+		InstructoresServiceAdmin
+			.getInstructores()
+			.then(function(response){
+				$scope.instructores = response;
+
+		}).catch(function(err){
+			console.log(err)
+		});
+
+		//copiar los datos
+		$scope.claseDup = angular.copy($scope.agendarClase);
+		console.log($scope.claseDup)
+		//$scope.claseDuplicado.newHora = $scope.agregarClase.hora;
+
+		$scope.agendar=function(){
+			
+			var clase = {};
+			clase.diaAg = $scope.claseDup.dia;
+			clase.horaAg = $scope.claseDup.hora;
+			clase.claseAg = $scope.claseDup.clase;
+			clase.imgClaseAg = $scope.claseDup.imgClase;
+			clase.horaDuracionAg = $scope.claseDup.horaDuracion;
+			clase.minDuracionAg = $scope.claseDup.minDuracion;
+			clase.id_instructor = $scope.claseDup.id_instructor;
+			clase.no_registro = usuarioActual.no_registro;
+				
+				ClasesServiceAdmin
+					.AgendarClase(clase)
+					.then(function(response){
+						console.log(response)
+						//$scope.editClase.hora = response.newHora;
+						//cerrar popup
+						helper.popupClose();
+					})
+					.catch(function(err){
+							console.log(err)
+					});
+			}
+		
+
+
+
+	}
+
+})();
+},{}],70:[function(require,module,exports){
 require('./inicio.controller');
-},{"./inicio.controller":64}],64:[function(require,module,exports){
+},{"./inicio.controller":71}],71:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Usuario')
 	.controller('InicioController', InicioController);
 
-	InicioController.$inject = ["$state","$scope","InicioServiceAdmin"];
+	InicioController.$inject = ["$state","$scope","InicioServiceAdmin", "ClientesServiceAdmin", 'UsuarioFactory'];
 
-	function InicioController($state, $scope, InicioServiceAdmin){
+	function InicioController($state, $scope, InicioServiceAdmin, ClientesServiceAdmin, UsuarioFactory){
 		console.log("Inicio controller");
-
+		var usuario = UsuarioFactory.getInfo();
 		$scope.banners = [];
+		$scope.c = {};
 
 		//getBanner
-		InicioServiceAdmin.getBanner().then(
-			function(response){
-			console.log(response)
-			$scope.banners = response;
-			console.log(response);
+		InicioServiceAdmin
+			.getBanner()
+			.then(function(response){
+				console.log(response)
+				$scope.banners = response;
+				console.log(response);
+			}).catch(function(err){
+				console.log(err)
+		});
+
+
+		//getClientes
+		ClientesServiceAdmin
+			.getCliente(usuario.no_registro)
+			.then(function(response){
+				console.log(response)
+				$scope.c = response;
 		}).catch(function(err){
 			console.log(err)
 		});
 	}
 
 })();
-},{}],65:[function(require,module,exports){
+},{}],72:[function(require,module,exports){
 require('./instructores.controller');
 require('./popupInformacion/popupInformacion.directive');
-},{"./instructores.controller":66,"./popupInformacion/popupInformacion.directive":67}],66:[function(require,module,exports){
+},{"./instructores.controller":73,"./popupInformacion/popupInformacion.directive":74}],73:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -2159,7 +2788,7 @@ require('./popupInformacion/popupInformacion.directive');
 	}
 
 })();
-},{}],67:[function(require,module,exports){
+},{}],74:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Usuario')
 	.directive('instructorInfo', instructorInfo)
@@ -2172,39 +2801,52 @@ require('./popupInformacion/popupInformacion.directive');
 
 })();
 
-},{}],68:[function(require,module,exports){
+},{}],75:[function(require,module,exports){
 require('./pagos.controller');
-},{"./pagos.controller":69}],69:[function(require,module,exports){
+},{"./pagos.controller":76}],76:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
 	angular.module('gymApp.Usuario')
 	.controller('PagosController', PagosController);
 
-	PagosController.$inject = ["$state","$scope","PagosServiceAdmin"];
+	PagosController.$inject = ["$state","$scope","PagosServiceAdmin", "UsuarioFactory"];
 
-	function PagosController($state, $scope, PagosServiceAdmin){
+	function PagosController($state, $scope, PagosServiceAdmin, UsuarioFactory){
 		console.log("Pagos controller");
-
-		$scope.Pagos = [];
+		var usuario = UsuarioFactory.getInfo();
+		$scope.pagos = {};
+		var fechaActual = new Date();
 
 		//getPagos
-		PagosServiceAdmin.getPagos().then(
-			function(response){
-			console.log(response)
-			$scope.pagos = response;
+		PagosServiceAdmin
+			.getPago(usuario.no_registro)
+			.then(function(response){
+				console.log(response)
+				$scope.pagos = response;
+
+				for(var i=0; i < response.length; i++){
+					if(new Date($scope.pagos[i].PagosFechaPago) <= fechaActual){
+						$scope.pagos[i].fechaVencida = true;
+						$scope.pagos[i].PagosEstado = "No Pagado";
+					}
+				}
+
+
 		}).catch(function(err){
 			console.log(err)
 		});
+
+
 	}
 
 })();
-},{}],70:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 require('./perfil.controller');
 require('./perfil.directive');
 require('./popupModificar/popupModificar.controller');
 
-},{"./perfil.controller":71,"./perfil.directive":72,"./popupModificar/popupModificar.controller":73}],71:[function(require,module,exports){
+},{"./perfil.controller":78,"./perfil.directive":79,"./popupModificar/popupModificar.controller":80}],78:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -2233,7 +2875,7 @@ require('./popupModificar/popupModificar.controller');
 	}
 
 })();
-},{}],72:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Usuario')
 	.directive('perfilModificar', perfilModificar)
@@ -2251,7 +2893,7 @@ require('./popupModificar/popupModificar.controller');
 	}
 
 })();
-},{}],73:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -2284,11 +2926,11 @@ require('./popupModificar/popupModificar.controller');
 	}
 
 })();
-},{}],74:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 require('./retos.module');
 require('./retos.controller');
 require('./popupVer/popupVer.directive');
-},{"./popupVer/popupVer.directive":75,"./retos.controller":76,"./retos.module":77}],75:[function(require,module,exports){
+},{"./popupVer/popupVer.directive":82,"./retos.controller":83,"./retos.module":84}],82:[function(require,module,exports){
 (function(){
 	angular.module('gymApp.Usuario')
 	.directive('retoVer', retoVer)
@@ -2300,7 +2942,7 @@ require('./popupVer/popupVer.directive');
 	}
 
 })();
-},{}],76:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 (function() {
 
 	//modulo al qe pertenece
@@ -2325,13 +2967,13 @@ require('./popupVer/popupVer.directive');
 
 })();
 
-},{}],77:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 (function(){
 
 	angular.module('gymApp.Retos', []);
 
 })();
-},{}],78:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 (function(){
 	angular
 		.module('gymApp.Usuario')
@@ -2355,13 +2997,13 @@ require('./popupVer/popupVer.directive');
 		}
 
 })();
-},{}],79:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 (function(){
 
 	angular.module('gymApp.Usuario', []);
 
 })();
-},{}],80:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 /*(function(){
 	angular.module('gymApp.Usuario')
 
@@ -2396,4 +3038,4 @@ require('./popupVer/popupVer.directive');
 	}
 
 })();*/
-},{}]},{},[48]);
+},{}]},{},[51]);

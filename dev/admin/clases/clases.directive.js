@@ -4,6 +4,7 @@
 	.directive('clasesModificar', clasesModificar)
 	.directive('clasesEliminar', clasesEliminar)
 	.directive('clasesVer', clasesVer)
+	.directive('clasesLista', clasesLista)
 
 	function clasesAgregar(){
 		return{
@@ -39,6 +40,17 @@
 		return{
 			restrict:'E',
 			templateUrl: './admin/clases/popupVer/popupVer.html'
+		}
+	}
+
+	function clasesLista(){
+		return{
+			restrict:'E',
+			scope:{
+				clase : '='
+			},
+			templateUrl: './admin/clases/popupLista/popupLista.html',
+			controller: 'ClasesListaAdminController'
 		}
 	}
 

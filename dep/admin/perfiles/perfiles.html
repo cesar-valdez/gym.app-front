@@ -1,5 +1,1 @@
-<div class="Area"></div><!--div.ContenedorPerfilesdiv(ng-repeat="perfil in perfiles").PerfilAdmin
-	figure(style="background-image: url('{{perfil.imgCliente}}')").PerfilAdmin-imagenPerfil
-	figcaption.PerfilAdmin-nombre {{perfil.nombre}} {{perfil.apellido}}
-	button(class="PerfilAdmin-ver  PopupAdd" popup-add="<perfiles-ver><perfiles-ver/>") ver
-	button(class="PerfilAdmin-eliminar  PopupAdd" popup-add="<perfiles-eliminar del-perfil='perfil' />") Eliminar-->
+<div class="Area"><input type="text" name="buscar" ng-model="search" class="InputBuscar"/><button:i class="icomoon search BtnBuscar">  Buscar </button:i><form action="http://localhost:8080/gym.app/back/pdf/clientes.php" method="POST" class="FormPDF"><button type="submit" class="FormPDF-btn"><i class="icomoon file-pdf">   Guardar</i></button></form></div><div class="ContenedorPerfiles"><div ng-repeat="c in clientes | filter: search" class="Perfiles"><figure style="background-image: url('{{c.ClientesImgCliente}}')" class="Perfiles-imagenPerfil"></figure><figcaption>{{c.ClientesNombre}} {{c.ClientesApellido}}</figcaption><button popup-add="&lt;perfiles-ver&gt;&lt;perfiles-ver/&gt;" class="Perfiles-ver-perfil PopupAdd Perfiles-verPerfil">Ver</button><button popup-add="&lt;perfiles-eliminar del-cliente='c'/&gt;" class="Perfiles-delete-perfil PopupAdd Perfiles-deletePerfil"> Eliminar</button></div></div>

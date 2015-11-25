@@ -2,6 +2,7 @@
 @import './popupModificar/popupModificar.styl'
 @import './popupEliminar/popupEliminar.styl'
 @import './popupVer/popupVer.styl'
+@import './popupLista/popupLista.styl'
 //--------------------globales-------------------------	
 .ContenedorClaseAdmin
 	display: flex;
@@ -28,10 +29,17 @@
 		background-repeat:no-repeat;
 		background-size:100% 100%;
 		background-position:center center;
-	figcaption
-		font-size:1.3em;
+	.AreaTexto
 		text-align:center;
-		margin-top:.5em;
+		figcaption
+			font-size:1.3em;
+			text-align:center;
+			margin-top:.5em;
+			display:inline-block;
+		i
+			display:inline-block;
+			margin-left:1em;
+			cursor:pointer;
 	&-ver
 		background: rgb(127,129,112);
 		float:left;
@@ -42,7 +50,7 @@
 		background: rgb(229,52,13);
 		float:right;
 	button
-		color:white;
+		color:white; 
 		font-size:15px;
 		padding:.2em .7em;
 		margin-top:.5em;

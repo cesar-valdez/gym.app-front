@@ -16,17 +16,21 @@
 		return{
 			restrict:'E',
 			scope:{
-				editPago : '='
+				editPago: '='
 			},
-			templateUrl: './admin/pagos/popupModificar/popupModificar.html'
-			//controller: 'SetPagosAdminController'
+			templateUrl: './admin/pagos/popupModificar/popupModificar.html',
+			controller: 'SetPagosAdminController'
 		}
 	}
 
 	function pagosEliminar(){
 		return{
 			restrict:'E',
-			templateUrl: './admin/pagos/popupEliminar/popupEliminar.html'
+			scope:{
+				delPago: '='
+			},
+			templateUrl: './admin/pagos/popupEliminar/popupEliminar.html',
+			controller: 'DeletePagosAdminController'
 		}
 	}
 

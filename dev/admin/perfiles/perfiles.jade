@@ -1,7 +1,13 @@
 div.Area
-//div.ContenedorPerfiles
-	div(ng-repeat="perfil in perfiles").PerfilAdmin
-		figure(style="background-image: url('{{perfil.imgCliente}}')").PerfilAdmin-imagenPerfil
-		figcaption.PerfilAdmin-nombre {{perfil.nombre}} {{perfil.apellido}}
-		button(class="PerfilAdmin-ver  PopupAdd" popup-add="<perfiles-ver><perfiles-ver/>") ver
-		button(class="PerfilAdmin-eliminar  PopupAdd" popup-add="<perfiles-eliminar del-perfil='perfil' />") Eliminar
+	input(type="text" name="buscar" ng-model="search").InputBuscar
+	button:i.icomoon.search.BtnBuscar   Buscar 
+	form(action="http://localhost:8080/gym.app/back/pdf/clientes.php" method="POST").FormPDF
+		button(type="submit").FormPDF-btn
+			i.icomoon.file-pdf    Guardar
+div.ContenedorPerfiles
+	div(ng-repeat="c in clientes | filter: search").Perfiles
+		figure(style="background-image: url('{{c.ClientesImgCliente}}')").Perfiles-imagenPerfil
+		figcaption {{c.ClientesNombre}} {{c.ClientesApellido}}
+		button(class="Perfiles-ver-perfil PopupAdd" popup-add="<perfiles-ver><perfiles-ver/>").Perfiles-verPerfil Ver
+		button(class="Perfiles-delete-perfil PopupAdd" popup-add="<perfiles-eliminar del-cliente='c'/>").Perfiles-deletePerfil  Eliminar
+	

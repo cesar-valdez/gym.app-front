@@ -2,7 +2,9 @@ button(class="AgregarClase PopupAdd" popup-add="<clases-agregar><clases-agregar/
 div.ContenedorClaseAdmin
 	div(ng-repeat="clase in clases").Clases
 		figure(style="background-image: url('{{clase.imgClase}}')").Clases-imagenClase
-		figcaption.Clases-reto {{clase.clase}}
+		div.AreaTexto
+			figcaption.Clases-reto {{clase.clase}}
+			i(class="Clases-lista PopupAdd" popup-add="<clases-lista clase='clase'><clases-lista/>").icomoon.calendar
 		button(class="Clases-ver PopupAdd" popup-add="<clases-ver><clases-ver/>").Clase-ver Ver
 		button(class="Clases-modific PopupAdd" popup-add="<clases-modificar edit-clase='clase'/>") Modificar
 		button(class="Clases-delete PopupAdd" popup-add="<clases-eliminar del-clase='clase'/>") Eliminar

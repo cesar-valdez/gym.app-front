@@ -26,7 +26,8 @@
 		}
 	}
 
-	function popupClose(){
+	popupClose.$inject = ['$state'];
+	function popupClose($state){
 		return {
 			restrict:'A',
 			link: function(scope, elem, attrs){
@@ -40,6 +41,7 @@
 					if(e.target != this && !angular.element(e.target).hasClass('popup-close')) return
 
 					elem.remove();
+					$state.reload();
 				})
 			}
 		}

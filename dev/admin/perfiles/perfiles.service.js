@@ -49,6 +49,19 @@
 			return deferred.promise;
 		}
 
+		function deleteClientes(cliente){
+			var deferred = $q.defer();
+			var cliente = angular.fromJson(cliente);
+			$http.delete(constants.webService + 'deleteClientes', {data: cliente})
+			.success(function(response){
+				deferred.resolve(response)
+			})
+			.catch(function(err){
+				deferred.reject(err)
+			});
+			return deferred.promise;
+		}
+
 		/* addRetos(reto){
 			var deferred = $q.defer();
 			var reto = angular.fromJson(reto);
@@ -61,18 +74,6 @@
 			});
 			return deferred.promise;
 		}
-
-		function deleteRetos(reto){
-			var deferred = $q.defer();
-			var reto = angular.fromJson(reto);
-			$http.delete(constants.webService + 'deleteRetos', {data: reto})
-			.success(function(response){
-				deferred.resolve(response)
-			})
-			.catch(function(err){
-				deferred.reject(err)
-			});
-			return deferred.promise;
 		}*/
 
 
@@ -81,7 +82,8 @@
 		return{
 			getClientes: getClientes,
 			getCliente: getCliente,
-			setClientes: setClientes
+			setClientes: setClientes,
+			deleteClientes: deleteClientes
 		};
 
 	}

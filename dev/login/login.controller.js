@@ -4,9 +4,9 @@
 	angular.module('gymApp.Login')
 	.controller('LoginController', LoginController);
 
-	LoginController.$inject = ["$compile","$state","$scope","LoginService", "UsuarioFactory"];
+	LoginController.$inject = ["$compile","$state","$scope", "$timeout","LoginService", "UsuarioFactory"];
 
-	function LoginController($compile, $state, $scope, LoginService, UsuarioFactory){
+	function LoginController($compile, $state, $scope, $timeout, LoginService, UsuarioFactory){
 		console.log("Login controller");
 		$scope.usuario = {};
 		var usuario = UsuarioFactory;
@@ -26,6 +26,7 @@
 					console.log(data);
 								usuario.setInfo(data.usuario);
 								$state.go('usuario.inicio')
+								body.append($compile("<mensaje-ok ok='" + data.msj + "'></mensaje-ok>")($scope));
 							}
 
 						} else {

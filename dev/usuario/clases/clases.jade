@@ -1,7 +1,7 @@
 div.ContenedorClase
-	div(ng-repeat="clases in clases").Clase
-		figure(style="background-image: url('{{clases.imgClase}}')").Clase-imagenClase
-		figcaption.Clase-reto {{clases.clase}}
+	div(ng-repeat="c in clases").Clase
+		figure(style="background-image: url('{{c.imgClase}}')").Clase-imagenClase
+		figcaption.Clase-reto {{c.clase}}
 		button(class="Clase-detalle PopupAdd" popup-add="<clase-detalle><clase-detalle/>") Detalles 
-		button(class="Clase-agendar PopupAdd" popup-add="<clase-agendar><clase-agendar/>") Agendar
+		button(class="Clase-agendar PopupAdd" popup-add="<clase-agendar agendar-clase='c'/>") Agendar
 	

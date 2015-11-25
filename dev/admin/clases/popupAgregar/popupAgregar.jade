@@ -6,7 +6,7 @@ div(popup-close).PopupClasesAgregar
 				input(type="file" file-upload="clase.imgClase").SubirImg
 				i.icomoon.camera
 		p Clase:
-		input(type="text" name="clase" ng-model="clase.clase" required).CajaClase
+		input(type="text" name="clase" ng-model="clase.clase" maxlength="20" required).CajaClase
 		p Instructor:
 		select(name="instructor" ng-model="clase.id_instructor" required).CajaInstructor
 			option(ng-repeat="instructor in instructores" value="{{instructor.id_instructor}}") {{instructor.nombre}}

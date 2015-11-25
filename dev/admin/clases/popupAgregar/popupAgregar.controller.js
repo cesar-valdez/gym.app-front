@@ -30,7 +30,7 @@
 
 		//AddClase
 		$scope.addClases=function(){
-			$scope.clase.no_registro = "1";
+			$scope.clase.no_registro = "12";
 			var d = ["Lunes", "Martes", "Miercoles", "Jueves","Viernes", "Sabado", "Domingo"];
 			//var insertExitoso = false;
 			var days =[];

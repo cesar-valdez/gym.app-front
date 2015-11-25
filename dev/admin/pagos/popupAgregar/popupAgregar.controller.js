@@ -13,8 +13,10 @@
 		$scope.selected = {};
 
 		//getClientes
-		ClientesServiceAdmin.getClientes().then(function(response){
-			$scope.clientes = response;
+		ClientesServiceAdmin
+			.getClientes()
+			.then(function(response){
+				$scope.clientes = response;
 		});
 
 
@@ -25,7 +27,7 @@
 		//AddPago
 		$scope.addPagos=function(){
 			//$scope.pago.no_registro = "1";
-			$scope.newPago.no_registro = $scope.selected.no_registro;
+			$scope.newPago.no_registro = $scope.selected.ClientesNoRegistro;
 
 			//Servicio para validar si es la primera vez que paga
 			PagosServiceAdmin

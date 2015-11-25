@@ -1,20 +1,49 @@
-//--------------------globales-------------------------	
+@import './popupVer/popupVer.styl'
+@import './popupEliminar/popupEliminar.styl'
+
 .Area
-	background:red;
-	width:4em;
-	height:5em;
-/*.ContenedorPerfiles
+	width:55em;
+	padding:.5em;
+	background: rgba(223, 151, 17, 0.5);
+	margin:4em 0em 0em 10em;
+	border-radius:7px;
+	.InputBuscar
+		margin-left:3em;
+		width:16em;
+		height:2em;
+	.BtnBuscar
+		color:white;
+		font-size:15px;
+		margin:.5em 0em 0em 1em;
+		padding:.3em .8em;
+		border: 0;
+		border-radius:7px;
+		background: rgb(179, 116, 0);
+		border: solid 1px white;
+		i
+			margin-right:5em;
+	.FormPDF
+		display:inline-block;
+		&-btn 
+			color:white;
+			font-size:15px;
+			padding:.2em 1em;
+			border: 0;
+			border-radius:7px;
+			background:rgb(179, 116, 0);
+			margin-left:15em;
+			border: solid 1px white;
+.ContenedorPerfiles
 	display: flex;
-	background:red;
 	flex-wrap: wrap;
 	justify-content: space-around;
 	padding: 2em 3em 0em 3em;
-	.PerfilAdmin
+	.Perfiles
 		width:17em;
 		background:white;
 		border-radius:15px;
-		padding:.7em .7em .7em .7em;
 		margin: 0em 2em 3em 0em;
+		padding:.7em .7em .7em .7em;
 		&-imagenPerfil
 			width:15.5em;
 			height:7.5em;
@@ -24,18 +53,18 @@
 		figcaption
 			font-size:1.3em;
 			text-align:center;
-			margin-top:.3em;
-		&-ver
+			margin-top:.5em;
+		&-verPerfil
 			background: rgb(127,129,112);
-			float:left;
-			margin-right:.8em;
-		&-eliminar
+			margin-left:2.4em;
+			padding:.2em 1em;
+		&-deletePerfil
 			background: rgb(229,52,13);
-			float:right;
+			margin-left:1.5em;
+			padding:.2em .7em;
 		button
 			color:white;
 			font-size:15px;
-			padding:.2em .7em;
 			margin-top:.5em;
 			border: 0;
-			border-radius:7px;*/
+			border-radius:7px;

@@ -15,11 +15,11 @@ div.AreaTabla
 				td Fecha pagado
 				td Costo
 				td Estado de pago
-			tr(ng-repeat="pago in pagos")
-				td {{pago.PagosId}}
-				td {{pago.ClientesNombre}}
-				td {{pago.CientesApellido}}
-				td {{pago.PagosMonto}}
-				td {{pago.PagosFechaPagado}}
-				td {{pago.PagosFechaPago}}
-				td {{pago.PagosEstado}}
+			tr(ng-repeat="p in pagos" ng-class="{'fechaVencida': p.fechaVencida}")
+				td {{p.ClientesRegistro}}
+				td {{p.ClientesNombre}}
+				td {{p.ClientesApellido}}
+				td {{p.PagosFechaPago | date:'dd/MMM/yyyy'}}
+				td {{p.PagosFechaPagado | date:'dd/MMM/yyyy'}}
+				td {{p.PagosMonto}}
+				td {{p.PagosEstado}}

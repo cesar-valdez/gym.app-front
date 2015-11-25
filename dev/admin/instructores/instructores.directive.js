@@ -35,7 +35,8 @@
 		return{
 			restrict:'E',
 			scope:{
-				delInstructor : '='
+				delInstructor : '=',
+				instructores : '='
 			},
 			templateUrl: './admin/instructores/popupEliminar/popupEliminar.html',
 			controller: 'DeleteInstructoresAdminController',

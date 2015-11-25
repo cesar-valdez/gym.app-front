@@ -3,15 +3,15 @@ div(popup-close).PopupPagosAgregar
 		div.AreaBuscar
 			p.Buscar Buscar:
 			p Por No.Registro:
-			select( ng-options="client as client.no_registro for client in clientes track by client.no_registro" ng-model="selected").InputRegistro
+			select( ng-options="client as client.ClientesNoRegistro for client in clientes track by client.ClientesNoRegistro" ng-model="selected").InputRegistro
 			p.PorNombre Por Nombre:
-			select( ng-options="client as client.nombre for client in clientes track by client.no_registro" ng-model="selected").InputRegistro
+			select( ng-options="client as client.ClientesNombre for client in clientes track by client.ClientesNoRegistro" ng-model="selected").InputRegistro
 		p No.Registro:
-		input(type="text" name="noRegistro" value="1" ng-model="selected.no_registro" disabled).InputRegistro
+		input(type="text" name="noRegistro" value="1" ng-model="selected.ClientesNoRegistro" disabled).InputRegistro
 		p Nombre:
-		input(type="text" name="nombre" value="Cesar" ng-model="selected.nombre" disabled)
+		input(type="text" name="nombre" value="Cesar" ng-model="selected.ClientesNombre" disabled)
 		p Apellido:
-		input(type="text" name="apellido" value="Valdez" ng-model="selected.apellido" disabled)
+		input(type="text" name="apellido" value="Valdez" ng-model="selected.ClientesApellido" disabled)
 		p.PFecha Fecha:
 		input(type="date" name="fecha" ng-model="newPago.fechaPagado").CajaAncho
 		p.PEstado Estado:

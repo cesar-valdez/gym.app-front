@@ -1,4 +1,6 @@
 label.NombreAdmin ¡Bienvenido!
+a(href="http://localhost:8080/gym.app/back/index.php/getClientes" target="blank").Json Json
+a(href="http://localhost:8080/gym.app/bbdd.xml" target="blank").Xml XML
 article.ArticuleAdmin
 	ul(rn-carousel rn-carousel-auto-slide rn-carousel-index="carouselIndex").UlAdmin
 		li(ng-repeat="ban in banners track by $index")
@@ -13,5 +15,5 @@ article.ArticuleAdmin
 						div(class="icomoon.bin PopupAdd" popup-add="<inicio-eliminar del-banner='ban'/>")
 							i.icomoon.bin
 					p.PAdmin {{ban.anuncio}} 
-div.AreaIndicador
+//div.AreaIndicador
 	span(rn-carousel-indicators ng-if="banners.length > 1" slides="banners" ng-class="{'active':carouselIndex==index}").Indicador
