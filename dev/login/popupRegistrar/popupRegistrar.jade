@@ -1,27 +1,27 @@
 div(popup-close).PopupRegistrar
-	form.PopupRegistrar-contenidoRegistrar
-		figure(style="background-image:url({{usuario.imgCliente}});").ImgRegistrar
+	form(name="formNuevoUsuario").PopupRegistrar-contenidoRegistrar
+		figure(style="background-image:url({{newUsuario.imgCliente}});").ImgRegistrar
 			span Subir foto
 			label.label
-				input(type="file" file-upload="usuario.imgCliente").SubirImg
+				input(type="file" file-upload="newUsuario.imgCliente").SubirImg
 				i.icomoon.camera
 		p Nombre:
-		input(type="text" name="nombre" ng-model="usuario.nombre" maxlength="20" required)
+		input(type="text" name="nombre" ng-model="newUsuario.nombre" maxlength="20" required)
 		p Apellido:
-		input(type="text" name="apellido" ng-model="usuario.apellido" maxlength="20" required)
+		input(type="text" name="apellido" ng-model="newUsuario.apellido" maxlength="20" required)
 		p Celular:
-		input(type="numeric" name="celular" ng-model="usuario.celular" maxlength="10")
+		input(type="numeric" name="celular" ng-model="newUsuario.celular" maxlength="10")
 		p Domicilio:
-		input(type="text" name="domicilio" ng-model="usuario.domicilio" maxlength="100")
+		input(type="text" name="domicilio" ng-model="newUsuario.domicilio" maxlength="100")
 		p Correo:
-		input(type="email" name="correo" ng-model="usuario.correo" title="ingresa un correo electrónico" maxlength="25" required)
+		input(type="email" name="correo" ng-model="newUsuario.correo" title="ingresa un correo electrónico" maxlength="25" required)
 		p Contraseña:
-		input(type="text" name="contrasenia" ng-model="usuario.password" maxlength="10" required)
+		input(type="text" name="contrasenia" ng-model="newUsuario.password" maxlength="10" required)
 		p Edad:
-		input(type="numeric" name="edad" ng-model="usuario.edad" maxlength="3" required).CajaChica
+		input(type="numeric" name="edad" ng-model="newUsuario.edad" maxlength="3" required).CajaChica
 		p.Estatura Estatura:
-		input(type="text" name="estatura" ng-model="usuario.estatura" maxlength="15" required).CajaChica
+		input(type="text" name="estatura" ng-model="newUsuario.estatura" maxlength="15" required).CajaChica
 		p.Peso Peso:
-		input(type="text" name="peso" ng-model="usuario.peso" maxlength="15" required).CajaChica
+		input(type="text" name="peso" ng-model="newUsuario.peso" maxlength="15" required).CajaChica
 		button.BtnCancelar.popup-close Cancelar
-		button.BtnRegistrar(ng-click="registrar()") Registrar
+		button.BtnRegistrar(ng-click="registrar(formNuevoUsuario.$valid)") Registrar

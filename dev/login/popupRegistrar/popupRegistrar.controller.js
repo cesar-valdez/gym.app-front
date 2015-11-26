@@ -9,15 +9,15 @@
 	function LoginRegistrarController($compile, $state, $scope, LoginService, InstructoresServiceAdmin, HelpersFactory, constants){
 		console.log("LoginRegistrar controller");
 
-		$scope.usuario={};
+		$scope.newUsuario={};
 		var helper = HelpersFactory;
 		//imagen por default
-		$scope.usuario.imgCliente=constants.imgDefault;
-		$scope.usuario.tipoUsuario = "usuario";
+		$scope.newUsuario.imgCliente=constants.imgDefault;
+		$scope.newUsuario.tipoUsuario = "usuario";
 
 
 		var body =angular.element(document).find('body');
-		$scope.registrar = function(){
+		$scope.registrar = function(formValid){
 			/*var usuario = {
 				"nombre":"jorge",
 				"apellido":"Avalos",
@@ -31,21 +31,23 @@
 				"password":"ram",
 				"tipoUsuario": "usuario"
 			}*/
-			LoginService
-				.addUsuario($scope.usuario)
-				//.addUsuario(usuario)
-				.then(function(data){
-					console.log(data)
-					if(data.estatus == 'ok'){
-						body.append($compile("<mensaje-ok ok='" + data.msj + "'></mensaje-ok>")($scope));
-						helper.popupClose();
-					} else {
-						body.append($compile("<mensaje-error error='" + data.msj + "'></mensaje-error>")($scope));
-					}
-				})
-				.catch(function(err){
-					console.log(err)
-				})
+			if(formValid){
+				LoginService
+					.addUsuario($scope.newUsuario)
+					//.addUsuario(usuario)
+					.then(function(data){
+						console.log(data)
+						if(data.estatus == 'ok'){
+							body.append($compile("<mensaje-ok ok='" + data.msj + "'></mensaje-ok>")($scope));
+							helper.popupClose();
+						} else {
+							body.append($compile("<mensaje-error error='" + data.msj + "'></mensaje-error>")($scope));
+						}
+					})
+					.catch(function(err){
+						console.log(err)
+					})
+			}
 		}
 
 	}
