@@ -4,13 +4,16 @@
 	angular.module('gymApp.Admin')
 	.controller('SetPagosAdminController', SetPagosAdminController);
 
-	SetPagosAdminController.$inject = ["$state","$scope","PagosServiceAdmin" , "HelpersFactory", "constant"];
+	SetPagosAdminController.$inject = ["$compile", "$state","$scope","PagosServiceAdmin" , "HelpersFactory", "constant"];
 
-	function SetPagosAdminController($state, $scope, PagosServiceAdmin, HelpersFactory, constants){
+	function SetPagosAdminController($compile, $state, $scope, PagosServiceAdmin, HelpersFactory, constants){
 		$scope.pagoDuplicado = angular.copy($scope.editPago);
 		var helper=HelpersFactory;
 
 		$scope.EditarPago=function(){
+
+			//validacion con mensaje ok y error
+			var body = angular.element(document).find('body');
 
 			var pago = {};
 			pago.id_pago = $scope.pagoDuplicado.PagosId;
@@ -23,10 +26,20 @@
 			PagosServiceAdmin
 				.setPagos(pago)
 				.then(function(response){
+
+					if(response.estatus == 'ok'){
+							helper.popupClose();
+							body.append($compile("<mensaje-ok ok='"+ response.msj +"'></mensaje-ok>")($scope));
+							//$state.reload();
+						} else {
+							helper.popupClose();
+							body.append($compile("<mensaje-error error='"+ response.msj +"'></mensaje-error>")($scope));
+						}
+
 					$scope.editPago = response;
 					//cerrar popup
-					helper.popupClose();
-					$state.reload();
+					//helper.popupClose();
+					//$state.reload();
 				})
 				.catch(function(err){
 						console.log(err)

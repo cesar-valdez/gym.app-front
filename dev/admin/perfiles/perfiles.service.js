@@ -62,6 +62,20 @@
 			return deferred.promise;
 		}
 
+		function deleteUsuarios(usuario){
+			var deferred = $q.defer();
+			var usuario = angular.fromJson(usuario);
+			$http.delete(constants.webService + 'deleteUsuarios', {data: usuario})
+			.success(function(response){
+				deferred.resolve(response)
+			})
+			.catch(function(err){
+				deferred.reject(err)
+			});
+			return deferred.promise;
+		}
+
+
 		/* addRetos(reto){
 			var deferred = $q.defer();
 			var reto = angular.fromJson(reto);
@@ -83,7 +97,8 @@
 			getClientes: getClientes,
 			getCliente: getCliente,
 			setClientes: setClientes,
-			deleteClientes: deleteClientes
+			deleteClientes: deleteClientes,
+			deleteUsuarios: deleteUsuarios
 		};
 
 	}

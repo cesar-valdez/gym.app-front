@@ -4,15 +4,18 @@
 	angular.module('gymApp.Usuario')
 	.controller('AgendarClaseController', AgendarClaseController);
 
-	AgendarClaseController.$inject = ["$state","$scope","ClasesServiceAdmin", "InstructoresServiceAdmin", "HelpersFactory", "constant", "UsuarioFactory"];
+	AgendarClaseController.$inject = ["$compile", "$state","$scope","ClasesServiceAdmin", "InstructoresServiceAdmin", "HelpersFactory", "constant", "UsuarioFactory"];
 
-	function AgendarClaseController($state, $scope, ClasesServiceAdmin, InstructoresServiceAdmin, HelpersFactory, constants, UsuarioFactory){
+	function AgendarClaseController($compile, $state, $scope, ClasesServiceAdmin, InstructoresServiceAdmin, HelpersFactory, constants, UsuarioFactory){
 		console.log("AgendarClaseAdmin controller");
 		var usuarioActual = UsuarioFactory.getInfo();
 
 		//getinstructor, para mostrar todos los instructores en el campo 
 		$scope.instructores = [];
 		var helper = HelpersFactory;
+
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
 
 		InstructoresServiceAdmin
 			.getInstructores()
@@ -43,10 +46,17 @@
 				ClasesServiceAdmin
 					.AgendarClase(clase)
 					.then(function(response){
-						console.log(response)
+						if(response.estatus == 'ok'){
+							helper.popupClose();
+							body.append($compile("<mensaje-ok ok='"+ response.msj +"'></mensaje-ok>")($scope));
+							//$state.reload();
+						} else {
+							helper.popupClose();
+							body.append($compile("<mensaje-error error='"+ response.msj +"'></mensaje-error>")($scope));
+						}
 						//$scope.editClase.hora = response.newHora;
 						//cerrar popup
-						helper.popupClose();
+						//helper.popupClose();
 					})
 					.catch(function(err){
 							console.log(err)

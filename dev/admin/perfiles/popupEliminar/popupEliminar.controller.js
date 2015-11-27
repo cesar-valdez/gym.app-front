@@ -18,11 +18,11 @@
 			
 			$scope.deleteCliente=function(){
 				
-				var cliente = {};
-				cliente.no_registro = $scope.clienteDuplicado.ClientesNoRegistro;
+				var usuario = {};
+				usuario.correo = $scope.clienteDuplicado.UsuariosCorreo;
 
 				ClientesServiceAdmin
-					.deleteClientes(cliente)
+					.deleteUsuarios(usuario)
 					.then(function(response){
 
 						//validacion con mensaje error y ok

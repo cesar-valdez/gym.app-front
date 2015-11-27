@@ -19,6 +19,6 @@ div(popup-close).PopupPagosAgregar
 			option Pagado
 			option No Pagado
 		p.Pago Pago:
-		input(type="text" name="pago" ng-model="newPago.montoPagado" ).CajaPago
+		input(type="numeric" name="pago" maxLength="4" ng-model="newPago.montoPagado" required ).CajaPago
 		button.BtnCancelar.popup-close Cancelar
 		button(ng-click="addPagos()").BtnCrear Crear

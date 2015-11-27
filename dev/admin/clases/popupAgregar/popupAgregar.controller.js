@@ -4,14 +4,16 @@
 	angular.module('gymApp.Admin')
 	.controller('ClasesAgregarAdminController', ClasesAgregarAdminController);
 
-	ClasesAgregarAdminController.$inject = ["$state","$scope","ClasesServiceAdmin", "InstructoresServiceAdmin", "HelpersFactory", "constant"];
+	ClasesAgregarAdminController.$inject = ["$compile", "$state","$scope","ClasesServiceAdmin", "InstructoresServiceAdmin", "HelpersFactory", "constant"];
 
-	function ClasesAgregarAdminController($state, $scope, ClasesServiceAdmin, InstructoresServiceAdmin, HelpersFactory, constants){
-		console.log("ClasesAgregarAdmin controller");
+	function ClasesAgregarAdminController($compile, $state, $scope, ClasesServiceAdmin, InstructoresServiceAdmin, HelpersFactory, constants){
 
 		//getinstructor, para mostrar todos los instructores en el campo 
 		$scope.instructores = [];
 		var helper = HelpersFactory;
+
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
 
 		InstructoresServiceAdmin
 			.getInstructores()
@@ -35,21 +37,24 @@
 			//var insertExitoso = false;
 			var days =[];
 			for(var i = 0; i <=7; i++){
-				//console.log($scope.dias)
 				if($scope.clase.dias[i] == true){
-					//console.log(d[i]);
 					days.push(d[i]);
 				}
 
 			}
 			$scope.clase.dias = days;
-			console.log($scope.clase)
 			ClasesServiceAdmin
 				.addClases($scope.clase)
 				.then(function(res){
 
-					console.log("res");
-					console.log(res);
+					if(res.estatus == 'ok'){
+							helper.popupClose();
+							body.append($compile("<mensaje-ok ok='"+ res.msj +"'></mensaje-ok>")($scope));
+							//$state.reload();
+						} else {
+							helper.popupClose();
+							body.append($compile("<mensaje-error error='"+ res.msj +"'></mensaje-error>")($scope));
+						}
 
 					var todoBien=true;
 
@@ -60,11 +65,7 @@
 							mensaje+=" ------------ "
 						}
 					}
-						//console.log(mensaje)
 					//insertar clases
-
-
-
 					for(var i=0; i < res.length; i++){
 						if(res[i].estatus == "success"){
 							var clasesInsertar = angular.copy($scope.clase)
@@ -74,7 +75,7 @@
 						}
 					}
 
-						helper.popupClose();
+						//helper.popupClose();
 						//reload para que el popup no cierre pero los  campos queden en blanco
 						//$state.reload();
 

@@ -1,31 +1,37 @@
 div(popup-close).PopupClasesLista
 	div.PopupClasesLista-contenidoClasesLista
-		h2 todos los clientes<br>
+		form(action="http://localhost:8080/gym.app/back/pdf/agendados.php" method="POST").FormPDF
+			button(type="submit").FormPDF-btnPDF
+				i.icomoon.file-pdf    Guardar
+		h2 Clientes agendados<br>
 		table.TablaLista
 			tr
-				td Id_agenda
-				td Hora 
-				td Dia
+				//td Id_agenda
 				td No_registro
 				td Nombre
 				td Apellido
+				td Hora 
+				td Dia
 				td Celular
 				td Peso
 				td Estatura
 				td Edad
 				td Domicilio
+				td
 			tr(ng-repeat="lista in listas")
-				td {{lista.agendarclaseIDAgendar}}
-				td {{lista.agendarclaseHora}}
-				td {{lista.agendarclaseDia}}
+				//td {{lista.agendarclaseIDAgendar}}
 				td {{lista.ClientesRegistro}}
 				td {{lista.ClientesNombre}}
 				td {{lista.ClientesApellido}}
+				td {{lista.agendarclaseHora}}
+				td {{lista.agendarclaseDia}}
 				td {{lista.ClientesCelular}}
 				td {{lista.ClientesPeso}}
 				td {{lista.ClientesEstatura}}
 				td {{lista.ClientesEdad}}
 				td {{lista.ClientesDomicilio}}
+				td
+					i(class="icomoon.bin PopupAdd" popup-add="<clases-eliminar-agendado del-agendado='lista'/>").icomoon.bin
 		//div(ng-repeat="lista in listas").Area
 			p{{lista.agendarclaseIDAgendar}}
 			p{{lista.agendarclaseHora}}

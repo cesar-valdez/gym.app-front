@@ -5,6 +5,7 @@
 	.directive('clasesEliminar', clasesEliminar)
 	.directive('clasesVer', clasesVer)
 	.directive('clasesLista', clasesLista)
+	.directive('clasesEliminarAgendado', clasesEliminarAgendado)
 
 	function clasesAgregar(){
 		return{
@@ -51,6 +52,17 @@
 			},
 			templateUrl: './admin/clases/popupLista/popupLista.html',
 			controller: 'ClasesListaAdminController'
+		}
+	}
+
+	function clasesEliminarAgendado(){
+		return{
+			restrict:'E',
+			scope:{
+				delAgendado : '='
+			},
+			templateUrl: './admin/clases/popupLista/popupEliminarAgendado/popupEliminarAgendado.html',
+			controller: 'DeleteClienteAgendadoController'
 		}
 	}
 

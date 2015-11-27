@@ -4,11 +4,15 @@
 	angular.module('gymApp.Admin')
 	.controller('PagosAgregarAdminController', PagosAgregarAdminController);
 
-	PagosAgregarAdminController.$inject = ["$state",'HelpersFactory', "$scope","PagosServiceAdmin", "ClientesServiceAdmin",'$filter'];
+	PagosAgregarAdminController.$inject = ["$compile", "$state",'HelpersFactory', "$scope","PagosServiceAdmin", "ClientesServiceAdmin",'$filter'];
 
-	function PagosAgregarAdminController($state,HelpersFactory,  $scope, PagosServiceAdmin, ClientesServiceAdmin,$filter){
+	function PagosAgregarAdminController($compile, $state,HelpersFactory,  $scope, PagosServiceAdmin, ClientesServiceAdmin,$filter){
 		console.log("PagosAdmin controller");
 		var helper = HelpersFactory;
+
+		//validacion con mensaje ok y error
+		var body = angular.element(document).find('body');
+
 		//seleccionar cliente en input
 		$scope.selected = {};
 
@@ -33,6 +37,7 @@
 			PagosServiceAdmin
 				.pagoExistente($scope.newPago)
 				.then(function(response){
+
 					if(response.estatus){
 						$scope.newPago.fechaPago = helper.stringToDate(response.fechaPago);
 						$scope.newPago.fechaPago.setMonth($scope.newPago.fechaPago.getMonth() + 1);
@@ -50,8 +55,16 @@
 					PagosServiceAdmin
 					.addPago($scope.newPago)
 						.then(function(res){
-							helper.popupClose();
-							$state.reload();
+							if(res.estatus == 'ok'){
+									helper.popupClose();
+									body.append($compile("<mensaje-ok ok='"+ res.msj +"'></mensaje-ok>")($scope));
+									//$state.reload();
+								} else {
+									helper.popupClose();
+									body.append($compile("<mensaje-error error='"+ res.msj +"'></mensaje-error>")($scope));
+								}
+							//helper.popupClose();
+							//$state.reload();
 					})
 					.catch(function(err){
 						console.log(err)
